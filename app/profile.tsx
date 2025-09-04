@@ -4,17 +4,17 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const NewsScreen = () => {
+const ProfileScreen = () => {
   return (
     <Container>
       <Content>
-        <Text>NewsScreen</Text>
+        <Text>Profile Screen</Text>
       </Content>
     </Container>
   )
 }
 
-export default NewsScreen
+export default ProfileScreen
 
 const Container = styled(SafeAreaView)`
   ${mixinContainer}

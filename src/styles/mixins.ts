@@ -4,7 +4,7 @@ const { height: screenHeight } = Dimensions.get('window')
 
 ///// 컨테이너 믹스인
 export const mixinContainer = (): ViewStyle => ({
-  minHeight: screenHeight,
+  flex: 1,
 })
 
 ///// 컨텐츠 컨테이너 믹스인

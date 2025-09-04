@@ -1,11 +1,11 @@
 import { CommonButton } from '@/components/input/Button'
 import InputText from '@/components/input/InputText'
-import CommonBottomNavigationBar from '@/components/navigation/CommonBottomNavigationBar'
 import { mixinContainer, mixinFlex } from '@/styles/mixins'
 import styled from '@emotion/native'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 // 홈 화면 예시
 export const HomeScreen = () => {
@@ -21,16 +21,22 @@ export const HomeScreen = () => {
 
   return (
     <Container>
-      <Text>{text}</Text>
-      <InputText placeholder='InputText' onChangeText={setText} value={text} />
-      <CommonButton title='Click me' onPress={handlePress} />
-      <CommonButton title='Go to News' onPress={goToNews} />
-      <CommonBottomNavigationBar />
+      <Content>
+        <InputText placeholder='InputText' onChangeText={setText} value={text} />
+        <CommonButton title='Click me' onPress={handlePress} />
+        <CommonButton title='Go to News' onPress={goToNews} />
+      </Content>
     </Container>
   )
 }
 
+export default HomeScreen
+
 const Container = styled(SafeAreaView)`
   ${mixinContainer};
-  ${mixinFlex('column', 'center', 'center')};
+`
+
+const Content = styled(View)`
+  flex: 1;
+  ${mixinFlex('column', 'flex-start', 'center')};
 `
