@@ -1,5 +1,6 @@
 import { CommonButton } from '@/components/input/Button'
 import InputText from '@/components/input/InputText'
+import CommonBottomNavigationBar from '@/components/navigation/CommonBottomNavigationBar'
 import { mixinContainer, mixinFlex } from '@/styles/mixins'
 import styled from '@emotion/native'
 import { router } from 'expo-router'
@@ -24,6 +25,7 @@ export const HomeScreen = () => {
       <InputText placeholder='InputText' onChangeText={setText} value={text} />
       <CommonButton title='Click me' onPress={handlePress} />
       <CommonButton title='Go to News' onPress={goToNews} />
+      <CommonBottomNavigationBar />
     </Container>
   )
 }
