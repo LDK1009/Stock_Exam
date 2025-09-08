@@ -1,0 +1,18 @@
+{
+  "build": {
+    "development": {
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "SUPABASE_URL",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "SUPABASE_ANON_KEY",
+        "EXPO_PUBLIC_SUPABASE_ROLE_KEY": "SUPABASE_ROLE_KEY"
+      }
+    },
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "SUPABASE_URL",
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "SUPABASE_ANON_KEY",
+        "EXPO_PUBLIC_SUPABASE_ROLE_KEY": "SUPABASE_ROLE_KEY"
+      }
+    }
+  }
+}
