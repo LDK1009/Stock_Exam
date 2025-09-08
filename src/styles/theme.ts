@@ -46,6 +46,16 @@ export const fontSizes = {
   title: 18,
 }
 
+// 아이콘 크기
+export const iconSizes = {
+  xs: 16,
+  sm: 20,
+  md: 24,
+  lg: 28,
+  xl: 32,
+  xxl: 40,
+}
+
 // 간격 (padding, margin)
 export const spacing = {
   xs: 4,
@@ -71,16 +81,6 @@ export const border = {
     thin: 1,
     thick: 2,
   },
-}
-
-// 아이콘 크기
-export const iconSizes = {
-  xs: 16,
-  sm: 20,
-  md: 24,
-  lg: 28,
-  xl: 32,
-  xxl: 40,
 }
 
 // zIndex 계층

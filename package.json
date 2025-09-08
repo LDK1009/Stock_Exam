@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "eslint src/ app/ --ext .ts,.tsx,.js,.jsx",
     "lint:fix": "eslint src/ app/ --ext .ts,.tsx,.js,.jsx --fix",
@@ -26,7 +26,7 @@
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.17",
     "@react-navigation/native-stack": "^7.3.23",
-    "@supabase/supabase-js": "^2.52.1",
+    "@supabase/supabase-js": "^2.57.2",
     "expo": "~53.0.20",
     "expo-blur": "~14.1.5",
     "expo-constants": "~17.1.7",
@@ -52,7 +52,7 @@
     "react-native-url-polyfill": "^2.0.0",
     "react-native-vector-icons": "^10.3.0",
     "react-native-web": "~0.20.0",
-    "react-native-webview": "13.13.5",
+    "react-native-webview": "^13.13.5",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
