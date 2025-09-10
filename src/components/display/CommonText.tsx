@@ -4,13 +4,13 @@ import { Text, View } from 'react-native'
 
 type PropsType = {
   children: string
-  size: 'meta' | 'caption' | 'body' | 'subtitle' | 'title' | 'custom'
-  color: 'default' | 'white' | 'black' | 'custom'
+  size?: 'meta' | 'caption' | 'body' | 'subtitle' | 'title' | 'custom'
+  color?: 'default' | 'white' | 'black' | 'custom'
   customSize?: number
   customColor?: string
 }
 
-const CommonText = ({ children, size, color, customSize, customColor }: PropsType) => {
+const CommonText = ({ children, size = 'body', color = 'default', customSize, customColor }: PropsType) => {
   const textSize =
     size === 'custom'
       ? customSize
