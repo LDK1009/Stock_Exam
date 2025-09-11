@@ -14,7 +14,7 @@ const ProfileScreen = () => {
     const userIsAuthenticated = await isAuthenticated();
 
     // 로그인이 안되어있으면 로그인 페이지로 이동
-    if(userIsAuthenticated) {
+    if(!userIsAuthenticated) {
       router.replace('/auth/login')
     }
   }

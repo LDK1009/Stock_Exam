@@ -1,7 +1,9 @@
 import { supabase } from '@/lib/supabaseClient'
+import { mixinFlex } from '@/styles/mixins'
+import styled from '@emotion/native'
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { Alert, Button, Text } from 'react-native'
+import { Alert, Image, TouchableOpacity, View } from 'react-native'
 import WebView from 'react-native-webview'
 
 const LoginScreen = () => {
@@ -14,23 +16,24 @@ const LoginScreen = () => {
         provider: 'kakao',
         options: {
           redirectTo: 'stockexam://auth/callback',
-          skipBrowserRedirect: true
+          skipBrowserRedirect: true,
         },
       })
 
       if (error) throw error
-      
+
       if (data?.url) {
         setAuthUrl(data.url)
         setShowWebView(true)
       }
-    } catch (error) {
-      Alert.alert('Error', error.message)
+    } catch {
+      Alert.alert('로그인 실패')
+      router.replace('/')
     }
   }
 
   // WebView에서 URL 변경 감지
-  const handleNavigationStateChange = async (navState) => {
+  const handleNavigationStateChange = async (navState: any) => {
     // access_token이 포함된 URL인지 확인
     if (navState.url.includes('access_token=')) {
       try {
@@ -40,37 +43,49 @@ const LoginScreen = () => {
         const refreshToken = params.get('refresh_token')
 
         // 세션 설정
-        const { data: { session }, error } = await supabase.auth.setSession({
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.setSession({
           access_token: accessToken!,
-          refresh_token: refreshToken!
+          refresh_token: refreshToken!,
         })
 
         if (error) throw error
-        
+
         if (session) {
           setShowWebView(false)
           // 홈 화면으로 이동
           router.replace('/')
         }
-      } catch (error) {
-        Alert.alert('Error', error.message)
+      } catch {
+        Alert.alert('로그인 실패')
+        router.replace('/')
       }
     }
   }
 
   return (
     <>
-    <Text>LoginScreen</Text>
       {showWebView ? (
-        <WebView
-          source={{ uri: authUrl }}
-          onNavigationStateChange={handleNavigationStateChange}
-        />
+        <WebView source={{ uri: authUrl }} onNavigationStateChange={handleNavigationStateChange} />
       ) : (
-        <Button onPress={signInWithKakao} title="카카오로 로그인" />
+        <Container>
+          <TouchableOpacity onPress={signInWithKakao}>
+            <Image
+              source={require('@assets/images/kakao-login.png')}
+              style={{ width: 200, height: 50 }}
+            />
+          </TouchableOpacity>
+        </Container>
       )}
     </>
   )
 }
 
 export default LoginScreen
+
+const Container = styled(View)`
+  ${mixinFlex('column', 'center', 'center')}
+  flex: 1;
+`
