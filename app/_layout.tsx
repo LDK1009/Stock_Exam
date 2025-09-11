@@ -1,98 +1,33 @@
 import { theme } from '@/styles/theme'
-import styled from '@emotion/native'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { Tabs } from 'expo-router'
+import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import * as SystemUI from 'expo-system-ui'
 import React, { useEffect } from 'react'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { Platform, StatusBar as RNStatusBar } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import 'react-native-url-polyfill/auto'
 
 export default function RootLayout() {
   useEffect(() => {
-    // 시스템 UI 색상 설정
-    SystemUI.setBackgroundColorAsync(theme.colors.background.default)
-  }, [])
+    // 시스템 UI 색상 설정 - 앱 시작시 한 번만 실행
+    if (Platform.OS === 'android') {
+      // Android에서는 StatusBar 배경색과 스타일을 직접 설정
+      RNStatusBar.setBackgroundColor(theme.colors.background.paper)
+      RNStatusBar.setBarStyle('light-content')
+    }
+  }, []) // 빈 의존성 배열로 앱 시작시 한 번만 실행
 
   return (
     <SafeAreaProvider>
-      <Container>
-        <StatusBar style='light' translucent />
-        <StyledTabs
-          screenOptions={{
-            tabBarStyle: StyledTabBar,
-            tabBarActiveTintColor: '#FFFFFF',
-            tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.5)',
-            tabBarShowLabel: false,
-            headerShown: false,
-          }}
-        >
-          <Tabs.Screen
-            name='index'
-            options={{
-              title: 'Home',
-              tabBarIcon: ({ color }) => (
-                <TabIcon>
-                  <Ionicons name='home-outline' size={theme.iconSizes.md} color={color} />
-                </TabIcon>
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name='quiz'
-            options={{
-              title: 'Quiz',
-              tabBarIcon: ({ color }) => (
-                <TabIcon>
-                  <MaterialIcons name='quiz' size={theme.iconSizes.md} color={color} />
-                </TabIcon>
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name='news'
-            options={{
-              title: 'News',
-              tabBarIcon: ({ color }) => (
-                <TabIcon>
-                  <MaterialIcons name='article' size={theme.iconSizes.md} color={color} />
-                </TabIcon>
-              ),
-            }}
-          />
-          <Tabs.Screen
-            name='profile'
-            options={{
-              title: 'Profile',
-              tabBarIcon: ({ color }) => (
-                <TabIcon>
-                  <Ionicons name='person-outline' size={theme.iconSizes.md} color={color} />
-                </TabIcon>
-              ),
-            }}
-          />
-        </StyledTabs>
-      </Container>
+      {/* iOS에서는 expo-status-bar를 통해 스타일 설정 */}
+      <StatusBar 
+        style='light'
+        backgroundColor={theme.colors.background.paper}
+        translucent
+      />
+      <Stack>
+        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+        <Stack.Screen name='auth' options={{ headerShown: false }} />
+      </Stack>
     </SafeAreaProvider>
   )
 }
-
-const Container = styled(SafeAreaView)`
-  flex: 1;
-`
-
-const StyledTabs = styled(Tabs)``
-
-const StyledTabBar = {
-  backgroundColor: theme.colors.background.default,
-  height: theme.iconSizes.md * 2, // 아이콘 크기의 2배 (위아래 여백 포함)
-  paddingTop: 12,
-  elevation: 0, // 안드로이드 그림자 제거
-  shadowOpacity: 0, // iOS 그림자 제거
-  borderTopWidth: 0,
-}
-
-const TabIcon = styled.View`
-  width: ${theme.iconSizes.md};
-  height: ${theme.iconSizes.md};
-`

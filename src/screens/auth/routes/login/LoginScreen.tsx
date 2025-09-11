@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabaseClient'
 import { router } from 'expo-router'
 import { useState } from 'react'
-import { Alert, Button } from 'react-native'
+import { Alert, Button, Text } from 'react-native'
 import WebView from 'react-native-webview'
 
 const LoginScreen = () => {
@@ -60,6 +60,7 @@ const LoginScreen = () => {
 
   return (
     <>
+    <Text>LoginScreen</Text>
       {showWebView ? (
         <WebView
           source={{ uri: authUrl }}
