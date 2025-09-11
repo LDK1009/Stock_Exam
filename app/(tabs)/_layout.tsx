@@ -12,11 +12,8 @@ export default function TabsLayout() {
     <SafeAreaProvider>
       <Container>
         {/* iOS에서는 expo-status-bar를 통해 스타일 설정 */}
-        <StatusBar 
-          style='light'
-          backgroundColor={theme.colors.background.paper}
-          translucent
-        />
+        <StatusBar style='light' backgroundColor={theme.colors.background.paper} translucent />
+
         <StyledTabs
           screenOptions={{
             tabBarStyle: StyledTabBar,

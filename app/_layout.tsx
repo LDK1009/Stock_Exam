@@ -1,8 +1,9 @@
 import { theme } from '@/styles/theme'
+import styled from '@emotion/native'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React, { useEffect } from 'react'
-import { Platform, StatusBar as RNStatusBar } from 'react-native'
+import { Platform, StatusBar as RNStatusBar, SafeAreaView } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import 'react-native-url-polyfill/auto'
 
@@ -18,16 +19,19 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      {/* iOS에서는 expo-status-bar를 통해 스타일 설정 */}
-      <StatusBar 
-        style='light'
-        backgroundColor={theme.colors.background.paper}
-        translucent
-      />
-      <Stack>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-        <Stack.Screen name='auth' options={{ headerShown: false }} />
-      </Stack>
+      <Container>
+        {/* iOS에서는 expo-status-bar를 통해 스타일 설정 */}
+        <StatusBar style='light' backgroundColor={theme.colors.background.paper} translucent />
+        <Stack>
+          <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+          <Stack.Screen name='auth' options={{ headerShown: false }} />
+        </Stack>
+      </Container>
     </SafeAreaProvider>
   )
 }
+
+const Container = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${theme.colors.background.paper};
+`
