@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
+import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizStore } from '@/stores/screens/quiz/quiz'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -9,12 +10,20 @@ import Quiz from './Quiz'
 const QuizList = () => {
   ////////// 상태 관리
   const { quizList, setQuizzes } = useQuizStore()
+  const { searchValue, category, difficulty, type, orderBy } = useQuizFilterStore()
   const [loading, setLoading] = useState(false) // 로딩 상태
   const [canMore, setCanMore] = useState(true) // 더 불러올 데이터가 있는지
   const [page, setPage] = useState(0) // 현재 페이지 번호
 
   ////////// 퀴즈 데이터 가져오기
-  async function getQuiz(pageNumber = 0) {
+  async function getQuiz(
+    pageNumber = 0,
+    searchValue = '',
+    category = '',
+    difficulty = '',
+    type = '',
+    orderBy = 'createdAt'
+  ) {
     // 더 이상 불러올 데이터가 없거나 이미 로딩 중이면 중단
     if (!canMore || loading) return
 
@@ -23,12 +32,43 @@ const QuizList = () => {
 
     // 퀴즈 데이터 가져오기
     try {
-      // 퀴즈 데이터 가져오기
-      const { data, error } = await supabase
-        .from('quizzes')
-        .select('*')
-        .order('createdAt', { ascending: false }) // 최신순 정렬
-        .range(pageNumber * 10, (pageNumber + 1) * 10 - 1) // 10개씩 페이지네이션
+      // 기본 쿼리 설정
+      let query = supabase.from('quizzes').select('*')
+
+      // 검색어 필터
+      if (searchValue) {
+        // 검색 조건 설정
+        query = query.or(
+          [
+            `question.ilike.%${searchValue}%`,
+            `explanation.ilike.%${searchValue}%`,
+            `options.cs.{"${searchValue}"}`,
+            `tags.cs.{"${searchValue}"}`,
+          ].join(',')
+        )
+      }
+
+      // 카테고리 필터
+      if (category) {
+        query = query.eq('category', category)
+      }
+
+      // 난이도 필터
+      if (difficulty) {
+        query = query.eq('difficulty', difficulty)
+      }
+
+      // 문제 유형 필터
+      if (type) {
+        query = query.eq('type', type)
+      }
+
+      // 정렬 순서 설정
+      const [orderByField, orderDirection] = orderBy.split(':') // 예) createdAt:desc
+      query = query.order(orderByField, { ascending: orderDirection === 'asc' })
+
+      // 페이지네이션 적용
+      const { data, error } = await query.range(pageNumber * 10, (pageNumber + 1) * 10 - 1) // 10개씩 페이지네이션
 
       // 에러 처리
       if (error) throw error
@@ -59,16 +99,16 @@ const QuizList = () => {
     if (!loading && canMore) {
       const nextPage = page + 1
       setPage(nextPage)
-      getQuiz(nextPage)
+      getQuiz(nextPage, searchValue, category, difficulty, type, orderBy)
     }
   }
 
-  ////////// 마운트 시 초기화
+  ////////// 필터 변경 시 데이터 다시 불러오기
   useEffect(() => {
     setPage(0) // 페이지 초기화
     setCanMore(true) // 더 불러오기 가능하도록 초기화
-    getQuiz(0) // 첫 페이지 로드
-  }, [])
+    getQuiz(0, searchValue, category, difficulty, type, orderBy) // 필터 적용하여 데이터 로드
+  }, [searchValue, category, difficulty, type, orderBy])
 
   ////////// 로딩 인디케이터 컴포넌트
   const renderFooter = () => {

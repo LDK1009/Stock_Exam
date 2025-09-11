@@ -1,4 +1,4 @@
-import { useQuizSearchStore } from '@/stores/screens/quiz/search'
+import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -7,7 +7,7 @@ import React from 'react'
 import { TextInput, TouchableOpacity } from 'react-native'
 
 const SearchBar = () => {
-  const { inputValue, setInputValue, searchValue, setSearchValue, clearInputValue } = useQuizSearchStore()
+  const { inputValue, setInputValue, setSearchValue, clearInputValue } = useQuizFilterStore()
 
   const handleSubmit = () => {
     setSearchValue(inputValue)
