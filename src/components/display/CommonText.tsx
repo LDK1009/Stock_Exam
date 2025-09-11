@@ -10,7 +10,13 @@ type PropsType = {
   customColor?: string
 }
 
-const CommonText = ({ children, size = 'body', color = 'default', customSize, customColor }: PropsType) => {
+const CommonText = ({
+  children,
+  size = 'body',
+  color = 'default',
+  customSize,
+  customColor,
+}: PropsType) => {
   const textSize =
     size === 'custom'
       ? customSize
@@ -35,7 +41,9 @@ const CommonText = ({ children, size = 'body', color = 'default', customSize, cu
 
   return (
     <View>
-      <Text style={{ fontSize: textSize, color: textColor }}>{children}</Text>
+      <Text selectable style={{ fontSize: textSize, color: textColor }}>
+        {children}
+      </Text>
     </View>
   )
 }

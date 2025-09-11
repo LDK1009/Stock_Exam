@@ -13,11 +13,16 @@ type PropsType = {
 const Quiz = ({ quiz }: PropsType) => {
   return (
     <Container>
+      {/* 헤더 */}
       <Header>
         <HeaderText>{`${quiz.category}ㅣ${quiz.step}ㅣ${quiz.type}`}</HeaderText>
         <HeaderText>{`${quiz.difficulty}ㅣ${quiz.score}점`}</HeaderText>
       </Header>
-      <QuestionText>{quiz.question}</QuestionText>
+      {/* 질문 */}
+      <QuestionText numberOfLines={2} ellipsizeMode='tail'>
+        {quiz.question}
+      </QuestionText>
+      {/* 푸터 */}
       <Footer>
         <FooterText>조회 1.2k</FooterText>
         <FooterText>댓글 34</FooterText>
