@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabaseClient'
 import { mixinFlex } from '@/styles/mixins'
+import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
+import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { useState } from 'react'
 import { Alert, Image, TouchableOpacity, View } from 'react-native'
@@ -71,11 +73,16 @@ const LoginScreen = () => {
         <WebView source={{ uri: authUrl }} onNavigationStateChange={handleNavigationStateChange} />
       ) : (
         <Container>
-          <TouchableOpacity onPress={signInWithKakao}>
-            <Image
-              source={require('@assets/images/kakao-login.png')}
-              style={{ width: 200, height: 50 }}
+          <BackButton onPress={() => router.replace('/')}>
+            <Ionicons
+              name='chevron-back'
+              size={theme.iconSizes.lg}
+              color={theme.colors.core.white}
             />
+          </BackButton>
+          <Logo source={require('@assets/images/icon.png')} style={{ width: 100, height: 100 }} />
+          <TouchableOpacity onPress={signInWithKakao}>
+            <KakaoLogin source={require('@assets/images/kakao-login.png')} />
           </TouchableOpacity>
         </Container>
       )}
@@ -88,4 +95,18 @@ export default LoginScreen
 const Container = styled(View)`
   ${mixinFlex('column', 'center', 'center')}
   flex: 1;
+  background-color: ${theme.colors.background.default};
+  row-gap: 24px;
 `
+
+const Logo = styled(Image)`
+  border-radius: ${`${theme.border.radius.full}px`};
+`
+
+const BackButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+`
+
+const KakaoLogin = styled(Image)``
