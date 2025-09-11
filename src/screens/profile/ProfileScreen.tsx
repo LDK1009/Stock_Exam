@@ -1,31 +1,45 @@
 import CommonText from '@/components/display/CommonText'
-import { isAuthenticated } from '@/services/auth/login'
+import { isAuthenticated, logout } from '@/services/auth/auth'
 import { mixinContainer, mixinContentContainer, mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
+import { useFocusEffect } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
 
 const ProfileScreen = () => {
-  const router = useRouter();
+  const router = useRouter()
 
+  ////////// 로그인 체크
   async function loginCheck() {
-    const userIsAuthenticated = await isAuthenticated();
+    const userIsAuthenticated = await isAuthenticated()
 
     // 로그인이 안되어있으면 로그인 페이지로 이동
-    if(!userIsAuthenticated) {
+    if (!userIsAuthenticated) {
       router.replace('/auth/login')
     }
   }
-  
 
-  loginCheck()
+  ////////// 로그아웃
+  async function logoutFunction() {
+    await logout()
+    router.push('/')
+  }
+
+  ////////// 화면 포커스될 때마다 로그인 체크
+  useFocusEffect(
+    React.useCallback(() => {
+      loginCheck()
+    }, [])
+  )
 
   return (
     <Container>
       <CommonText>ProfileScreen</CommonText>
-      <CommonText>ProfileScreen</CommonText>
+      <LogoutButton onPress={logoutFunction}>
+        <LogoutText>로그아웃</LogoutText>
+      </LogoutButton>
     </Container>
   )
 }
@@ -41,4 +55,18 @@ const Container = styled(SafeAreaView)`
   padding-bottom: 0px;
 
   background-color: ${theme.colors.background.default};
+`
+
+const LogoutButton = styled.TouchableOpacity`
+  width: 100%;
+  ${mixinFlex('row', 'center', 'center')}
+  background-color: ${theme.colors.status.error};
+  padding: 8px;
+  border-radius: 8px;
+`
+
+const LogoutText = styled.Text`
+  color: ${theme.colors.core.white};
+  font-size: ${`${theme.fontSizes.body}px`};
+  font-weight: ${`${theme.fontWeights.bold}`};
 `

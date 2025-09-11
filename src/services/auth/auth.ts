@@ -16,5 +16,9 @@ const isAuthenticated = async (): Promise<boolean> => {
   }
 }
 
-export { isAuthenticated }
+const logout = async () => {
+  await supabase.auth.signOut()
+}
+
+export { isAuthenticated, logout }
 
