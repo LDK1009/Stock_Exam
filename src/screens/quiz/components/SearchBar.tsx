@@ -15,7 +15,9 @@ const SearchBar = () => {
 
   return (
     <Container>
-      <SearchIcon name='search' size={24} />
+      <TouchableOpacity onPress={handleSubmit}>
+        <SearchIcon name='search' size={24} />
+      </TouchableOpacity>
       <SearchInput
         value={inputValue}
         onChangeText={setInputValue}

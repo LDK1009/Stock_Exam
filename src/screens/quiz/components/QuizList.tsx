@@ -24,8 +24,10 @@ const QuizList = () => {
     type = '',
     orderBy = 'createdAt'
   ) {
-    // 더 이상 불러올 데이터가 없거나 이미 로딩 중이면 중단
-    if (!canMore || loading) return
+    // 페이지가 0이 아닐 때만 canMore 체크 (새로운 검색 시작할 때는 무시)
+    if ((pageNumber > 0 && !canMore) || loading) {
+      return
+    }
 
     // 로딩 상태 설정
     setLoading(true)
