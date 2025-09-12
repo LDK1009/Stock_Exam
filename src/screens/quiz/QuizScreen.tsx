@@ -3,6 +3,7 @@ import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
+import CategoryBar from './components/CategoryBar'
 import QuizList from './components/QuizList'
 import SearchBar from './components/SearchBar'
 
@@ -10,6 +11,7 @@ const QuizScreen = () => {
   return (
     <Container>
       <SearchBar />
+      <CategoryBar />
       <QuizList />
     </Container>
   )

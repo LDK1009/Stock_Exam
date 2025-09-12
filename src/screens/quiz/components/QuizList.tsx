@@ -52,7 +52,9 @@ const QuizList = () => {
 
       // 카테고리 필터
       if (category) {
-        query = query.eq('category', category)
+        if (category !== '전체') {
+          query = query.eq('category', category)
+        }
       }
 
       // 난이도 필터
