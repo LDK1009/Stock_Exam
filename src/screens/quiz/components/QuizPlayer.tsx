@@ -2,9 +2,10 @@ import { useQuizStore } from '@/stores/screens/quiz/quiz'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
+import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
-import React from 'react'
-import { Dimensions, FlatList, Modal, StatusBar, View } from 'react-native'
+import React, { useCallback, useRef } from 'react'
+import { Dimensions, FlatList, Modal, StatusBar, View, ViewToken } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Quiz from './Quiz'
 
@@ -22,34 +23,76 @@ const QuizPlayer = () => {
   // 컨텐츠 높이 계산(상단 스테이터스바, 하단 바텀 네비게이션 바 제외)
   const CONTENT_HEIGHT = SCREEN_HEIGHT - STATUSBAR_HEIGHT - insets.bottom
 
+  // viewability 설정을 useRef로 메모이제이션
+  const viewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 70,
+  }).current
+
+  // 보이는 아이템 변경 핸들러를 useCallback으로 메모이제이션
+  const onViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (viewableItems.length > 0) {
+        const currentQuiz = viewableItems[0].item as QuizType
+        console.log('현재 보이는 퀴즈:', currentQuiz.id)
+      }
+    },
+    []
+  )
+
+  type RenderItemProps = {
+    item: QuizType
+    index: number
+  }
+
+  // renderItem도 useCallback으로 메모이제이션
+  const renderItem = useCallback(
+    ({ item: quizData, index }: RenderItemProps) => (
+      <QuizContainer height={CONTENT_HEIGHT}>
+        <Quiz quiz={quizData} index={index} />
+      </QuizContainer>
+    ),
+    [CONTENT_HEIGHT]
+  )
+
+  // getItemLayout도 useCallback으로 메모이제이션
+  const getItemLayout = useCallback(
+    (_: any, index: number) => ({
+      length: CONTENT_HEIGHT,
+      offset: CONTENT_HEIGHT * index,
+      index,
+    }),
+    [CONTENT_HEIGHT]
+  )
+
   return (
     <Modal visible={open} transparent animationType='fade' onRequestClose={() => setOpen(false)}>
       <ModalContainer>
         <FlatList
-          // 렌더링 관련
+          ///// 렌더링 관련
+          // 렌더링할 배열
           data={quizList}
-          renderItem={({ item: quizData, index }) => (
-            <QuizContainer height={CONTENT_HEIGHT}>
-              <Quiz quiz={quizData} index={index} />
-            </QuizContainer>
-          )}
-          // 페이징 관련
+          // 렌더링할 아이템 컴포넌트
+          renderItem={renderItem}
+          ///// 페이징 관련
+          // 페이징 사용 여부
           pagingEnabled={true}
+          // 페이징 감속 설정
           decelerationRate={'normal'}
-          // 스크롭바 표시 관련
-          showsVerticalScrollIndicator={false}
-          viewabilityConfig={{
-            itemVisiblePercentThreshold: 50, // 50% 이상 보일 때 visible로 간주
-          }}
-          contentContainerStyle={{ flexGrow: 1 }} // 이걸 제거해보세요
           // 시작할 아이템 인덱스
           initialScrollIndex={selectedQuizIndex}
           // 아이템 크기/위치 정보
-          getItemLayout={(_, index) => ({
-            length: CONTENT_HEIGHT, // 각 아이템이 차지하는 실제 높이
-            offset: CONTENT_HEIGHT * index, // 이전 아이템들의 높이 합
-            index,
-          })}
+          getItemLayout={getItemLayout}
+          ///// 뷰 트래킹 관련
+          // 뷰 트래킹 판단 기준 설정
+          viewabilityConfig={viewabilityConfig}
+          // 보이는 아이템 변경 핸들러
+          onViewableItemsChanged={onViewableItemsChanged}
+          ///// 성능 최적화 관련
+          removeClippedSubviews={true} // 화면 밖 아이템 메모리에서 제거
+          maxToRenderPerBatch={3} // 한번에 렌더링할 아이템 수 제한
+          ///// 기타
+          // 스크롤바 숨김 여부
+          showsVerticalScrollIndicator={false} // 스크롤바 숨기기
         />
       </ModalContainer>
     </Modal>
