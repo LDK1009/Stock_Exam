@@ -4,8 +4,8 @@ import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import { useState } from 'react'
-import { Alert, Image, TouchableOpacity, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { Alert, BackHandler, Image, TouchableOpacity, View } from 'react-native'
 import WebView from 'react-native-webview'
 
 const LoginScreen = () => {
@@ -67,6 +67,15 @@ const LoginScreen = () => {
     }
   }
 
+  // 백핸들러
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      router.replace('/') // 홈으로 이동
+      return true // 기본 동작 방지
+    })
+
+    return () => backHandler.remove()
+  }, [])
   return (
     <>
       {showWebView ? (
