@@ -59,12 +59,16 @@ const QuizList = () => {
 
       // 난이도 필터
       if (difficulty) {
-        query = query.eq('difficulty', difficulty)
+        if (difficulty !== '전체') {
+          query = query.eq('difficulty', difficulty)
+        }
       }
 
       // 문제 유형 필터
       if (type) {
-        query = query.eq('type', type)
+        if (type !== '전체') {
+          query = query.eq('type', type)
+        }
       }
 
       // 정렬 순서 설정
