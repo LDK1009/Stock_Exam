@@ -9,7 +9,7 @@ import Quiz from './Quiz'
 
 const QuizList = () => {
   ////////// 상태 관리
-  const { quizList, setQuizzes } = useQuizStore()
+  const { quizList, setQuizList } = useQuizStore()
   const { searchValue, category, difficulty, type, sort } = useQuizFilterStore()
   const [loading, setLoading] = useState(false) // 로딩 상태
   const [canMore, setCanMore] = useState(true) // 더 불러올 데이터가 있는지
@@ -107,13 +107,13 @@ const QuizList = () => {
 
       // 첫 페이지면 교체, 아니면 기존 데이터에 추가
       if (pageNumber === 0) {
-        setQuizzes(data || [])
+        setQuizList(data || [])
       } else {
         // 중복 제거하여 병합
         const uniqueQuizzes = [...quizList, ...(data || [])].filter(
           (quiz, index, self) => index === self.findIndex((q) => q.id === quiz.id)
         )
-        setQuizzes(uniqueQuizzes)
+        setQuizList(uniqueQuizzes)
       }
     } catch (error) {
       // 에러 처리
