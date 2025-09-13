@@ -18,6 +18,7 @@ export default {
         backgroundColor: '#ffffff',
       },
       package: 'com.stockexam.app',
+      versionCode: 2,
       edgeToEdgeEnabled: true,
     },
     web: {
@@ -41,6 +42,9 @@ export default {
       typedRoutes: true,
     },
     extra: {
+      eas: {
+        projectId: "21f2a9db-2523-4ff3-b912-672e555bf3b8"
+      },
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
       supabaseRoleKey: process.env.EXPO_PUBLIC_SUPABASE_ROLE_KEY,
