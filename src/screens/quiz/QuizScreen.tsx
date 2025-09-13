@@ -6,11 +6,13 @@ import { SafeAreaView } from 'react-native'
 import CategoryBar from './components/CategoryBar'
 import FillterBar from './components/FillterBar'
 import QuizList from './components/QuizList'
+import QuizPlayer from './components/QuizPlayer'
 import SearchBar from './components/SearchBar'
 
 const QuizScreen = () => {
   return (
     <Container>
+      <QuizPlayer />
       <SearchBar />
       <CategoryBar />
       <FillterBar />

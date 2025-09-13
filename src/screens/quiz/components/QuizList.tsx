@@ -155,7 +155,7 @@ const QuizList = () => {
   return (
     <FlatList
       data={quizList}
-      renderItem={({ item }) => <Quiz quiz={item} />}
+      renderItem={({ item, index }) => <Quiz quiz={item} index={index} />}
       keyExtractor={(item, index) => item.id?.toString() || `no-id-${index}`}
       contentContainerStyle={{ gap: 16 }}
       onEndReached={loadMore} // 하단 도달시 추가 로드

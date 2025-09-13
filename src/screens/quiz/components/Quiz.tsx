@@ -1,16 +1,20 @@
+import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import '@emotion/react'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
   quiz: QuizType
+  index: number
 }
 
-const Quiz = ({ quiz }: PropsType) => {
+const Quiz = ({ quiz, index }: PropsType) => {
+  const { setOpen: setOpenQuizPlayer } = useQuizPlayerStore()
+  const { setSelectedQuizIndex } = useQuizPlayerStore()
 
   // 난이도 매핑
   const difficultyMap = {
@@ -19,8 +23,16 @@ const Quiz = ({ quiz }: PropsType) => {
     3: '어려움',
   }
 
+  // 퀴즈 클릭 핸들러
+  function QuizPressHandler() {
+    setOpenQuizPlayer(true)
+    setSelectedQuizIndex(index)
+  }
+
   return (
-    <Container>
+    <Container
+      onPress={QuizPressHandler}
+    >
       {/* 헤더 */}
       <Header>
         <HeaderText>{`${quiz.category}ㅣ${quiz.step}ㅣ${quiz.type}`}</HeaderText>
@@ -42,7 +54,7 @@ const Quiz = ({ quiz }: PropsType) => {
 
 export default Quiz
 
-const Container = styled(View)`
+const Container = styled(TouchableOpacity)`
   width: 100%;
   height: auto;
   padding: ${`${theme.spacing.md}px`};
