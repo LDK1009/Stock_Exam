@@ -10,7 +10,7 @@ import Quiz from './Quiz'
 const QuizList = () => {
   ////////// 상태 관리
   const { quizList, setQuizzes } = useQuizStore()
-  const { searchValue, category, difficulty, type, orderBy } = useQuizFilterStore()
+  const { searchValue, category, difficulty, type, sort } = useQuizFilterStore()
   const [loading, setLoading] = useState(false) // 로딩 상태
   const [canMore, setCanMore] = useState(true) // 더 불러올 데이터가 있는지
   const [page, setPage] = useState(0) // 현재 페이지 번호
@@ -22,7 +22,7 @@ const QuizList = () => {
     category = '',
     difficulty = '',
     type = '',
-    orderBy = 'createdAt'
+    sort = ''
   ) {
     // 페이지가 0이 아닐 때만 canMore 체크 (새로운 검색 시작할 때는 무시)
     if ((pageNumber > 0 && !canMore) || loading) {
@@ -71,9 +71,28 @@ const QuizList = () => {
         }
       }
 
-      // 정렬 순서 설정
-      const [orderByField, orderDirection] = orderBy.split(':') // 예) createdAt:desc
-      query = query.order(orderByField, { ascending: orderDirection === 'asc' })
+      // 정렬 필터
+      if (sort) {
+        const sortMap = {
+          인기순: 'quizViews(view):desc',
+          최신순: 'createdAt:desc:',
+          오래된순: 'createdAt:asc',
+          난이도순: 'difficulty:asc',
+          난이도역순: 'difficulty:desc',
+        }
+
+        const sortColumn = sortMap[sort as keyof typeof sortMap].split(':')[0]
+        const sortDirection = sortMap[sort as keyof typeof sortMap].split(':')[1]
+
+        if (sort === '인기순') {
+          // 추후 개발 필요
+          // query = query.order(sortColumn, { ascending: sortDirection === 'asc' })
+        }
+
+        if (sort !== '인기순') {
+          query = query.order(sortColumn, { ascending: sortDirection === 'asc' })
+        }
+      }
 
       // 페이지네이션 적용
       const { data, error } = await query.range(pageNumber * 10, (pageNumber + 1) * 10 - 1) // 10개씩 페이지네이션
@@ -90,7 +109,11 @@ const QuizList = () => {
       if (pageNumber === 0) {
         setQuizzes(data || [])
       } else {
-        setQuizzes([...quizList, ...(data || [])])
+        // 중복 제거하여 병합
+        const uniqueQuizzes = [...quizList, ...(data || [])].filter(
+          (quiz, index, self) => index === self.findIndex((q) => q.id === quiz.id)
+        )
+        setQuizzes(uniqueQuizzes)
       }
     } catch (error) {
       // 에러 처리
@@ -107,7 +130,7 @@ const QuizList = () => {
     if (!loading && canMore) {
       const nextPage = page + 1
       setPage(nextPage)
-      getQuiz(nextPage, searchValue, category, difficulty, type, orderBy)
+      getQuiz(nextPage, searchValue, category, difficulty, type, sort)
     }
   }
 
@@ -115,8 +138,8 @@ const QuizList = () => {
   useEffect(() => {
     setPage(0) // 페이지 초기화
     setCanMore(true) // 더 불러오기 가능하도록 초기화
-    getQuiz(0, searchValue, category, difficulty, type, orderBy) // 필터 적용하여 데이터 로드
-  }, [searchValue, category, difficulty, type, orderBy])
+    getQuiz(0, searchValue, category, difficulty, type, sort) // 필터 적용하여 데이터 로드
+  }, [searchValue, category, difficulty, type, sort])
 
   ////////// 로딩 인디케이터 컴포넌트
   const renderFooter = () => {
@@ -133,7 +156,7 @@ const QuizList = () => {
     <FlatList
       data={quizList}
       renderItem={({ item }) => <Quiz quiz={item} />}
-      keyExtractor={(item) => item.id?.toString() || ''}
+      keyExtractor={(item, index) => item.id?.toString() || `no-id-${index}`}
       contentContainerStyle={{ gap: 16 }}
       onEndReached={loadMore} // 하단 도달시 추가 로드
       onEndReachedThreshold={0.5} // 하단 50% 지점에서 트리거

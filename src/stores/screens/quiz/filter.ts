@@ -1,7 +1,5 @@
+import { QuizSortType } from '@/types/quiz'
 import { create } from 'zustand'
-
-// 정렬 옵션 타입
-type OrderByOption = 'createdAt:desc' | 'createdAt:asc' | 'difficulty:desc' | 'difficulty:asc'
 
 // 사용자 상태
 type StoreType = {
@@ -15,14 +13,16 @@ type StoreType = {
   category: string
   difficulty: string
   type: string
-  orderBy: OrderByOption
+
+  // 정렬 필터
+  sort: QuizSortType
 
   // 필터 설정
   setSearchValue: (value: string) => void
   setCategory: (value: string) => void
   setDifficulty: (value: string) => void
   setType: (value: string) => void
-  setOrderBy: (value: OrderByOption) => void
+  setSort: (value: QuizSortType) => void
 
   // 필터 초기화
   clearFilters: () => void
@@ -30,30 +30,35 @@ type StoreType = {
 
 export const useQuizFilterStore = create<StoreType>((set) => ({
   // 검색어 입력값 초기값
-  inputValue: "",
-  setInputValue: (value) => set({ inputValue: value || "" }),
-  clearInputValue: () => set({ inputValue: "" }),
+  inputValue: '',
+  setInputValue: (value) => set({ inputValue: value || '' }),
+  clearInputValue: () => set({ inputValue: '' }),
 
   // 필터 초기값
-  searchValue: "",
-  category: "",
-  difficulty: "",
-  type: "",
-  orderBy: "createdAt:desc",
+  searchValue: '',
+  category: '전체',
+  difficulty: '',
+  type: '',
+
+  // 정렬 필터 초기값
+  sort: '인기순',
 
   // 필터 설정 함수
-  setSearchValue: (value) => set({ searchValue: value || "" }),
+  setSearchValue: (value) => set({ searchValue: value || '' }),
   setCategory: (value) => set({ category: value }),
   setDifficulty: (value) => set({ difficulty: value }),
   setType: (value) => set({ type: value }),
-  setOrderBy: (value) => set({ orderBy: value }),
+
+  // 정렬 필터 설정 함수
+  setSort: (value) => set({ sort: value }),
 
   // 필터 초기화 함수
-  clearFilters: () => set({
-    searchValue: "",
-    category: "",
-    difficulty: "",
-    type: "",
-    orderBy: "createdAt:desc"
-  })
+  clearFilters: () =>
+    set({
+      searchValue: '',
+      category: '',
+      difficulty: '',
+      type: '',
+      sort: '인기순',
+    }),
 }))

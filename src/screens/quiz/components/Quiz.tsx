@@ -11,12 +11,20 @@ type PropsType = {
 }
 
 const Quiz = ({ quiz }: PropsType) => {
+
+  // 난이도 매핑
+  const difficultyMap = {
+    1: '쉬움',
+    2: '보통',
+    3: '어려움',
+  }
+
   return (
     <Container>
       {/* 헤더 */}
       <Header>
         <HeaderText>{`${quiz.category}ㅣ${quiz.step}ㅣ${quiz.type}`}</HeaderText>
-        <HeaderText>{`${quiz.difficulty}ㅣ${quiz.score}점`}</HeaderText>
+        <HeaderText>{`${difficultyMap[quiz.difficulty as keyof typeof difficultyMap]}ㅣ${quiz.score}점`}</HeaderText>
       </Header>
       {/* 질문 */}
       <QuestionText numberOfLines={2} ellipsizeMode='tail'>

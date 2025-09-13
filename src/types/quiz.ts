@@ -4,7 +4,7 @@ type QuizType = {
   category: string // 주제
   step: '학습' | '실천' | '고찰' | '응용' // 단계
   type: '객관식' | 'OX' // 타입(객관식, 주관식, OX)
-  difficulty: '쉬움' | '보통' | '어려움' // 난이도
+  difficulty: number // 난이도(숫자가 높을수록 어려움)
   score: number // 정답 시 주는 레벨업 점수
 
   question: string // 질문
@@ -38,5 +38,7 @@ type QuizDifficultyType = '쉬움' | '보통' | '어려움'
 ////////// 퀴즈 유형 타입
 type QuizTypeType = '객관식' | 'OX'
 
-export type { QuizCategoryType, QuizDifficultyType, QuizListType, QuizType, QuizTypeType }
+type QuizSortType = '인기순' | '최신순' | '오래된순' | '난이도순' | '난이도역순'
+
+export type { QuizCategoryType, QuizDifficultyType, QuizListType, QuizSortType, QuizType, QuizTypeType }
 
