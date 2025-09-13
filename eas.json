@@ -1,9 +1,12 @@
 {
+  "cli": {
+    "version": ">= 0.52.0"
+  },
   "build": {
     "development": {
+      "distribution": "internal",
       "android": {
-        "buildType": "apk",
-        "versionCode": 2
+        "gradleCommand": ":app:assembleDebug"
       },
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "SUPABASE_URL",
@@ -13,8 +16,7 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle",
-        "versionCode": 2
+        "buildType": "app-bundle"
       },
       "env": {
         "EXPO_PUBLIC_SUPABASE_URL": "SUPABASE_URL",
