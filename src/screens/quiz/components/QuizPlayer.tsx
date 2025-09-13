@@ -7,7 +7,7 @@ import styled from '@emotion/native'
 import React, { useCallback, useRef } from 'react'
 import { Dimensions, FlatList, Modal, StatusBar, View, ViewToken } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Quiz from './Quiz'
+import QuizDetail from './QuizDetail'
 
 const QuizPlayer = () => {
   const { open, setOpen, selectedQuizIndex } = useQuizPlayerStore()
@@ -46,9 +46,9 @@ const QuizPlayer = () => {
 
   // renderItem도 useCallback으로 메모이제이션
   const renderItem = useCallback(
-    ({ item: quizData, index }: RenderItemProps) => (
+    ({ item: quizData }: RenderItemProps) => (
       <QuizContainer height={CONTENT_HEIGHT}>
-        <Quiz quiz={quizData} index={index} />
+        <QuizDetail quiz={quizData} />
       </QuizContainer>
     ),
     [CONTENT_HEIGHT]
@@ -114,7 +114,8 @@ type QuizContainerProps = {
 }
 
 const QuizContainer = styled(View)<QuizContainerProps>`
-  height: ${({ height }) => `${height}px`};
   ${mixinFlex('column', 'center', 'center')}
-  border: 1px solid blue;
+  height: ${({ height }) => `${height}px`};
+  padding: 32px;
+  row-gap: 16px;
 `
