@@ -7,6 +7,7 @@ import styled from '@emotion/native'
 import React, { useCallback, useRef } from 'react'
 import { Dimensions, FlatList, Modal, StatusBar, View, ViewToken } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import Toast, { BaseToast } from 'react-native-toast-message'
 import QuizDetail from './QuizDetail'
 
 const QuizPlayer = () => {
@@ -93,6 +94,34 @@ const QuizPlayer = () => {
           ///// 기타
           // 스크롤바 숨김 여부
           showsVerticalScrollIndicator={false} // 스크롤바 숨기기
+        />
+        <Toast
+          visibilityTime={1.5 * 1000}
+          config={{
+            error: (props) => (
+              <BaseToast
+                {...props}
+                style={{
+                  backgroundColor: theme.colors.status.error,
+                  borderLeftWidth: 0,
+                  borderRadius: 8,
+                  width: '80%',
+                  zIndex: theme.zIndices.toast,
+                  height: 40, // 기본값보다 작게 설정
+                  // 또는
+                }}
+                contentContainerStyle={{
+                  paddingHorizontal: 16,
+                  zIndex: theme.zIndices.toast,
+                }}
+                text1Style={{
+                  fontSize: theme.fontSizes.body,
+                  fontWeight: 'bold', // theme.fontWeights.bold 대신
+                  color: theme.colors.core.white,
+                }}
+              />
+            ),
+          }}
         />
       </ModalContainer>
     </Modal>

@@ -5,7 +5,8 @@ import { theme } from '@/styles/theme'
 import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import React, { useState } from 'react'
-import { Alert, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 type PropsType = {
   quiz: QuizType
@@ -72,7 +73,13 @@ const QuizDetail = ({ quiz }: PropsType) => {
   // 보기 터치 핸들러
   function OptionPressHandler(optionNumber: number) {
     if (isAnswerRevealed) {
-      Alert.alert('이미 정답이 공개되었습니다.')
+      Toast.show({
+        type: 'error',
+        text1: '이미 정답이 공개되었습니다.',
+        position: 'top',
+        autoHide: true,
+        topOffset: 30,
+      })
       return
     }
     // 정답 공개 여부 업데이트
