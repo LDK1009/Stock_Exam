@@ -11,7 +11,7 @@ export const colors = {
     light: '#ff79b0',
   },
   background: {
-    default: '#001009',
+    default: '#000000',
     paper: '#222222',
   },
   black: {
