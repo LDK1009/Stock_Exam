@@ -1,4 +1,4 @@
-import { QuizSortType } from '@/types/quiz'
+import { QuizSortType } from '@/types/quiz/quiz'
 import { create } from 'zustand'
 
 // 사용자 상태

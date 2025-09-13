@@ -1,6 +1,6 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { QuizType } from '@/types/quiz'
+import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import '@emotion/react'
 import React from 'react'

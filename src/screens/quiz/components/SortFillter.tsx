@@ -1,7 +1,7 @@
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { QuizSortType } from '@/types/quiz'
+import { QuizSortType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import { Ionicons } from '@expo/vector-icons'
 import React, { useState } from 'react'

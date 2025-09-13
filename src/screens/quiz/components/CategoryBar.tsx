@@ -1,7 +1,7 @@
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { QuizCategoryType } from '@/types/quiz'
+import { QuizCategoryType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import React from 'react'
 import { ScrollView, Text, TouchableOpacity } from 'react-native'
