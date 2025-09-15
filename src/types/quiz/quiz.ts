@@ -33,12 +33,19 @@ type QuizCategoryType =
   | '투자판단'
 
 ////////// 퀴즈 난이도 타입
-type QuizDifficultyType = '쉬움' | '보통' | '어려움'
+type QuizDifficultyType = 1 | 2 | 3
 
 ////////// 퀴즈 유형 타입
 type QuizTypeType = '객관식' | 'OX'
 
 type QuizSortType = '인기순' | '최신순' | '오래된순' | '난이도순' | '난이도역순'
 
-export type { QuizCategoryType, QuizDifficultyType, QuizListType, QuizSortType, QuizType, QuizTypeType }
+export type {
+  QuizCategoryType,
+  QuizDifficultyType,
+  QuizListType,
+  QuizSortType,
+  QuizType,
+  QuizTypeType
+}
 
