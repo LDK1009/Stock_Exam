@@ -3,10 +3,13 @@ import { create } from 'zustand'
 
 type QuizDataType = {
   category: string
-  difficulty: string
+  difficulty: number | null
+  // 고급
   step: '학습' | '실천' | '고찰' | '응용'
   type: '객관식' | 'OX'
   score: 10 | 20 | 30
+  tags: string[]
+  //
   question: string
   options: string[]
   answer: 1 | 2 | 3 | null
@@ -35,10 +38,11 @@ export const useCreateQuizStore = create<StoreType>((set) => ({
 
   quizData: {
     category: '',
-    difficulty: '',
+    difficulty: null,
     step: '학습',
     type: '객관식',
     score: 10,
+    tags: ['주식고사', '퀴즈', '사용자제작'],
     question: '',
     options: [],
     answer: null,
@@ -61,10 +65,11 @@ export const useCreateQuizStore = create<StoreType>((set) => ({
     set({
       quizData: {
         category: '',
-        difficulty: '',
+        difficulty: null,
         step: '학습',
         type: '객관식',
         score: 10,
+        tags: ['주식고사', '퀴즈', '사용자제작'],
         question: '',
         options: [],
         answer: null,

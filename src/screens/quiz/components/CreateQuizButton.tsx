@@ -1,15 +1,19 @@
-import CommonText from '@/components/display/CommonText'
+import CommonToast from '@/components/feedback/CommonToast'
 import CommonButton from '@/components/input/CommonButton'
 import CommonDropDown from '@/components/input/CommonDropDown'
 import InputText from '@/components/input/CommonInputText'
+import { isAuthenticated } from '@/services/auth/auth'
+import { createQuiz } from '@/services/tables/quizzes'
 import { useCreateQuizStore } from '@/stores/screens/quiz/ui/createQuiz'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { QuizCategoryType, QuizDifficultyType } from '@/types/quiz/quiz'
+import { QuizCategoryType, QuizDifficultyType, QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import React from 'react'
-import { Modal, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 const CreateQuizButton = () => {
   const { open, setOpen, quizData, setQuizDataProperty, clearQuizData, setQuizDataOptionProperty } =
@@ -20,7 +24,6 @@ const CreateQuizButton = () => {
     label: QuizCategoryType
     value: QuizCategoryType
   }[] = [
-    { label: '전체', value: '전체' },
     { label: '재무상태표', value: '재무상태표' },
     { label: '현금흐름표', value: '현금흐름표' },
     { label: '자본변동표', value: '자본변동표' },
@@ -40,39 +43,132 @@ const CreateQuizButton = () => {
     { label: '어려움', value: 3 },
   ]
 
+  // 정답 드롭다운 옵션
+  const answerData: {
+    label: string
+    value: number
+  }[] = [
+    { label: '1번', value: 1 },
+    { label: '2번', value: 2 },
+    { label: '3번', value: 3 },
+  ]
+
+  async function buttonPress() {
+    const userIsAuthenticated = await isAuthenticated()
+
+    // 로그인 여부 확인
+    if (!userIsAuthenticated) {
+      setOpen(false)
+      Toast.show({
+        type: 'error',
+        text1: '로그인 후 이용 가능합니다.',
+      })
+      router.push('/auth/login')
+      return
+    }
+
+    setOpen(true)
+  }
+
+  async function createQuizButtonPress() {
+    const { category, difficulty, question, options, answer, explanation } = quizData
+
+    ///// 로그인 검증
+    const userIsAuthenticated = await isAuthenticated()
+    if (!userIsAuthenticated) {
+      setOpen(false)
+      setTimeout(() => {
+        Toast.show({
+          type: 'error',
+          text1: '로그인 후 이용 가능합니다.',
+        })
+      }, 500)
+      return
+    }
+
+    if (!category || !difficulty || !question || !options || !answer || !explanation) {
+      Toast.show({
+        type: 'error',
+        text1: '모든 필수 항목을 입력해주세요.',
+      })
+      return
+    }
+
+    // 퀴즈 생성
+    await createQuiz(quizData as QuizType)
+
+    // 입력값 초기화
+    clearQuizData()
+
+    // 모달 닫기
+    setOpen(false)
+
+    // 토스트 띄우기
+    setTimeout(() => {
+      Toast.show({
+        type: 'success',
+        text1: '퀴즈 생성 완료',
+      })
+    }, 500)
+  }
+
   return (
     <Container>
-      <IconButton onPress={() => setOpen(true)}>
+      <IconButton onPress={buttonPress}>
         <Ionicons name='add' size={24} color='#FFFFFF' />
       </IconButton>
 
       {/* 모달 */}
       <Modal visible={open} transparent animationType='fade' onRequestClose={() => setOpen(false)}>
-        <ModalContainer>
-          <CommonText>{JSON.stringify(quizData, null, 2)}</CommonText>
+        <ModalContainer
+          contentContainerStyle={{
+            flexGrow: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            rowGap: 24,
+            paddingBottom: 80, // 이거 추가
+          }}
+        >
           {/* 설정 */}
           <SectionContainer>
             <SubTitle>설정</SubTitle>
             <CommonDropDown
               options={categoryData}
-              placeholder='카테고리'
+              placeholder={quizData.category ? quizData.category : '카테고리'}
               onChange={(value) => {
                 setQuizDataProperty('category', value)
               }}
             />
             <CommonDropDown
               options={difficultyData}
-              placeholder='난이도'
+              placeholder={
+                quizData.difficulty
+                  ? (difficultyData.find((el) => el.value === quizData.difficulty)?.label ??
+                    '난이도')
+                  : '난이도'
+              }
               onChange={(value) => {
                 setQuizDataProperty('difficulty', value)
               }}
             />
 
-            <CommonButton title='고급' onPress={() => {}} />
+            <CommonButton
+              title='고급'
+              onPress={() => {
+                Toast.show({
+                  type: 'info',
+                  text1: '준비중인 기능입니다.',
+                  position: 'top',
+                  autoHide: true,
+                  topOffset: 0,
+                })
+              }}
+            />
           </SectionContainer>
 
           {/* 문제 */}
           <SectionContainer>
+            <SubTitle>문제</SubTitle>
             <InputText
               placeholder='Q. 제목 입력'
               onChangeText={(text) => setQuizDataProperty('question', text)}
@@ -88,18 +184,43 @@ const CreateQuizButton = () => {
               value={quizData.options[0]}
             />
             <InputText
-              placeholder='② 보기1 입력'
+              placeholder='② 보기2 입력'
               onChangeText={(text) => setQuizDataOptionProperty(1, text)}
               value={quizData.options[1]}
             />
             <InputText
-              placeholder='③ 보기1 입력'
+              placeholder='③ 보기3 입력'
               onChangeText={(text) => setQuizDataOptionProperty(2, text)}
               value={quizData.options[2]}
             />
           </SectionContainer>
+
           {/* 정답 및 해설 */}
-          <SectionContainer></SectionContainer>
+          <SectionContainer>
+            <SubTitle>정답 및 해설</SubTitle>
+            <CommonDropDown
+              options={answerData}
+              placeholder={
+                quizData.answer
+                  ? (answerData.find((el) => el.value === quizData.answer)?.label ?? '정답')
+                  : '정답'
+              }
+              onChange={(value) => {
+                setQuizDataProperty('answer', value)
+              }}
+            />
+            <InputText
+              placeholder='해설 입력'
+              onChangeText={(text) => setQuizDataProperty('explanation', text)}
+              value={quizData.explanation}
+            />
+          </SectionContainer>
+
+          {/* 완료 버튼 */}
+          <CommonButton title='완료' onPress={createQuizButtonPress} />
+
+          {/* 토스트 */}
+          <CommonToast />
         </ModalContainer>
       </Modal>
     </Container>
@@ -123,9 +244,9 @@ const IconButton = styled(TouchableOpacity)`
   border: 1px solid #333333;
 `
 
-const ModalContainer = styled(View)`
-  ${mixinFlex('column', 'center', 'center')}
-  padding:40px;
+const ModalContainer = styled(ScrollView)`
+  padding: 40px;
+  padding-bottom: 80px;
   flex: 1;
 
   background-color: ${theme.colors.background.default};

@@ -1,3 +1,4 @@
+import CommonToast from '@/components/feedback/CommonToast'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import { Stack } from 'expo-router'
@@ -5,7 +6,6 @@ import { StatusBar } from 'expo-status-bar'
 import React, { useEffect } from 'react'
 import { Platform, StatusBar as RNStatusBar, SafeAreaView } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import Toast from 'react-native-toast-message'
 import 'react-native-url-polyfill/auto'
 
 export default function RootLayout() {
@@ -28,7 +28,7 @@ export default function RootLayout() {
           <Stack.Screen name='auth' options={{ headerShown: false }} />
         </Stack>
       </Container>
-      <Toast/>
+      <CommonToast />
     </SafeAreaProvider>
   )
 }
