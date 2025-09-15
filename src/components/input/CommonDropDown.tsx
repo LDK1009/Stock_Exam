@@ -48,14 +48,7 @@ const CommonDropDown = ({
         containerStyle,
       ]}
       ///// 옵션 아이템 컨테이너 스타일
-      itemContainerStyle={[
-        {
-          backgroundColor: theme.colors.background.paper,
-          borderRadius: 8,
-          borderWidth: 0,
-          padding: 0,
-        },
-      ]}
+      itemContainerStyle={[{}]}
       ///// 선택된 옵션의 배경색
       activeColor={theme.colors.background.default}
       ///// 플레이스홀더 스타일
