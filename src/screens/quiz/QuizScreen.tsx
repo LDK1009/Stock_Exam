@@ -13,7 +13,9 @@ import SearchBar from './components/SearchBar'
 const QuizScreen = () => {
   return (
     <Container>
+      {/* 백그라운드 */}
       <QuizPlayer />
+      {/* 바디 */}
       <SearchBar />
       <CategoryBar />
       <FillterBar />
