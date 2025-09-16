@@ -9,20 +9,12 @@
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
-      "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://tqwakvmtfyiyxjyxrctv.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxd2Frdm10ZnlpeXhqeXhyY3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyOTQwOTgsImV4cCI6MjA3Mjg3MDA5OH0.mQWfnzJzcQ77Ldt-0X4yCLy5zcPLmeAoXah-YWxsHbU"
-      },
       "channel": "development"
     },
     "production": {
       "autoIncrement": true,
       "android": {
         "buildType": "app-bundle"
-      },
-      "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://tqwakvmtfyiyxjyxrctv.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRxd2Frdm10ZnlpeXhqeXhyY3R2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyOTQwOTgsImV4cCI6MjA3Mjg3MDA5OH0.mQWfnzJzcQ77Ldt-0X4yCLy5zcPLmeAoXah-YWxsHbU"
       },
       "channel": "production"
     }

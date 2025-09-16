@@ -1,9 +1,10 @@
 {
-  "name": "speed-battle",
+  "name": "stock-exam",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
+    "prebuild": "node scripts/verify-env.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -67,6 +68,7 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "babel-plugin-module-resolver": "^5.0.2",
+    "dotenv": "^17.2.2",
     "eslint": "^9.32.0",
     "eslint-config-expo": "~9.2.0",
     "eslint-config-prettier": "^10.1.8",
