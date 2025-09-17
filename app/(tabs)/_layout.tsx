@@ -1,6 +1,6 @@
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
@@ -23,6 +23,7 @@ export default function TabsLayout() {
             headerShown: false,
           }}
         >
+          {/* 홈 */}
           <Tabs.Screen
             name='index'
             options={{
@@ -34,6 +35,19 @@ export default function TabsLayout() {
               ),
             }}
           />
+          {/* 종목 */}
+          <Tabs.Screen
+            name='stock'
+            options={{
+              title: 'Stock',
+              tabBarIcon: ({ color }) => (
+                <TabIcon>
+                  <FontAwesome name='building-o' size={theme.iconSizes.md} color={color} />
+                </TabIcon>
+              ),
+            }}
+          />
+          {/* 퀴즈 */}
           <Tabs.Screen
             name='quiz'
             options={{
@@ -45,6 +59,7 @@ export default function TabsLayout() {
               ),
             }}
           />
+          {/* 뉴스 */}
           <Tabs.Screen
             name='news'
             options={{
@@ -56,6 +71,7 @@ export default function TabsLayout() {
               ),
             }}
           />
+          {/* 프로필 */}
           <Tabs.Screen
             name='profile'
             options={{
