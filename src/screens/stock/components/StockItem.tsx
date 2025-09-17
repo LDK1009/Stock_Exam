@@ -12,9 +12,9 @@ type StockItemProps = {
 
 const StockItem = ({ stock }: StockItemProps) => {
   // 퀴즈 개수
-  const quizCount = Math.floor(Math.random() * 10)
+  const quizCount = 32
   // 퀴즈 성공 개수
-  const quizSuccessCount = Math.floor(Math.random() * 10)
+  const quizSuccessCount = 16
 
   return (
     <Container>
@@ -34,14 +34,19 @@ const StockItem = ({ stock }: StockItemProps) => {
         </StockPriceContainer>
       </StockInfo>
       <QuizContainer>
+        {/* 퀴즈 개수 박스 */}
         <QuizCountBox>
+          {/* 퀴즈 성공 비율 박스 */}
           <QuizSuccessRatioBox ratio={quizSuccessCount / quizCount} />
+          {/* 퀴즈 개수 텍스트 */}
           {quizSuccessCount === quizCount ? (
             <QuizCountText>🎓</QuizCountText>
           ) : (
             <QuizCountText>{quizCount}</QuizCountText>
           )}
         </QuizCountBox>
+        {/* 퀴즈 성공 비율 텍스트 */}
+        <QuizSuccessRatioText>진행률 {(quizSuccessCount / quizCount) * 100}%</QuizSuccessRatioText>
       </QuizContainer>
     </Container>
   )
@@ -93,7 +98,7 @@ const StockMarketCapitalization = styled(Text)`
 `
 
 const QuizContainer = styled(View)`
-  ${mixinFlex('column', 'flex-start', 'flex-start')}
+  ${mixinFlex('column', 'flex-start', 'center')}
   row-gap: 4px;
 `
 
@@ -125,4 +130,10 @@ const QuizSuccessRatioBox = styled(View)<QuizSuccessRatioBoxProps>`
   width: 100%;
   height: ${({ ratio }) => `${ratio * 100}%`};
   background-color: rgba(255, 255, 255, 0.5);
+`
+
+const QuizSuccessRatioText = styled(Text)`
+  font-size: 10px;
+  font-weight: ${theme.fontWeights.regular};
+  color: ${theme.colors.core.white};
 `
