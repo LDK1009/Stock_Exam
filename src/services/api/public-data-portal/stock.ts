@@ -12,9 +12,9 @@ async function getStockList() {
     .map((item: any) => ({
       id: item.srtnCd,
       name: item.itmsNm,
-      closingPrice: item.clpr,
-      fluctuationRate: item.fltRt,
-      marketCapitalization: item.mrktTotAmt,
+      closingPrice: Number(item.clpr),
+      fluctuationRate: Number(item.fltRt),
+      marketCapitalization: Number(item.mrktTotAmt),
     }))
     .sort((a: StockType, b: StockType) => b.marketCapitalization - a.marketCapitalization)
 

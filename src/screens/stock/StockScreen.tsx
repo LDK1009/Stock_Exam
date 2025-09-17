@@ -7,13 +7,14 @@ import styled from '@emotion/native'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { useCallback } from 'react'
 import { View } from 'react-native'
+import StockList from './components/StockList'
 
 const StockScreen = () => {
   const { stockList, setStockList } = useStockStore()
 
   async function fetchStockData() {
     const stockListData = await getStockList()
-    console.log('주식 데이터:', stockListData)
+    // console.log('주식 데이터:', stockListData)
     setStockList(stockListData)
   }
 
@@ -26,7 +27,7 @@ const StockScreen = () => {
   return (
     <Container>
       <CommonText>StockScreen</CommonText>
-      <CommonText>{JSON.stringify(stockList, null, 2)}</CommonText>
+      <StockList stockList={stockList} />
     </Container>
   )
 }
