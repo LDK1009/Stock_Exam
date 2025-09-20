@@ -1,7 +1,11 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { StockType } from '@/types/stock/stock'
-import { formatFluctuationRate, formatKoreanCurrency } from '@/utils/number'
+import {
+  formatFluctuationRate,
+  formatKoreanCurrency,
+  formatThousandSeparator,
+} from '@/utils/number'
 import styled from '@emotion/native'
 import { router } from 'expo-router'
 import React from 'react'
@@ -24,7 +28,7 @@ const StockItem = ({ stock }: StockItemProps) => {
         <StockName>{stock.name}</StockName>
         {/* 종가, 등락률, 시가총액 */}
         <StockPriceContainer>
-          <StockPrice>{formatKoreanCurrency(stock.closingPrice)} </StockPrice>
+          <StockPrice>{formatThousandSeparator(stock.closingPrice)}원{' '}</StockPrice>
           <StockFluctuationRate direction={stock.fluctuationRate > 0 ? 'up' : 'down'}>
             ({stock.fluctuationRate > 0 ? '+' : ''}
             {formatFluctuationRate(stock.fluctuationRate)}%){' '}

@@ -38,6 +38,7 @@ const Container = styled(SafeAreaView)`
   row-gap: 24px;
   background-color: ${theme.colors.background.default};
 `
+
 const QuizArea = styled(View)`
   width: 100%;
   flex: 1;

@@ -34,5 +34,36 @@ async function getStockList() {
   return returnData
 }
 
-export { getStockList }
+async function getStockDetailById(id: string) {
+  let data
+
+  for (let i = 1; i <= 14; i++) {
+    const requestDate = getPreviousDate8Digits(i)
+
+    const response = await axios.get(
+      `https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?serviceKey=${process.env.EXPO_PUBLIC_PUBLIC_DATA_PORTAL_ENCODING_API_KEY}&numOfRows=9999&pageNo=1&resultType=json&basDt=${requestDate}&mrktCls=KOSPI&likeSrtnCd=${id}`
+    )
+
+    if (response.data.response.body.items.item.length > 0) {
+      data = response.data.response.body.items.item
+      break
+    }
+  }
+
+  const { itmsNm, srtnCd, clpr, fltRt, mrktTotAmt } = data[0]
+
+  const returnData = {
+    id: srtnCd,
+    name: itmsNm,
+    closingPrice: Number(clpr),
+    fluctuationRate: Number(fltRt),
+    marketCapitalization: Number(mrktTotAmt),
+  }
+
+  console.log('returnData', returnData);
+
+  return returnData
+}
+
+export { getStockDetailById, getStockList }
 
