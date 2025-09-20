@@ -26,6 +26,19 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
           <Stack.Screen name='auth' options={{ headerShown: false }} />
+          <Stack.Screen
+            name='stock'
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* [id] 경로도 추가 */}
+          <Stack.Screen
+            name='stock/[id]'
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack>
       </Container>
       <CommonToast />

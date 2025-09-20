@@ -3,8 +3,9 @@ import { theme } from '@/styles/theme'
 import { StockType } from '@/types/stock/stock'
 import { formatFluctuationRate, formatKoreanCurrency } from '@/utils/number'
 import styled from '@emotion/native'
+import { router } from 'expo-router'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 type StockItemProps = {
   stock: StockType
@@ -17,7 +18,7 @@ const StockItem = ({ stock }: StockItemProps) => {
   const quizSuccessCount = 16
 
   return (
-    <Container>
+    <Container onPress={() => router.push(`/stock/${stock.id}`)}>
       <StockInfo>
         {/* 종목명 */}
         <StockName>{stock.name}</StockName>
@@ -54,7 +55,7 @@ const StockItem = ({ stock }: StockItemProps) => {
 
 export default StockItem
 
-const Container = styled(View)`
+const Container = styled(TouchableOpacity)`
   width: 100%;
   padding: 16px;
   ${mixinFlex('row', 'space-between', 'center')}
