@@ -3,9 +3,9 @@ import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { StockType } from '@/types/stock/stock'
 import {
-    formatFluctuationRate,
-    formatKoreanCurrency,
-    formatThousandSeparator,
+  formatFluctuationRate,
+  formatKoreanCurrency,
+  formatThousandSeparator,
 } from '@/utils/number'
 import styled from '@emotion/native'
 import React from 'react'
@@ -16,7 +16,7 @@ type PropsType = {
   stock: StockType
 }
 
-const Overview = ({ stock }: PropsType) => {
+const OverviewSection = ({ stock }: PropsType) => {
   console.log(stock)
 
   const data = [
@@ -94,7 +94,7 @@ const Overview = ({ stock }: PropsType) => {
   )
 }
 
-export default Overview
+export default OverviewSection
 
 const Container = styled(View)`
   ${mixinFlex('column', 'flex-start', 'center')}

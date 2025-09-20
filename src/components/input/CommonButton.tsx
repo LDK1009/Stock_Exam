@@ -8,13 +8,25 @@ import { Text, TouchableOpacity } from 'react-native'
 interface ButtonProps {
   title: string
   onPress: () => void
+  icon?: React.ReactNode
+  iconPosition?: 'start' | 'end'
   size?: 'small' | 'medium' | 'large'
+  borderRadius?: string
 }
 
-const CommonButton = ({ title, onPress, size = 'medium' }: ButtonProps) => {
+const CommonButton = ({
+  title,
+  onPress,
+  icon,
+  iconPosition = 'start',
+  size = 'medium',
+  borderRadius,
+}: ButtonProps) => {
   return (
-    <Container onPress={onPress} size={size}>
+    <Container onPress={onPress} size={size} borderRadius={borderRadius}>
+      {iconPosition === 'start' && icon}
       <ButtonText size={size}>{title}</ButtonText>
+      {iconPosition === 'end' && icon}
     </Container>
   )
 }
@@ -23,14 +35,17 @@ export default CommonButton
 
 type ContainerProps = {
   size: 'small' | 'medium' | 'large'
+  borderRadius?: string
 }
 
 const Container = styled(TouchableOpacity)<ContainerProps>`
   ${mixinFlex('row', 'center', 'center')}
+  column-gap: 4px;
+
   width: 100%;
   padding: ${({ size }) => (size === 'small' ? '4px' : size === 'medium' ? '8px' : '16px')};
 
-  border-radius: 8px;
+  border-radius: ${({ borderRadius }) => borderRadius || '8px'};
   background-color: ${theme.colors.background.paper};
 `
 
