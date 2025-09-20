@@ -7,7 +7,7 @@ import styled from '@emotion/native'
 import { useFocusEffect } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useCallback, useState } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { SafeAreaView, ScrollView, Text, View } from 'react-native'
 import NewsSection from './components/NewsSection'
 import OverviewSection from './components/OverviewSection'
 import StockQuiz from './components/QuizSection'
@@ -38,18 +38,20 @@ const StockDetailScreen = () => {
 
   return (
     <Container>
-      <Section>
-        <SectionTitle>개요</SectionTitle>
-        <OverviewSection stock={stock} />
-      </Section>
-      <Section>
-        <SectionTitle>문제</SectionTitle>
-        <StockQuiz />
-      </Section>
-      <Section>
-        <SectionTitle>뉴스</SectionTitle>
-        <NewsSection stock={stock} />
-      </Section>
+      <ScrollContainer contentContainerStyle={{ rowGap: 24, paddingBottom: 100 }}>
+        <Section>
+          <SectionTitle>개요</SectionTitle>
+          <OverviewSection stock={stock} />
+        </Section>
+        <Section>
+          <SectionTitle>문제</SectionTitle>
+          <StockQuiz />
+        </Section>
+        <Section>
+          <SectionTitle>뉴스</SectionTitle>
+          <NewsSection stock={stock} />
+        </Section>
+      </ScrollContainer>
     </Container>
   )
 }
@@ -59,10 +61,12 @@ export default StockDetailScreen
 const Container = styled(SafeAreaView)`
   ${mixinContainer}
   ${mixinFlex('column', 'flex-start', 'stretch')}
-  padding: 32px 16px;
-  padding-bottom: 0px;
-  row-gap: 24px;
   background-color: ${theme.colors.background.default};
+`
+
+const ScrollContainer = styled(ScrollView)`
+  flex: 1;
+  padding: 32px 16px;
 `
 
 const SectionTitle = styled(Text)`

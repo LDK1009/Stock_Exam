@@ -17,8 +17,6 @@ type PropsType = {
 }
 
 const OverviewSection = ({ stock }: PropsType) => {
-  console.log(stock)
-
   const data = [
     {
       name: '완료',
