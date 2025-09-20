@@ -10,7 +10,6 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 
 const QuizSection = () => {
   const { quizList } = useQuizStore()
-  console.log(quizList)
 
   type RenderItemProps = {
     item: QuizType

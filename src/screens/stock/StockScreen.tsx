@@ -14,7 +14,6 @@ const StockScreen = () => {
 
   async function fetchStockData() {
     const stockListData = await getStockList()
-    // console.log('주식 데이터:', stockListData)
     setStockList(stockListData)
   }
 

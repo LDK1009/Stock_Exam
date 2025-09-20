@@ -54,7 +54,7 @@ async function getNaverNews(searchString: string) {
         }
       } catch (error) {
         console.error('썸네일 추가 및 본문 추출 실패:', error)
-        return { ...item, thumbnail: "" }
+        return { ...item, thumbnail: '' }
       }
     })
   )

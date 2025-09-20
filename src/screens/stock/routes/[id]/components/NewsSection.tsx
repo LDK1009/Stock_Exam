@@ -44,6 +44,7 @@ const NewsSection = ({ stock }: PropsType) => {
     }, [])
   )
 
+  
   return (
     <FlatListContainer>
       <FlatList

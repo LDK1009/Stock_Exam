@@ -5,7 +5,6 @@ async function createQuiz(quizData: QuizType) {
   try {
     const response = await supabase.from('quizzes').insert(quizData).select()
 
-    console.log(response)
     return response
   } catch (error) {
     throw error
