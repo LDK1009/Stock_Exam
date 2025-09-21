@@ -20,7 +20,7 @@ const QuizList = () => {
     pageNumber = 0,
     searchValue = '',
     category = '',
-    difficulty = '',
+    difficulty: null | number = null,
     type = '',
     sort = ''
   ) {
@@ -59,7 +59,8 @@ const QuizList = () => {
 
       // 난이도 필터
       if (difficulty) {
-        if (difficulty !== '전체') {
+        // 난이도가 '전체'가 아닐 때만 필터 적용
+        if (difficulty !== null) {
           query = query.eq('difficulty', difficulty)
         }
       }

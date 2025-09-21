@@ -11,7 +11,7 @@ type StoreType = {
   // 검색 필터
   searchValue: string
   category: string
-  difficulty: string
+  difficulty: null | number
   type: string
 
   // 정렬 필터
@@ -20,7 +20,7 @@ type StoreType = {
   // 필터 설정
   setSearchValue: (value: string) => void
   setCategory: (value: string) => void
-  setDifficulty: (value: string) => void
+  setDifficulty: (value: null | number) => void
   setType: (value: string) => void
   setSort: (value: QuizSortType) => void
 
@@ -37,7 +37,7 @@ export const useQuizFilterStore = create<StoreType>((set) => ({
   // 필터 초기값
   searchValue: '',
   category: '전체',
-  difficulty: '',
+  difficulty: null,
   type: '',
 
   // 정렬 필터 초기값
@@ -57,7 +57,7 @@ export const useQuizFilterStore = create<StoreType>((set) => ({
     set({
       searchValue: '',
       category: '',
-      difficulty: '',
+      difficulty: null,
       type: '',
       sort: '인기순',
     }),

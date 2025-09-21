@@ -10,14 +10,19 @@ const DifficultyFilter = () => {
   const [visible, setVisible] = useState(false)
   const { difficulty, setDifficulty } = useQuizFilterStore()
 
-  const options = ['전체', '쉬움', '보통', '어려움']
+  const options = [
+    { label: '전체', value: null },
+    { label: '쉬움', value: 1 },
+    { label: '보통', value: 2 },
+    { label: '어려움', value: 3 },
+  ]
 
-  const selectedLabel = options.find((opt) => opt === difficulty) || '난이도'
+  const selectedOption = options.find((opt) => opt.value === difficulty) ?? options[0]
 
   return (
     <>
       <FilterButton onPress={() => setVisible(true)}>
-        <ButtonText>{selectedLabel}</ButtonText>
+        <ButtonText>{selectedOption.label}</ButtonText>
         <IconBox>
           <Ionicons name='chevron-down' size={12} color='rgba(255, 255, 255, 0.7)' />
         </IconBox>
@@ -30,14 +35,14 @@ const DifficultyFilter = () => {
             <OptionContainer>
               {options.map((option) => (
                 <OptionButton
-                  key={option}
+                  key={option.value}
                   onPress={() => {
-                    setDifficulty(option)
+                    setDifficulty(option.value)
                     setVisible(false)
                   }}
-                  isSelected={difficulty === option}
+                  isSelected={difficulty === option.value}
                 >
-                  <OptionText isSelected={difficulty === option}>{option}</OptionText>
+                  <OptionText isSelected={difficulty === option.value}>{option.label}</OptionText>
                 </OptionButton>
               ))}
             </OptionContainer>
