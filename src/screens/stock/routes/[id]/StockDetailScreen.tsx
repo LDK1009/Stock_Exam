@@ -8,6 +8,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { SafeAreaView, ScrollView, Text, View } from 'react-native'
+import IndicatorSection from './components/IndicatorSection'
 import NewsSection from './components/NewsSection'
 import OverviewSection from './components/OverviewSection'
 import StockQuiz from './components/QuizSection'
@@ -50,6 +51,10 @@ const StockDetailScreen = () => {
         <Section>
           <SectionTitle>뉴스</SectionTitle>
           <NewsSection stock={stock} />
+        </Section>
+        <Section>
+          <SectionTitle>핵심 지표</SectionTitle>
+          <IndicatorSection stock={stock} />
         </Section>
       </ScrollContainer>
     </Container>
