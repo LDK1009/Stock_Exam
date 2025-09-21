@@ -1,4 +1,4 @@
-import { getNaverNews } from '@/services/api/naver/news'
+import { getStockNewsList } from '@/services/api/naver/news'
 import { NewsType } from '@/types/news/news'
 import { StockType } from '@/types/stock/stock'
 import styled from '@emotion/native'
@@ -33,7 +33,7 @@ const NewsSection = ({ stock }: PropsType) => {
       const fetchNewsData = async () => {
         try {
           // 뉴스 검색
-          const response = await getNaverNews(stock.name)
+          const response = await getStockNewsList(stock.name)
 
           setNewsList(response)
         } catch (error) {
