@@ -1,5 +1,8 @@
 import CommonLoading from '@/components/feedback/CommonLoading'
-import { getStockDetailById } from '@/services/api/public-data-portal/stock'
+import {
+  getCorporateRegistrationNumber,
+  getStockDetailById,
+} from '@/services/api/public-data-portal/stock'
 import { mixinContainer, mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { StockType } from '@/types/stock/stock'
@@ -23,9 +26,15 @@ const StockDetailScreen = () => {
     setStock(stockDetail)
   }
 
+  async function testFunction() {
+    const corporateRegistrationNumber = await getCorporateRegistrationNumber(id as string)
+    console.log('법인등록번호', corporateRegistrationNumber)
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchStockDetail()
+      testFunction()
     }, [])
   )
 
