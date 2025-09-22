@@ -1,3 +1,4 @@
+import { getSummaryFinancialStatements } from '@/services/api/public-data-portal/stock'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { StockType } from '@/types/stock/stock'
@@ -32,6 +33,15 @@ const IndicatorSection = ({ stock }: PropsType) => {
       value: `${45} %`,
     },
   ]
+
+
+  async function testFunction() {
+    const summaryFinancialStatements = await getSummaryFinancialStatements(stock.id)
+    console.log('요약 재무제표', JSON.stringify(summaryFinancialStatements, null, 2))
+  }
+
+
+  testFunction()
 
   return (
     <Container>
