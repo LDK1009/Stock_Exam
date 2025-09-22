@@ -1,4 +1,5 @@
 import CommonToast from '@/components/feedback/CommonToast'
+import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizStore } from '@/stores/screens/quiz/quiz'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
@@ -6,13 +7,22 @@ import { theme } from '@/styles/theme'
 import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import React, { useCallback, useRef } from 'react'
-import { Dimensions, FlatList, Modal, StatusBar, View, ViewToken } from 'react-native'
+import {
+  ActivityIndicator,
+  Dimensions,
+  FlatList,
+  Modal,
+  StatusBar,
+  View,
+  ViewToken,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import QuizDetail from './QuizDetail'
 
 const QuizPlayer = () => {
   const { open, setOpen, selectedQuizIndex } = useQuizPlayerStore()
-  const { quizList } = useQuizStore()
+  const { quizList, getQuiz, loading, canMore, page, setPage } = useQuizStore()
+  const { searchValue, category, difficulty, type, sort } = useQuizFilterStore()
 
   // 화면 높이 계산
   const { height: SCREEN_HEIGHT } = Dimensions.get('window')
@@ -29,15 +39,29 @@ const QuizPlayer = () => {
     itemVisiblePercentThreshold: 70,
   }).current
 
+  ////////// 무한 스크롤
+  const loadMore = useCallback(() => {
+    // 로딩 중이거나 더 불러올 데이터가 없으면 중단
+    if (!loading && canMore) {
+      const nextPage = page + 1
+      setPage(nextPage)
+      getQuiz(nextPage, searchValue, category, difficulty, type, sort)
+    }
+  }, [loading, canMore, page, searchValue, category, difficulty, type, sort])
+
   // 보이는 아이템 변경 핸들러를 useCallback으로 메모이제이션
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       if (viewableItems.length > 0) {
-        const currentQuiz = viewableItems[0].item as QuizType
-        console.log('현재 보이는 퀴즈:', currentQuiz.id)
+        const currentIndex = viewableItems[0].index as number
+
+        // 마지막에서 두 번째 퀴즈에 도달하면 추가 퀴즈 로드
+        if (currentIndex === quizList.length - 2) {
+          loadMore()
+        }
       }
     },
-    []
+    [quizList.length, loadMore]
   )
 
   type RenderItemProps = {
@@ -94,6 +118,13 @@ const QuizPlayer = () => {
           ///// 기타
           // 스크롤바 숨김 여부
           showsVerticalScrollIndicator={false} // 스크롤바 숨기기
+          ListFooterComponent={
+            loading ? (
+              <LoadingContainer>
+                <ActivityIndicator size='large' color={theme.colors.core.white} animating={true} />
+              </LoadingContainer>
+            ) : null
+          }
         />
         <CommonToast />
       </ModalContainer>
@@ -120,4 +151,9 @@ const QuizContainer = styled(View)<QuizContainerProps>`
   height: ${({ height }) => `${height}px`};
   padding: 32px;
   row-gap: 16px;
+`
+
+const LoadingContainer = styled(View)`
+  padding: 20px;
+  align-items: center;
 `
