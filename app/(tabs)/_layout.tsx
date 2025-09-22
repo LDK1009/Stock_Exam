@@ -93,6 +93,7 @@ const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${theme.colors.background.paper};
 `
+
 const StyledTabs = styled(Tabs)``
 
 const StyledTabBar = {

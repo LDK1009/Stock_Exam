@@ -4,32 +4,23 @@ import styled from '@emotion/native'
 import React from 'react'
 import { View } from 'react-native'
 import CategoryBar from './components/CategoryBar'
-import CreateQuizButton from './components/CreateQuizButton'
-import FillterBar from './components/FillterBar'
-import QuizList from './components/QuizList'
-import QuizPlayer from './components/QuizPlayer'
-import SearchBar from './components/SearchBar'
+import CreatePostButton from './components/CreatePostButton'
+import PostList from './components/PostList'
 
-const QuizScreen = () => {
+const CommunityScreen = () => {
   return (
     <Container>
-      {/* 백그라운드 */}
-      <QuizPlayer />
-      {/* 바디 */}
-      <SearchBar />
       <CategoryBar />
-      <FillterBar />
-      <QuizArea>
-        <QuizList />
-        <CreateQuizButton />
-      </QuizArea>
+      <PostArea>
+        <PostList />
+        <CreatePostButton />
+      </PostArea>
     </Container>
   )
 }
 
-export default QuizScreen
+export default CommunityScreen
 
-////////// 스타일링
 const Container = styled(View)`
   ${mixinContainer}
   ${mixinFlex('column', 'flex-start', 'center')}
@@ -39,7 +30,7 @@ const Container = styled(View)`
   background-color: ${theme.colors.background.default};
 `
 
-const QuizArea = styled(View)`
+const PostArea = styled(View)`
   width: 100%;
   flex: 1;
 `

@@ -1,4 +1,4 @@
-import CommunityScreen from '@/screens/news/CommunityScreen'
+import CommunityScreen from '@/screens/community/CommunityScreen'
 import React from 'react'
 
 const community = () => {

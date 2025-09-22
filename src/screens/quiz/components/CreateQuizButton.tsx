@@ -1,7 +1,7 @@
 import CommonToast from '@/components/feedback/CommonToast'
 import CommonButton from '@/components/input/CommonButton'
 import CommonDropDown from '@/components/input/CommonDropDown'
-import InputText from '@/components/input/CommonInputText'
+import CommonInputText from '@/components/input/CommonInputText'
 import { isAuthenticated } from '@/services/auth/auth'
 import { createQuiz } from '@/services/tables/quizzes'
 import { useCreateQuizStore } from '@/stores/screens/quiz/ui/createQuiz'
@@ -169,7 +169,7 @@ const CreateQuizButton = () => {
           {/* 문제 */}
           <SectionContainer>
             <SubTitle>문제</SubTitle>
-            <InputText
+            <CommonInputText
               placeholder='Q. 제목 입력'
               onChangeText={(text) => setQuizDataProperty('question', text)}
               value={quizData.question}
@@ -178,17 +178,17 @@ const CreateQuizButton = () => {
                 fontWeight: theme.fontWeights.bold,
               }}
             />
-            <InputText
+            <CommonInputText
               placeholder='① 보기1 입력'
               onChangeText={(text) => setQuizDataOptionProperty(0, text)}
               value={quizData.options[0]}
             />
-            <InputText
+            <CommonInputText
               placeholder='② 보기2 입력'
               onChangeText={(text) => setQuizDataOptionProperty(1, text)}
               value={quizData.options[1]}
             />
-            <InputText
+            <CommonInputText
               placeholder='③ 보기3 입력'
               onChangeText={(text) => setQuizDataOptionProperty(2, text)}
               value={quizData.options[2]}
@@ -209,7 +209,7 @@ const CreateQuizButton = () => {
                 setQuizDataProperty('answer', value)
               }}
             />
-            <InputText
+            <CommonInputText
               placeholder='해설 입력'
               onChangeText={(text) => setQuizDataProperty('explanation', text)}
               value={quizData.explanation}

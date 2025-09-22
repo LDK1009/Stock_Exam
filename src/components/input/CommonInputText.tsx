@@ -1,7 +1,7 @@
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import React from 'react'
-import { TextInput } from 'react-native'
+import { StyleProp, TextInput, TextStyle } from 'react-native'
 
 type PlaceholderStyle = {
   color?: string
@@ -13,22 +13,30 @@ type PropsType = {
   placeholder: string
   onChangeText: (text: string) => void
   value: string
+  containerStyle?: StyleProp<TextStyle>
   placeholderStyle?: PlaceholderStyle
 }
 
-const InputText = ({ placeholder, onChangeText, value, placeholderStyle }: PropsType) => {
+const CommonInputText = ({
+  placeholder,
+  onChangeText,
+  value,
+  containerStyle,
+  placeholderStyle,
+}: PropsType) => {
   return (
     <Container
       placeholder={placeholder}
       onChangeText={onChangeText}
       value={value}
+      style={containerStyle}
       placeholderTextColor={placeholderStyle?.color || 'rgba(255, 255, 255, 0.5)'}
       placeholderStyle={placeholderStyle}
     />
   )
 }
 
-export default InputText
+export default CommonInputText
 
 type ContainerProps = {
   placeholderStyle?: PlaceholderStyle
