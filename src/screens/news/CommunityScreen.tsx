@@ -5,16 +5,16 @@ import React from 'react'
 import { Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const NewsScreen = () => {
+const CommunityScreen = () => {
   return (
     <Container>
-      <Title>NEWS</Title>
+      <Title>COMMUNITY</Title>
       <SubTitle>준비중인 페이지입니다.</SubTitle>
     </Container>
   )
 }
 
-export default NewsScreen
+export default CommunityScreen
 
 const Container = styled(SafeAreaView)`
   flex: 1;
