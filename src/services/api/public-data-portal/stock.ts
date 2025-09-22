@@ -91,12 +91,19 @@ async function getCorporateRegistrationNumber(isinCd: string) {
 ////////// 요약 재무제표 조회
 async function getSummaryFinancialStatements(isinCd: string) {
   try {
+    // 법인등록번호 조회
     const corporateRegistrationNumber = await getCorporateRegistrationNumber(isinCd)
 
+    console.log('corporateRegistrationNumber', corporateRegistrationNumber)
+    // 작년 재무제표 조회
+    const lastYear = new Date().getFullYear() - 1
+
+    // API 요청
     const response = await axios.get(
-      `https://apis.data.go.kr/1160100/service/GetFinaStatInfoService_V2/getSummFinaStat_V2?numOfRows=1&pageNo=1&resultType=json&serviceKey=${process.env.EXPO_PUBLIC_PUBLIC_DATA_PORTAL_ENCODING_API_KEY}&crno=${corporateRegistrationNumber}`
+      `https://apis.data.go.kr/1160100/service/GetFinaStatInfoService_V2/getSummFinaStat_V2?numOfRows=1&pageNo=1&resultType=json&serviceKey=${process.env.EXPO_PUBLIC_PUBLIC_DATA_PORTAL_ENCODING_API_KEY}&crno=${corporateRegistrationNumber}&bizYear=${lastYear}`
     )
 
+    // 응답 데이터 반환
     return response.data.response.body.items.item[0]
   } catch (error) {
     throw error
