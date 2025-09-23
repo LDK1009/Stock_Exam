@@ -1,24 +1,26 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { Post } from '@/types/community/community'
+import { PostType } from '@/types/community/community'
 import styled from '@emotion/native'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
-  post: Post
+  post: PostType
 }
 
 const PostItem = ({ post }: PropsType) => {
-  const { id, author, createdAt, views, comments, likes, title, content } = post
+  const { id, authorUid, createdAt, viewCount, commentCount, recommendationCount, title, content } =
+    post
+    
   return (
     <Container>
-      <Author>{author}</Author>
+      <Author>{authorUid}</Author>
       <Title numberOfLines={2}>{title}</Title>
       <Footer>
-        <FooterText>조회 {views}</FooterText>
-        <FooterText>댓글 {comments}</FooterText>
-        <FooterText>추천 {likes}</FooterText>
+        <FooterText>조회 {viewCount}</FooterText>
+        <FooterText>댓글 {commentCount}</FooterText>
+        <FooterText>추천 {recommendationCount}</FooterText>
       </Footer>
     </Container>
   )

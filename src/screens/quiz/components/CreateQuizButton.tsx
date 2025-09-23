@@ -9,7 +9,7 @@ import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizCategoryType, QuizDifficultyType, QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React from 'react'
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native'
@@ -217,7 +217,11 @@ const CreateQuizButton = () => {
           </SectionContainer>
 
           {/* 완료 버튼 */}
-          <CommonButton title='완료' onPress={createQuizButtonPress} />
+          <CommonButton
+            title='문제 만들기'
+            onPress={createQuizButtonPress}
+            icon={<MaterialIcons name='quiz' size={20} color={theme.colors.core.white} />}
+          />
 
           {/* 토스트 */}
           <CommonToast />

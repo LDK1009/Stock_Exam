@@ -15,6 +15,7 @@ type PropsType = {
   value: string
   containerStyle?: StyleProp<TextStyle>
   placeholderStyle?: PlaceholderStyle
+  multiline?: boolean
 }
 
 const CommonInputText = ({
@@ -23,6 +24,7 @@ const CommonInputText = ({
   value,
   containerStyle,
   placeholderStyle,
+  multiline = false,
 }: PropsType) => {
   return (
     <Container
@@ -32,6 +34,7 @@ const CommonInputText = ({
       style={containerStyle}
       placeholderTextColor={placeholderStyle?.color || 'rgba(255, 255, 255, 0.5)'}
       placeholderStyle={placeholderStyle}
+      multiline={multiline}
     />
   )
 }

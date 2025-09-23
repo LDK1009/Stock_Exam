@@ -1,8 +1,8 @@
-import CommonText from '@/components/display/CommonText'
 import CommonToast from '@/components/feedback/CommonToast'
 import CommonDropDown from '@/components/input/CommonDropDown'
 import CommonInputText from '@/components/input/CommonInputText'
 import { isAuthenticated } from '@/services/auth/auth'
+import { createPost } from '@/services/tables/posts'
 import { useCreatePostStore } from '@/stores/screens/community/ui/createPost'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
@@ -11,7 +11,7 @@ import styled from '@emotion/native'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React from 'react'
-import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, Text, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
 
 const CreatePostButton = () => {
@@ -50,9 +50,11 @@ const CreatePostButton = () => {
     setOpen(true)
   }
 
-  async function createQuizButtonPress() {
-    ///// 로그인 검증
+  async function createPostButtonPress() {
+    ///// 로그인 여부
     const userIsAuthenticated = await isAuthenticated()
+
+    ///// 로그인 X
     if (!userIsAuthenticated) {
       setOpen(false)
       setTimeout(() => {
@@ -60,9 +62,38 @@ const CreatePostButton = () => {
           type: 'error',
           text1: '로그인 후 이용 가능합니다.',
         })
-      }, 500)
+      }, 0)
       return
     }
+
+    ///// 로그인 O
+    ///// 모든 필수 항목 입력 확인
+    if (!category || !title || !content) {
+      Toast.show({
+        type: 'error',
+        text1: '모든 필수 항목을 입력해주세요.',
+      })
+      return
+    }
+
+    await createPost({
+      category,
+      title,
+      content,
+    })
+
+    ///// 모달 닫기
+    setOpen(false)
+
+    ///// 글쓰기 완료 알림
+    setTimeout(() => {
+      Toast.show({
+        type: 'success',
+        text1: '글쓰기 완료',
+      })
+    }, 0)
+
+    return
   }
 
   return (
@@ -73,51 +104,42 @@ const CreatePostButton = () => {
 
       {/* 모달 */}
       <Modal visible={open} transparent animationType='fade' onRequestClose={() => setOpen(false)}>
-        <ModalContainer
-          contentContainerStyle={{
-            flexGrow: 1,
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            rowGap: 24,
-            paddingBottom: 80, // 이거 추가
-          }}
-        >
-          {/* 게시판 선택 */}
-          <CommonDropDown
-            options={categoryOptions}
-            placeholder={category === null ? '카테고리' : category}
-            onChange={(value) => {
-              setCategory(value)
-            }}
-          />
-
-          {/* 입력 컨테이너 */}
-          <InputContainer>
-            {/* 제목 입력 */}
-            <CommonInputText
-              placeholder='제목을 입력하세요.'
-              onChangeText={(text) => setTitle(text)}
-              value={title}
-            />
-
-            {/* 본문 입력 */}
-            <CommonInputText
-              placeholder='본문을 입력하세요.'
-              onChangeText={(text) => setContent(text)}
-              value={content}
-              containerStyle={{
-                height: 300,
-                textAlignVertical: 'top',
+        <ModalContainer>
+          <CategoryNInputContainer>
+            {/* 게시판 선택 */}
+            <CommonDropDown
+              options={categoryOptions}
+              placeholder={category === null ? '카테고리' : category}
+              onChange={(value) => {
+                setCategory(value)
               }}
             />
-          </InputContainer>
 
-          {/* 테스트 */}
-          <CommonText>{title}</CommonText>
-          <CommonText>{content}</CommonText>
+            {/* 입력 컨테이너 */}
+            <InputContainer>
+              {/* 제목 입력 */}
+              <CommonInputText
+                placeholder='제목을 입력하세요.'
+                onChangeText={(text) => setTitle(text)}
+                value={title}
+              />
+
+              {/* 본문 입력 */}
+              <CommonInputText
+                placeholder='본문을 입력하세요.'
+                onChangeText={(text) => setContent(text)}
+                value={content}
+                multiline={true}
+                containerStyle={{
+                  height: 400,
+                  textAlignVertical: 'top',
+                }}
+              />
+            </InputContainer>
+          </CategoryNInputContainer>
 
           {/* 완료 버튼 */}
-          <WriteButton>
+          <WriteButton onPress={createPostButtonPress}>
             <MaterialIcons name='create' size={20} color={theme.colors.core.white} />
             <WriteButtonText>글쓰기</WriteButtonText>
           </WriteButton>
@@ -147,22 +169,29 @@ const IconButton = styled(TouchableOpacity)`
   border: 1px solid #333333;
 `
 
-const ModalContainer = styled(ScrollView)`
+const ModalContainer = styled(View)`
+  ${mixinFlex('column', 'space-between', 'stretch')}
+  row-gap: 24px;
   padding: 32px;
   flex: 1;
 
   background-color: ${theme.colors.background.default};
 `
 
-const InputContainer = styled(View)`
+const CategoryNInputContainer = styled(View)`
+  width: 100%;
   ${mixinFlex('column', 'flex-start', 'flex-start')}
   row-gap: 24px;
-  flex: 1;
+`
+
+const InputContainer = styled(View)`
+  width: 100%;
+  ${mixinFlex('column', 'flex-start', 'flex-start')}
+  row-gap: 24px;
 `
 
 const WriteButton = styled(TouchableOpacity)`
   ${mixinFlex('row', 'center', 'center')}
-  width: 100%;
   width: 100%;
   column-gap: 4px;
   padding: 8px;

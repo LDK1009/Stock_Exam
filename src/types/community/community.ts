@@ -6,18 +6,20 @@ type CommunityCategoryType =
   | '마인드컨트롤'
   | '투자자문'
 
-type Post = {
-  id: number
+type PostType = {
+  id?: number
+  category: CommunityCategoryType | null
   title: string
   content: string
-  author: string
-  createdAt: string
-  views: number
-  comments: number
-  likes: number
+  authorUid?: string
+  createdAt?: string
+  updatedAt?: string
+  viewCount?: number
+  commentCount?: number
+  recommendationCount?: number
 }
 
-type PostList = Post[]
+type PostListType = PostType[]
 
-export type { CommunityCategoryType, Post, PostList }
+export type { CommunityCategoryType, PostListType, PostType }
 

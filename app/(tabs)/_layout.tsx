@@ -63,7 +63,7 @@ export default function TabsLayout() {
           <Tabs.Screen
             name='community'
             options={{
-              title: 'ㅊommunity',
+              title: 'Community',
               tabBarIcon: ({ color }) => (
                 <TabIcon>
                   <MaterialIcons name='article' size={theme.iconSizes.md} color={color} />
