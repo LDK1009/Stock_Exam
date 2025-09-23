@@ -21,5 +21,15 @@ async function getPostById(id: string) {
   }
 }
 
-export { createPost, getPostById }
+async function getCommentsByPostId(postId: string) {
+  try {
+    const response = await supabase.from('post_comments').select('*').eq('postId', postId)
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export { createPost, getCommentsByPostId, getPostById }
 

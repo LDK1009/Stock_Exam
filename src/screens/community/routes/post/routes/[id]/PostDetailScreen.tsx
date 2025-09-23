@@ -7,6 +7,7 @@ import styled from '@emotion/native'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { View } from 'react-native'
+import CommentSection from './components/CommentSection'
 import PostSection from './components/PostSection'
 
 const PostDetailScreen = () => {
@@ -38,6 +39,7 @@ const PostDetailScreen = () => {
   return (
     <Container>
       <PostSection post={postDeatil} />
+      <CommentSection postId={postDeatil.id || ''} />
     </Container>
   )
 }
