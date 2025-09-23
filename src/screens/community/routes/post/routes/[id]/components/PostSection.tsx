@@ -3,7 +3,7 @@ import { theme } from '@/styles/theme'
 import { PostType } from '@/types/community/community'
 import { formatDate } from '@/utils/time'
 import styled from '@emotion/native'
-import { Entypo } from '@expo/vector-icons'
+import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useState } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
@@ -20,6 +20,7 @@ const PostSection = ({ post }: PropsType) => {
     <Container contentContainerStyle={{ rowGap: 16 }}>
       {/* 제목 */}
       <Title>{title}</Title>
+
       {/* 헤더 */}
       <Header>
         {/* 작성자 */}
@@ -29,19 +30,43 @@ const PostSection = ({ post }: PropsType) => {
         {/* 작성일 */}
         <HeaderText>{formatDate(new Date(createdAt || ''), '.')}</HeaderText>
       </Header>
+
       {/* 본문 */}
       <ContentArea>
         {/* 본문 */}
-        <Content expanded={isContentExpanded}>{content}</Content>
+        <Content expanded={isContentExpanded}>
+          {content}
+          {content}
+          {content}
+          {content}
+        </Content>
         {/* 더보기 버튼 */}
-        <ReadMoreButton onPress={() => setIsContentExpanded(!isContentExpanded)}>
-          <LinearGradientContainer colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,1)']}>
-            <Entypo name='chevron-down' size={20} color='white' />
-            <ReadMoreButtonText>{isContentExpanded ? '접기' : '더보기'}</ReadMoreButtonText>
-          </LinearGradientContainer>
-        </ReadMoreButton>
+        {!isContentExpanded && (
+          <ReadMoreButton onPress={() => setIsContentExpanded(true)}>
+            <LinearGradientContainer colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,1)']}>
+              <Entypo name='chevron-down' size={20} color='white' />
+              <ReadMoreButtonText>{isContentExpanded ? '접기' : '더보기'}</ReadMoreButtonText>
+            </LinearGradientContainer>
+          </ReadMoreButton>
+        )}
       </ContentArea>
-      {/* 댓글 */}
+
+      {/* 하단 */}
+      <FooterContainer>
+        {/* 조회, 댓글, 추천 수 */}
+        <CountContainer>
+          <CountText>조회 {32}</CountText>
+          <CountText>댓글 {32}</CountText>
+          <CountText>추천 {32}</CountText>
+        </CountContainer>
+        {/* 추천 버튼 */}
+        <RecommendeContainer>
+          <RecommendeButton>
+            <MaterialIcons name='trending-up' size={16} color='white' />
+          </RecommendeButton>
+          <RecommendeCountText>32</RecommendeCountText>
+        </RecommendeContainer>
+      </FooterContainer>
     </Container>
   )
 }
@@ -110,4 +135,38 @@ const ReadMoreButtonText = styled(Text)`
   font-size: ${`${theme.fontSizes.subtitle}px`};
   font-weight: ${theme.fontWeights.bold};
   color: ${theme.colors.core.white};
+`
+
+const FooterContainer = styled(View)`
+  ${mixinFlex('row', 'space-between', 'center')}
+`
+
+const RecommendeContainer = styled(View)`
+  ${mixinFlex('row', 'center', 'center')}
+  column-gap: 4px;
+`
+
+const RecommendeButton = styled(TouchableOpacity)`
+  ${mixinFlex('row', 'center', 'center')}
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid ${theme.colors.core.white};
+`
+
+const RecommendeCountText = styled(Text)`
+  font-size: ${`${theme.fontSizes.subtitle}px`};
+  font-weight: ${theme.fontWeights.regular};
+  color: rgba(255, 255, 255, 0.5);
+`
+
+const CountContainer = styled(View)`
+  ${mixinFlex('row', 'center', 'center')}
+  column-gap: 8px;
+`
+
+const CountText = styled(Text)`
+  font-size: ${`${theme.fontSizes.caption}px`};
+  font-weight: ${theme.fontWeights.regular};
+  color: rgba(255, 255, 255, 0.5);
 `
