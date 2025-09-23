@@ -15,7 +15,7 @@ import { Modal, Text, TouchableOpacity, View } from 'react-native'
 import Toast from 'react-native-toast-message'
 
 const CreatePostButton = () => {
-  const { open, setOpen, category, setCategory, title, setTitle, content, setContent } =
+  const { open, setOpen, category, setCategory, title, setTitle, content, setContent, init } =
     useCreatePostStore()
 
   ///// 게시판 선택 드롭다운 옵션
@@ -81,6 +81,9 @@ const CreatePostButton = () => {
       title,
       content,
     })
+
+    ///// 입력값 초기화
+    init()
 
     ///// 모달 닫기
     setOpen(false)

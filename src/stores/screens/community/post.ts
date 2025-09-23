@@ -18,6 +18,7 @@ type StoreType = {
   ) => Promise<void>
 }
 
+
 export const usePostStore = create<StoreType>((set, get) => ({
   postList: [],
   loading: false,

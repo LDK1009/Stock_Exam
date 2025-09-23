@@ -13,6 +13,8 @@ type StoreType = {
 
   content: string
   setContent: (value: string) => void
+
+  init: () => void
 }
 
 export const useCreatePostStore = create<StoreType>((set) => ({
@@ -27,4 +29,10 @@ export const useCreatePostStore = create<StoreType>((set) => ({
 
   content: '',
   setContent: (value) => set({ content: value }),
+
+  init: () => set({
+    category: null,
+    title: '',
+    content: '',
+  }),
 }))
