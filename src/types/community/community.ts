@@ -7,7 +7,7 @@ type CommunityCategoryType =
   | '투자자문'
 
 type PostType = {
-  id?: number
+  id?: string
   category: CommunityCategoryType | null
   title: string
   content: string

@@ -2,6 +2,7 @@ import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { PostType } from '@/types/community/community'
 import styled from '@emotion/native'
+import { router } from 'expo-router'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
@@ -12,9 +13,9 @@ type PropsType = {
 const PostItem = ({ post }: PropsType) => {
   const { id, authorUid, createdAt, viewCount, commentCount, recommendationCount, title, content } =
     post
-    
+
   return (
-    <Container>
+    <Container onPress={() => router.push(`/community/post/${id}`)}>
       <Author>{authorUid}</Author>
       <Title numberOfLines={2}>{title}</Title>
       <Footer>

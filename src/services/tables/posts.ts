@@ -11,5 +11,16 @@ async function createPost(postData: PostType) {
   }
 }
 
-export { createPost }
+async function getPostById(id: string) {
+  try {
+    console.log(id)
+    const response = await supabase.from('posts').select('*').eq('id', id).single()
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export { createPost, getPostById }
 

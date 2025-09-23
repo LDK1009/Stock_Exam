@@ -74,6 +74,7 @@ export const usePostStore = create<StoreType>((set, get) => ({
         const uniquePosts = [...postList, ...(data || [])].filter(
           (post, index, self) => index === self.findIndex((p) => p.id === post.id)
         )
+
         set({ postList: uniquePosts })
       }
     } catch (error) {
