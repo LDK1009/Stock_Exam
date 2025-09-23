@@ -1,9 +1,9 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { PostCommentListType, PostCommentType } from '@/types/community/postComment'
+import { PostCommentListType } from '@/types/community/postComment'
 import styled from '@emotion/native'
 import React from 'react'
-import { FlatList, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import CommentItem from './CommentItem'
 
 type PropsType = {
@@ -17,15 +17,11 @@ const CommentSection = ({ commentList }: PropsType) => {
         <HeaderText>댓글</HeaderText>
       </Header>
       <CommentList>
-        <FlatList
-          data={commentList}
-          renderItem={({ item }: { item: PostCommentType }) => (
+        <ScrollView scrollEnabled={true} nestedScrollEnabled={true}>
+          {commentList?.map((item) => (
             <CommentItem key={item.id} comment={item} />
-          )}
-          contentContainerStyle={{ rowGap: 16 }}
-          scrollEnabled={true}
-          nestedScrollEnabled={true}
-        />
+          ))}
+        </ScrollView>
       </CommentList>
     </Container>
   )

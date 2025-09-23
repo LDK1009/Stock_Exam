@@ -8,6 +8,7 @@ import { useFocusEffect, useLocalSearchParams } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { ScrollView } from 'react-native'
 import CommentSection from './components/CommentSection'
+import NavigationSection from './components/NavigationSection'
 import PostSection from './components/PostSection'
 
 const PostDetailScreen = () => {
@@ -137,6 +138,7 @@ const PostDetailScreen = () => {
     >
       <PostSection post={postDeatil} />
       <CommentSection commentList={commentList} />
+      <NavigationSection />
     </Container>
   )
 }
