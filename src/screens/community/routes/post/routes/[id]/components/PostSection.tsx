@@ -3,6 +3,7 @@ import { theme } from '@/styles/theme'
 import { PostType } from '@/types/community/community'
 import { formatDate } from '@/utils/time'
 import styled from '@emotion/native'
+import { Entypo } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useState } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
@@ -34,8 +35,9 @@ const PostSection = ({ post }: PropsType) => {
         <Content expanded={isContentExpanded}>{content}</Content>
         {/* 더보기 버튼 */}
         <ReadMoreButton onPress={() => setIsContentExpanded(!isContentExpanded)}>
-          <LinearGradientContainer colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}>
-              <ReadMoreButtonText>{isContentExpanded ? '접기' : '더보기'}</ReadMoreButtonText>
+          <LinearGradientContainer colors={['rgba(0,0,0,0.5)', 'rgba(0,0,0,1)']}>
+            <Entypo name='chevron-down' size={20} color='white' />
+            <ReadMoreButtonText>{isContentExpanded ? '접기' : '더보기'}</ReadMoreButtonText>
           </LinearGradientContainer>
         </ReadMoreButton>
       </ContentArea>
@@ -98,10 +100,10 @@ const ReadMoreButton = styled(TouchableOpacity)`
 `
 
 const LinearGradientContainer = styled(LinearGradient)`
+  ${mixinFlex('row', 'center', 'center')}
+  column-gap: 4px;
   width: 100%;
   height: 100%;
-  
-
 `
 
 const ReadMoreButtonText = styled(Text)`
