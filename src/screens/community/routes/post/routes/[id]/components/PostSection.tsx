@@ -6,7 +6,7 @@ import styled from '@emotion/native'
 import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import React, { useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
   post: PostType
@@ -17,7 +17,7 @@ const PostSection = ({ post }: PropsType) => {
   const [isContentExpanded, setIsContentExpanded] = useState(false)
 
   return (
-    <Container contentContainerStyle={{ rowGap: 16 }}>
+    <Container>
       {/* 제목 */}
       <Title>{title}</Title>
 
@@ -73,7 +73,9 @@ const PostSection = ({ post }: PropsType) => {
 
 export default PostSection
 
-const Container = styled(ScrollView)`
+const Container = styled(View)`
+  ${mixinFlex('column', 'flex-start', 'center')}
+  row-gap: 16px;
   width: 100%;
 `
 
@@ -118,17 +120,13 @@ const ReadMoreButton = styled(TouchableOpacity)`
   left: 0;
 
   width: 100%;
-  height: 60px;
-
-  /* filter: blur(4px); */
-  /* -webkit-filter: blur(4px); */
 `
 
 const LinearGradientContainer = styled(LinearGradient)`
   ${mixinFlex('row', 'center', 'center')}
   column-gap: 4px;
   width: 100%;
-  height: 100%;
+  height: 60px;
 `
 
 const ReadMoreButtonText = styled(Text)`
@@ -138,6 +136,7 @@ const ReadMoreButtonText = styled(Text)`
 `
 
 const FooterContainer = styled(View)`
+  width: 100%;
   ${mixinFlex('row', 'space-between', 'center')}
 `
 

@@ -1,18 +1,25 @@
+import { theme } from '@/styles/theme'
+import { PostCommentListType } from '@/types/community/postComment'
+import styled from '@emotion/native'
 import React from 'react'
 import { Text, View } from 'react-native'
 
 type PropsType = {
-  postId: string
+  commentList: PostCommentListType | null
 }
 
-const CommentSection = ({ postId }: PropsType) => {
-
-    
+const CommentSection = ({ commentList }: PropsType) => {
   return (
-    <View>
+    <Container>
       <Text>CommentSection</Text>
-    </View>
+    </Container>
   )
 }
 
 export default CommentSection
+
+
+const Container = styled(View)`
+  width: 100%;
+  background-color: ${theme.colors.background.paper};
+`
