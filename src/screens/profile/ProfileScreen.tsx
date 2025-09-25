@@ -1,5 +1,4 @@
-import CommonText from '@/components/display/CommonText'
-import { isAuthenticated, logout } from '@/services/auth/auth'
+import { isAuthenticated } from '@/services/auth/auth'
 import { mixinContainer, mixinContentContainer, mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -7,6 +6,8 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
+import LogoutButton from './components/LogoutButton'
+import ProfileSection from './components/ProfileSection'
 
 const ProfileScreen = () => {
   const router = useRouter()
@@ -21,12 +22,6 @@ const ProfileScreen = () => {
     }
   }
 
-  ////////// 로그아웃
-  async function logoutFunction() {
-    await logout()
-    router.push('/')
-  }
-
   ////////// 화면 포커스될 때마다 로그인 체크
   useFocusEffect(
     React.useCallback(() => {
@@ -36,10 +31,8 @@ const ProfileScreen = () => {
 
   return (
     <Container>
-      <CommonText>ProfileScreen</CommonText>
-      <LogoutButton onPress={logoutFunction}>
-        <LogoutText>로그아웃</LogoutText>
-      </LogoutButton>
+      <ProfileSection />
+      <LogoutButton />
     </Container>
   )
 }
@@ -55,18 +48,4 @@ const Container = styled(SafeAreaView)`
   padding-bottom: 0px;
 
   background-color: ${theme.colors.background.default};
-`
-
-const LogoutButton = styled.TouchableOpacity`
-  width: 100%;
-  ${mixinFlex('row', 'center', 'center')}
-  background-color: ${theme.colors.status.error};
-  padding: 8px;
-  border-radius: 8px;
-`
-
-const LogoutText = styled.Text`
-  color: ${theme.colors.core.white};
-  font-size: ${`${theme.fontSizes.body}px`};
-  font-weight: ${`${theme.fontWeights.bold}`};
 `
