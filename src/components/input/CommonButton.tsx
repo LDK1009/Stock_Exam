@@ -12,6 +12,7 @@ interface ButtonProps {
   iconPosition?: 'start' | 'end'
   size?: 'small' | 'medium' | 'large'
   borderRadius?: string
+  bold?: boolean
 }
 
 const CommonButton = ({
@@ -21,11 +22,14 @@ const CommonButton = ({
   iconPosition = 'start',
   size = 'medium',
   borderRadius,
+  bold = false,
 }: ButtonProps) => {
   return (
     <Container onPress={onPress} size={size} borderRadius={borderRadius}>
       {iconPosition === 'start' && icon}
-      <ButtonText size={size}>{title}</ButtonText>
+      <ButtonText size={size} bold={bold}>
+        {title}
+      </ButtonText>
       {iconPosition === 'end' && icon}
     </Container>
   )
@@ -49,7 +53,11 @@ const Container = styled(TouchableOpacity)<ContainerProps>`
   background-color: ${theme.colors.background.paper};
 `
 
-const ButtonText = styled(Text)<ContainerProps>`
+type ButtonTextProps = ContainerProps & {
+  bold: boolean
+}
+
+const ButtonText = styled(Text)<ButtonTextProps>`
   color: ${theme.colors.core.white};
   font-size: ${({ size }) =>
     size === 'small'
@@ -57,4 +65,5 @@ const ButtonText = styled(Text)<ContainerProps>`
       : size === 'medium'
         ? `${theme.fontSizes.body}px`
         : `${theme.fontSizes.subtitle}px`};
+  font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
 `

@@ -6,6 +6,8 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
+import AnalyticsSection from './components/AnalyticsSection'
+import LearningOverviewSection from './components/learning-overview/LearningOverviewSection'
 import LogoutButton from './components/LogoutButton'
 import ProfileSection from './components/ProfileSection'
 
@@ -32,6 +34,8 @@ const ProfileScreen = () => {
   return (
     <Container>
       <ProfileSection />
+      <LearningOverviewSection/>
+      <AnalyticsSection/>
       <LogoutButton />
     </Container>
   )
