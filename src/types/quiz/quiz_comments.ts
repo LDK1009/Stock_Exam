@@ -2,7 +2,7 @@
  * quiz_comments 테이블 타입 정의
  * 퀴즈에 대한 댓글 정보
  */
-export type QuizComment = {
+export type QuizCommentType = {
   id: string; // UUID
   quizId: string; // UUID, quizzes 테이블의 id 참조
   userId: string; // UUID, auth.users 테이블의 id 참조
@@ -15,9 +15,9 @@ export type QuizComment = {
 /**
  * quiz_comments 테이블 삽입용 타입 (id, createdAt, updatedAt 제외)
  */
-export type QuizCommentInsert = Omit<QuizComment, 'id' | 'createdAt' | 'updatedAt'>;
+export type QuizCommentInsertType = Omit<QuizCommentType, 'id' | 'createdAt' | 'updatedAt'>;
 
 /**
  * quiz_comments 테이블 업데이트용 타입 (id, createdAt 제외)
  */
-export type QuizCommentUpdate = Omit<QuizComment, 'id' | 'createdAt'>;
+export type QuizCommentUpdateType = Omit<QuizCommentType, 'id' | 'createdAt'>;

@@ -2,7 +2,7 @@
  * user_quiz_answers 테이블 타입 정의
  * 유저의 퀴즈 답변 기록 및 정답 여부 정보
  */
-export type UserQuizAnswer = {
+export type QuizUserAnswerType = {
   id: string; // UUID, Primary Key
   userId: string; // UUID, auth.users 테이블의 id 참조
   quizId: string; // UUID, quizzes 테이블의 id 참조
@@ -15,9 +15,9 @@ export type UserQuizAnswer = {
 /**
  * user_quiz_answers 테이블 삽입용 타입 (id, answeredAt, createdAt, updatedAt 제외)
  */
-export type UserQuizAnswerInsert = Omit<UserQuizAnswer, 'id' | 'answeredAt' | 'createdAt' | 'updatedAt'>;
+export type QuizUserAnswerInsertType = Omit<QuizUserAnswerType, 'id' | 'answeredAt' | 'createdAt' | 'updatedAt'>;
 
 /**
  * user_quiz_answers 테이블 업데이트용 타입 (id, userId, quizId, answeredAt, createdAt 제외)
  */
-export type UserQuizAnswerUpdate = Omit<UserQuizAnswer, 'id' | 'userId' | 'quizId' | 'answeredAt' | 'createdAt'>;
+export type QuizUserAnswerUpdateType = Omit<QuizUserAnswerType, 'id' | 'userId' | 'quizId' | 'answeredAt' | 'createdAt'>;
