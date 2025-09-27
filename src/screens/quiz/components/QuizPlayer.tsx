@@ -1,4 +1,5 @@
 import CommonToast from '@/components/feedback/CommonToast'
+import { incrementQuizViewCount } from '@/services/tables/quiz_stats'
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizStore } from '@/stores/screens/quiz/quiz'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
@@ -54,6 +55,12 @@ const QuizPlayer = () => {
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       if (viewableItems.length > 0) {
         const currentIndex = viewableItems[0].index as number
+        const currentQuiz = quizList[currentIndex]
+
+        // 조회수 증가
+        if (currentQuiz?.id) {
+          incrementQuizViewCount(currentQuiz.id.toString())
+        }
 
         // 마지막에서 두 번째 퀴즈에 도달하면 추가 퀴즈 로드
         if (currentIndex === quizList.length - 2) {
@@ -61,7 +68,7 @@ const QuizPlayer = () => {
         }
       }
     },
-    [quizList.length, loadMore]
+    [quizList, loadMore]
   )
 
   type RenderItemProps = {
