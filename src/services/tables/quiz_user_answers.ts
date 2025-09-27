@@ -1,12 +1,24 @@
 import { supabase } from '@/lib/supabaseClient'
-import { QuizUserAnswerInsertType } from '@/types/quiz/quiz_user_answers'
+import { QuizUserAnswerInsertType, QuizUserAnswerUpdateType } from '@/types/quiz/quiz_user_answers'
 
-// 퀴즈 답변 저장
-async function saveQuizAnswer(answerData: QuizUserAnswerInsertType) {
+// 퀴즈 답변 생성
+async function createQuizUserAnswer(answerData: QuizUserAnswerInsertType) {
+  try {
+    const response = await supabase.from('quiz_user_answers').insert(answerData).select()
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+// 퀴즈 답변 업데이트
+async function updateQuizUserAnswer(id: string, updateData: QuizUserAnswerUpdateType) {
   try {
     const response = await supabase
-      .from('user_quiz_answers')
-      .insert(answerData)
+      .from('quiz_user_answers')
+      .update(updateData)
+      .eq('id', id)
       .select()
 
     return response
@@ -19,7 +31,7 @@ async function saveQuizAnswer(answerData: QuizUserAnswerInsertType) {
 async function getUserQuizAnswer(userId: string, quizId: string) {
   try {
     const response = await supabase
-      .from('user_quiz_answers')
+      .from('quiz_user_answers')
       .select('*')
       .eq('userId', userId)
       .eq('quizId', quizId)
@@ -35,7 +47,7 @@ async function getUserQuizAnswer(userId: string, quizId: string) {
 async function getUserQuizAnswers(userId: string, limit = 50) {
   try {
     const response = await supabase
-      .from('user_quiz_answers')
+      .from('quiz_user_answers')
       .select('*')
       .eq('userId', userId)
       .order('createdAt', { ascending: false })
@@ -51,14 +63,14 @@ async function getUserQuizAnswers(userId: string, limit = 50) {
 async function getUserCorrectRate(userId: string) {
   try {
     const { data, error } = await supabase
-      .from('user_quiz_answers')
+      .from('quiz_user_answers')
       .select('isCorrect')
       .eq('userId', userId)
 
     if (error) throw error
 
     const total = data.length
-    const correct = data.filter(answer => answer.isCorrect).length
+    const correct = data.filter((answer) => answer.isCorrect).length
     const correctRate = total > 0 ? (correct / total) * 100 : 0
 
     return { total, correct, correctRate }
@@ -68,7 +80,7 @@ async function getUserCorrectRate(userId: string) {
 }
 
 export {
-  getUserCorrectRate, getUserQuizAnswer,
-  getUserQuizAnswers, saveQuizAnswer
+  createQuizUserAnswer, getUserCorrectRate, getUserQuizAnswer,
+  getUserQuizAnswers, updateQuizUserAnswer
 }
 

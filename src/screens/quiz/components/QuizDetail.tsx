@@ -1,3 +1,5 @@
+import { supabase } from '@/lib/supabaseClient'
+import { createQuizUserAnswer, getUserQuizAnswer, updateQuizUserAnswer } from '@/services/tables/quiz_user_answers'
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
@@ -71,7 +73,7 @@ const QuizDetail = ({ quiz }: PropsType) => {
   }
 
   // 보기 터치 핸들러
-  function OptionPressHandler(optionNumber: number) {
+  async function OptionPressHandler(optionNumber: number) {
     if (isAnswerRevealed) {
       Toast.show({
         type: 'error',
@@ -82,10 +84,46 @@ const QuizDetail = ({ quiz }: PropsType) => {
       })
       return
     }
+
+    // 정답 여부 판단
+    const isCorrect = optionNumber === answer
+
     // 정답 공개 여부 업데이트
     setIsAnswerRevealed(true)
     // 선택한 보기 번호 업데이트
     setSelectedOptionNumber(optionNumber)
+
+    // 답변 데이터 저장/업데이트
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const userId = user.id
+        const quizId = quiz.id?.toString() || ''
+
+        // 기존 답변 조회
+        const { data: existingAnswer } = await getUserQuizAnswer(userId, quizId)
+
+        if (existingAnswer) {
+          // 기존 답변이 있으면 업데이트 (시도 횟수 증가)
+          await updateQuizUserAnswer(existingAnswer.id, {
+            isCorrect,
+            selectedAnswer: optionNumber, // 1부터 시작
+            attemptCount: existingAnswer.attemptCount + 1,
+          })
+        } else {
+          // 기존 답변이 없으면 생성 (첫 시도)
+          await createQuizUserAnswer({
+            userId,
+            quizId,
+            isCorrect,
+            selectedAnswer: optionNumber, // 1부터 시작
+            attemptCount: 1,
+          })
+        }
+      }
+    } catch (error) {
+      console.error('답변 저장 실패:', error)
+    }
   }
 
   // 태그 터치 핸들러
@@ -94,6 +132,8 @@ const QuizDetail = ({ quiz }: PropsType) => {
     setInputValue(tag)
     setSearchValue(tag)
   }
+
+  ////////////////////////////////////////////////////////////// 렌더링
 
   return (
     <Container>
