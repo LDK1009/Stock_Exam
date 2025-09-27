@@ -11,12 +11,12 @@ type PropsType = {
 }
 
 const PostItem = ({ post }: PropsType) => {
-  const { id, authorUid, createdAt, viewCount, commentCount, recommendationCount, title, content } =
+  const { id, userId, createdAt, viewCount, commentCount, recommendationCount, title, content } =
     post
 
   return (
     <Container onPress={() => router.push(`/community/post/${id}`)}>
-      <Author>{authorUid}</Author>
+      <Author>{userId}</Author>
       <Title numberOfLines={2}>{title}</Title>
       <Footer>
         <FooterText>조회 {viewCount}</FooterText>

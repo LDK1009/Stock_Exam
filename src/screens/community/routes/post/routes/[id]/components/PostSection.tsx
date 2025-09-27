@@ -13,7 +13,7 @@ type PropsType = {
 }
 
 const PostSection = ({ post }: PropsType) => {
-  const { title, authorUid, createdAt, content } = post
+  const { title, userId, createdAt, content } = post
   const [isContentExpanded, setIsContentExpanded] = useState(false)
 
   return (
@@ -25,7 +25,7 @@ const PostSection = ({ post }: PropsType) => {
       <Header>
         {/* 작성자 */}
         <HeaderText>
-          {authorUid?.slice(0, 6)}...{authorUid?.slice(-4)}
+          {userId?.slice(0, 6)}...{userId?.slice(-4)}
         </HeaderText>
         {/* 작성일 */}
         <HeaderText>{formatDate(new Date(createdAt || ''), '.')}</HeaderText>

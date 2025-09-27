@@ -11,11 +11,11 @@ type PropsType = {
 }
 
 const CommentItem = ({ comment }: PropsType) => {
-  const { authorUid, content } = comment
+  const { userId, content } = comment
 
   return (
     <Container>
-      <Author>{authorUid}</Author>
+      <Author>{userId}</Author>
       <Content>{content}</Content>
       {/* 추천 버튼 */}
       <RecommendeContainer>

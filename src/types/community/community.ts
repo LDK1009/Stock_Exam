@@ -11,7 +11,7 @@ type PostType = {
   category: CommunityCategoryType | null
   title: string
   content: string
-  authorUid?: string
+  userId?: string
   createdAt?: string
   updatedAt?: string
   viewCount?: number
