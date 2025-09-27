@@ -1,6 +1,8 @@
 ////////// 퀴즈 타입
 type QuizType = {
   id?: number // 식별 번호
+  userId?: string // 유저 아이디
+  
   category: string // 주제
   step: '학습' | '실천' | '고찰' | '응용' // 단계
   type: '객관식' | 'OX' // 타입(객관식, 주관식, OX)
