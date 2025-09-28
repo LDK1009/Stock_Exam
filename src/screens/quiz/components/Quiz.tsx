@@ -29,24 +29,33 @@ const Quiz = ({ quiz, index }: PropsType) => {
     setSelectedQuizIndex(index)
   }
 
+
+  ///// 퀴즈 데이터 비구조화할당
+  const { category, step, type, difficulty, score, question } = quiz
+
+  ///// 퀴즈 반응 통계
+  const { viewCount, likeCount, commentCount } = quiz.quiz_stats || {
+    viewCount: 0,
+    likeCount: 0,
+    commentCount: 0,
+  }
+
   return (
-    <Container
-      onPress={QuizPressHandler}
-    >
+    <Container onPress={QuizPressHandler}>
       {/* 헤더 */}
       <Header>
-        <HeaderText>{`${quiz.category}ㅣ${quiz.step}ㅣ${quiz.type}`}</HeaderText>
-        <HeaderText>{`${difficultyMap[quiz.difficulty as keyof typeof difficultyMap]}ㅣ${quiz.score}점`}</HeaderText>
+        <HeaderText>{`${category}ㅣ${step}ㅣ${type}`}</HeaderText>
+        <HeaderText>{`${difficultyMap[difficulty as keyof typeof difficultyMap]}ㅣ${score}점`}</HeaderText>
       </Header>
       {/* 질문 */}
       <QuestionText numberOfLines={2} ellipsizeMode='tail'>
-        {quiz.question}
+        {question}
       </QuestionText>
       {/* 푸터 */}
       <Footer>
-        <FooterText>조회 1.2k</FooterText>
-        <FooterText>댓글 34</FooterText>
-        <FooterText>추천 87</FooterText>
+        <FooterText>조회 {viewCount}</FooterText>
+        <FooterText>댓글 {commentCount}</FooterText>
+        <FooterText>추천 {likeCount}</FooterText>
       </Footer>
     </Container>
   )

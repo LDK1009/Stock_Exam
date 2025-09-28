@@ -1,3 +1,10 @@
+////////// 퀴즈 스탯 타입
+type QuizStatsType = {
+  viewCount: number
+  likeCount: number
+  commentCount: number
+}
+
 ////////// 퀴즈 타입
 type QuizType = {
   id?: number // 식별 번호
@@ -18,6 +25,9 @@ type QuizType = {
 
   createdAt?: string // 생성일
   updatedAt?: string // 수정일
+  
+  // 퀴즈 스탯 정보 (조인된 데이터)
+  quiz_stats?: QuizStatsType
 }
 
 ////////// 퀴즈 리스트 타입
@@ -47,6 +57,7 @@ export type {
   QuizDifficultyType,
   QuizListType,
   QuizSortType,
+  QuizStatsType,
   QuizType,
   QuizTypeType
 }

@@ -54,8 +54,15 @@ export const useQuizStore = create<StoreType>((set, get) => ({
     set({ loading: true })
 
     try {
-      // 기본 쿼리 설정
-      let query = supabase.from('quizzes').select('*')
+      // 기본 쿼리 설정 (quiz_stats 테이블 조인)
+      let query = supabase.from('quizzes').select(`
+          *,
+          quiz_stats (
+            viewCount,
+            likeCount,
+            commentCount
+          )
+        `)
 
       // 검색어 필터
       if (searchValue) {
@@ -87,7 +94,7 @@ export const useQuizStore = create<StoreType>((set, get) => ({
       // 정렬 필터
       if (sort) {
         const sortMap = {
-          인기순: 'quizViews(view):desc',
+          인기순: 'quiz_stats(viewCount):desc',
           최신순: 'createdAt:desc:',
           오래된순: 'createdAt:asc',
           난이도순: 'difficulty:asc',
@@ -97,9 +104,7 @@ export const useQuizStore = create<StoreType>((set, get) => ({
         const sortColumn = sortMap[sort as keyof typeof sortMap].split(':')[0]
         const sortDirection = sortMap[sort as keyof typeof sortMap].split(':')[1]
 
-        if (sort !== '인기순') {
-          query = query.order(sortColumn, { ascending: sortDirection === 'asc' })
-        }
+        query = query.order(sortColumn, { ascending: sortDirection === 'asc' })
       }
 
       // 페이지네이션 적용
