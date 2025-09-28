@@ -19,6 +19,7 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import QuizDetail from './QuizDetail'
+import QuizDetailActionBar from './QuizDetailActionBar'
 
 const QuizPlayer = () => {
   const { open, setOpen, selectedQuizIndex } = useQuizPlayerStore()
@@ -81,6 +82,7 @@ const QuizPlayer = () => {
     ({ item: quizData }: RenderItemProps) => (
       <QuizContainer height={CONTENT_HEIGHT}>
         <QuizDetail quiz={quizData} />
+        {quizData.id && <QuizDetailActionBar quizId={quizData.id} />}
       </QuizContainer>
     ),
     [CONTENT_HEIGHT]
