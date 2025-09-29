@@ -81,4 +81,6 @@ const SheetContainer = styled(View)<SheetContainerProps>`
   /* RN은 4값 축약 border-radius 미지원 → 위쪽만 개별 지정 */
   border-top-left-radius: ${({ borderRadius }) => `${borderRadius}px`};
   border-top-right-radius: ${({ borderRadius }) => `${borderRadius}px`};
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0;
 `

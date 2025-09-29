@@ -6,6 +6,7 @@ import styled from '@emotion/native'
 import React from 'react'
 import { FlatList, View } from 'react-native'
 import CommentItem from './CommentItem'
+import QuizCommentInput from './QuizCommentInput'
 
 const QuizCommentModal = () => {
   const { open, setOpen } = useCommentDrawerStore()
@@ -109,8 +110,9 @@ const QuizCommentModal = () => {
           style={{ flex: 1 }}
           nestedScrollEnabled
           keyboardShouldPersistTaps='handled'
-          contentContainerStyle={{ gap: 16 }}
+          contentContainerStyle={{ gap: 16, paddingHorizontal: 32 }}
         />
+        <QuizCommentInput />
       </Container>
     </CommonBottomSheet>
   )
@@ -123,7 +125,7 @@ const Container = styled(View)`
   row-gap: 16px;
   flex: 1;
   width: 100%;
-  padding: 16px 32px;
+  padding-top: 16px;
 `
 
 const Hr = styled(View)`
