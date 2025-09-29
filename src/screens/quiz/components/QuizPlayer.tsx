@@ -20,6 +20,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import QuizDetail from './QuizDetail'
 import QuizDetailActionBar from './QuizDetailActionBar'
+import ScrollAnimation from './ScrollAnimation'
 
 const QuizPlayer = () => {
   const { open, setOpen, selectedQuizIndex } = useQuizPlayerStore()
@@ -79,7 +80,7 @@ const QuizPlayer = () => {
 
   // renderItem도 useCallback으로 메모이제이션
   const renderItem = useCallback(
-    ({ item: quizData }: RenderItemProps) => (
+    ({ item: quizData, index }: RenderItemProps) => (
       <QuizContainer height={CONTENT_HEIGHT}>
         <QuizDetail quiz={quizData} />
         {quizData.id && <QuizDetailActionBar quizId={quizData.id} />}
@@ -135,6 +136,7 @@ const QuizPlayer = () => {
             ) : null
           }
         />
+        <ScrollAnimation />
         <CommonToast />
       </ModalContainer>
     </Modal>
