@@ -1,4 +1,5 @@
 import { useActionBarStore } from '@/stores/screens/quiz/ui/actionBar'
+import { useCommentDrawerStore } from '@/stores/screens/quiz/ui/commentDrawer'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizStatsType } from '@/types/quiz/quiz'
@@ -14,6 +15,7 @@ type PropsType = {
 
 const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
   const { userLikedList, userCurrentLikeList, setUserCurrentLikeList } = useActionBarStore()
+  const { setOpen: setOpenCommentDrawer } = useCommentDrawerStore()
   const { likeCount, commentCount } = quiz_stats
 
   ///// 좋아요 터치 핸들러
@@ -29,7 +31,7 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
 
   ///// 댓글 터치 핸들러
   async function handleCommentPress() {
-    console.log('handleCommentPress', { quiz_stats })
+    setOpenCommentDrawer(true)
   }
 
   ///// 좋아요 여부

@@ -1,4 +1,4 @@
-import Tooltip from '@/components/display/Tooltip'
+import CommonTooltip from '@/components/display/CommonTooltip'
 import { getSummaryFinancialStatements } from '@/services/api/public-data-portal/stock'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
@@ -194,7 +194,7 @@ const IndicatorSection = ({ stock }: PropsType) => {
         {/* 손익계산서 */}
         <IncomeStatementContainer>
           {incomeStatement.map((indicator: IndicatorType) => (
-            <Tooltip key={indicator.key} content={indicator.explanation} left={40}>
+            <CommonTooltip key={indicator.key} content={indicator.explanation} left={40}>
               <IndicatorRow>
                 <IndicatorKey>{indicator.key}</IndicatorKey>
                 <IndicatorValue>
@@ -202,13 +202,13 @@ const IndicatorSection = ({ stock }: PropsType) => {
                   {indicator.unit}
                 </IndicatorValue>
               </IndicatorRow>
-            </Tooltip>
+            </CommonTooltip>
           ))}
         </IncomeStatementContainer>
         {/* 재무상태표 */}
         <BalanceSheetContainer>
           {balanceSheet.map((indicator: IndicatorType) => (
-            <Tooltip key={indicator.key} content={indicator.explanation} top={37} left={40}>
+            <CommonTooltip key={indicator.key} content={indicator.explanation} top={37} left={40}>
               <IndicatorRow>
                 <IndicatorKey>{indicator.key}</IndicatorKey>
                 <IndicatorValue>
@@ -216,7 +216,7 @@ const IndicatorSection = ({ stock }: PropsType) => {
                   {indicator.unit}
                 </IndicatorValue>
               </IndicatorRow>
-            </Tooltip>
+            </CommonTooltip>
           ))}
         </BalanceSheetContainer>
       </IndicatorList>

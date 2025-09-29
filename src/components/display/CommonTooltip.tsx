@@ -13,7 +13,7 @@ type PropsType = {
   bottom?: number
 }
 
-const Tooltip = ({ children, content, top = 0, left = 0, right = 0, bottom = 0 }: PropsType) => {
+const CommonTooltip = ({ children, content, top = 0, left = 0, right = 0, bottom = 0 }: PropsType) => {
   return (
     <RNTooltip
       popover={<TooltipText>{content}</TooltipText>}
@@ -39,7 +39,7 @@ const Tooltip = ({ children, content, top = 0, left = 0, right = 0, bottom = 0 }
   )
 }
 
-export default Tooltip
+export default CommonTooltip
 
 const TooltipText = styled(Text)`
   font-size: ${`${theme.fontSizes.caption}px`};
