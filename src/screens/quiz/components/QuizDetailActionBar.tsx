@@ -1,35 +1,55 @@
+import { useActionBarStore } from '@/stores/screens/quiz/ui/actionBar'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizStatsType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
-import { Ionicons } from '@expo/vector-icons'
-import Feather from '@expo/vector-icons/Feather'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
+  quizId: number
   quiz_stats: QuizStatsType
 }
 
-const QuizDetailActionBar = ({ quiz_stats }: PropsType) => {
+const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
+  const { userLikedList, userCurrentLikeList, setUserCurrentLikeList } = useActionBarStore()
+  const { likeCount, commentCount } = quiz_stats
+
+  ///// 좋아요 터치 핸들러
   async function handleLikePress() {
-    console.log('handleLikePress', { quiz_stats })
+    if (userCurrentLikeList.includes(quizId)) {
+      // 좋아요 취소
+      setUserCurrentLikeList(userCurrentLikeList.filter((id) => id !== quizId))
+    } else {
+      // 좋아요 추가
+      setUserCurrentLikeList([...userCurrentLikeList, quizId])
+    }
   }
 
+  ///// 댓글 터치 핸들러
   async function handleCommentPress() {
     console.log('handleCommentPress', { quiz_stats })
   }
 
-  const {  likeCount, commentCount } = quiz_stats
+  ///// 좋아요 여부
+  const isLiked = [...userLikedList, ...userCurrentLikeList].includes(quizId)
+
+  ///// 현재 좋아요 눌렀는지 여부
+  const isCurrentLiked = userCurrentLikeList.includes(quizId)
 
   return (
     <Container>
       <ActionContainer onPress={handleLikePress}>
-        <Feather name='heart' size={24} color={theme.colors.core.white} />
-        <ActionText>{likeCount}</ActionText>
+        {isLiked ? (
+          <FontAwesome name='heart' size={20} color='white' />
+        ) : (
+          <FontAwesome name='heart-o' size={20} color='white' />
+        )}
+        <ActionText>{isCurrentLiked ? likeCount + 1 : likeCount}</ActionText>
       </ActionContainer>
       <ActionContainer onPress={handleCommentPress}>
-        <Ionicons name='chatbubble-outline' size={24} color={theme.colors.core.white} />
+        <Ionicons name='chatbubble-outline' size={20} color={theme.colors.core.white} />
         <ActionText>{commentCount}</ActionText>
       </ActionContainer>
     </Container>

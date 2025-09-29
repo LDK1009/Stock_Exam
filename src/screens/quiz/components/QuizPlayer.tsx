@@ -85,6 +85,7 @@ const QuizPlayer = () => {
         <QuizDetail quiz={quizData} />
         {quizData.id && (
           <QuizDetailActionBar
+            quizId={quizData.id}
             quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
           />
         )}
