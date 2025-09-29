@@ -1,3 +1,4 @@
+import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -7,6 +8,7 @@ import React, { useState } from 'react'
 const ScrollAnimation = () => {
   const [animationEnd, setAnimationEnd] = useState(false)
   const [animationCount, setAnimationCount] = useState(1)
+  const { setIsFirst, isFirst } = useQuizPlayerStore()
 
   // 애니메이션 variants 정의
   const containerVariants = {
@@ -35,13 +37,14 @@ const ScrollAnimation = () => {
     if (animationCount === 2) {
       setTimeout(() => {
         setAnimationEnd(true)
+        setIsFirst(false)
       }, 1000)
     }
   }
 
   return (
     <>
-      {!animationEnd && (
+      {isFirst && !animationEnd && (
         <Container>
           <BallContainer
             key={animationCount}
@@ -75,7 +78,6 @@ const Container = styled(MotiView)`
 
   position: absolute;
   bottom: 80px;
-  background-color: red;
   z-index: ${theme.zIndices.modal + 1};
   pointer-events: none; /* 터치 이벤트 차단 방지 */
 `
