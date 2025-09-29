@@ -26,16 +26,16 @@ const ScrollAnimation = () => {
 
   function handleAnimationCount() {
     // 3번 애니메이션 실행 후 종료
-    if (animationCount < 3) {
+    if (animationCount < 2) {
       setTimeout(() => {
         setAnimationCount(animationCount + 1)
-      }, 1500)
+      }, 1000)
     }
 
-    if (animationCount === 3) {
+    if (animationCount === 2) {
       setTimeout(() => {
         setAnimationEnd(true)
-      }, 1500)
+      }, 1000)
     }
   }
 
@@ -75,7 +75,9 @@ const Container = styled(MotiView)`
 
   position: absolute;
   bottom: 80px;
+  background-color: red;
   z-index: ${theme.zIndices.modal + 1};
+  pointer-events: none; /* 터치 이벤트 차단 방지 */
 `
 
 const BallContainer = styled(MotiView)`
