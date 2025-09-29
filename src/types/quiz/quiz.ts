@@ -1,4 +1,4 @@
-////////// 퀴즈 스탯 타입
+////////// 퀴즈 반응 통계 타입
 type QuizStatsType = {
   viewCount: number
   likeCount: number

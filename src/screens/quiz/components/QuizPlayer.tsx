@@ -83,7 +83,11 @@ const QuizPlayer = () => {
     ({ item: quizData, index }: RenderItemProps) => (
       <QuizContainer height={CONTENT_HEIGHT}>
         <QuizDetail quiz={quizData} />
-        {quizData.id && <QuizDetailActionBar quizId={quizData.id} />}
+        {quizData.id && (
+          <QuizDetailActionBar
+            quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
+          />
+        )}
       </QuizContainer>
     ),
     [CONTENT_HEIGHT]

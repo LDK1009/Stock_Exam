@@ -1,5 +1,6 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
+import { QuizStatsType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import { Ionicons } from '@expo/vector-icons'
 import Feather from '@expo/vector-icons/Feather'
@@ -7,27 +8,29 @@ import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
-  quizId: number
+  quiz_stats: QuizStatsType
 }
 
-const QuizDetailActionBar = ({ quizId }: PropsType) => {
+const QuizDetailActionBar = ({ quiz_stats }: PropsType) => {
   async function handleLikePress() {
-    console.log('handleLikePress', { quizId })
+    console.log('handleLikePress', { quiz_stats })
   }
 
   async function handleCommentPress() {
-    console.log('handleCommentPress', { quizId })
+    console.log('handleCommentPress', { quiz_stats })
   }
+
+  const {  likeCount, commentCount } = quiz_stats
 
   return (
     <Container>
       <ActionContainer onPress={handleLikePress}>
         <Feather name='heart' size={24} color={theme.colors.core.white} />
-        <ActionText>10</ActionText>
+        <ActionText>{likeCount}</ActionText>
       </ActionContainer>
       <ActionContainer onPress={handleCommentPress}>
         <Ionicons name='chatbubble-outline' size={24} color={theme.colors.core.white} />
-        <ActionText>10</ActionText>
+        <ActionText>{commentCount}</ActionText>
       </ActionContainer>
     </Container>
   )
