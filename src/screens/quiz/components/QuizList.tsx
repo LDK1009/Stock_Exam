@@ -1,5 +1,6 @@
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizStore } from '@/stores/screens/quiz/quiz'
+import { useActionBarStore } from '@/stores/screens/quiz/ui/actionBar'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import React, { useEffect } from 'react'
@@ -9,6 +10,7 @@ import Quiz from './Quiz'
 const QuizList = () => {
   ////////// 상태 관리
   const { quizList, loading, canMore, page, setPage, getQuiz } = useQuizStore()
+  const { fetchUserLikedList } = useActionBarStore()
   const { searchValue, category, difficulty, type, sort } = useQuizFilterStore()
 
   ////////// 무한 스크롤
@@ -25,6 +27,7 @@ const QuizList = () => {
   useEffect(() => {
     setPage(0) // 페이지 초기화
     getQuiz(0, searchValue, category, difficulty, type, sort) // 필터 적용하여 데이터 로드
+    fetchUserLikedList()
   }, [searchValue, category, difficulty, type, sort])
 
   ////////// 로딩 인디케이터 컴포넌트

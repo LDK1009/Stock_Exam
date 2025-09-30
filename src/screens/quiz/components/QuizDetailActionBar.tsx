@@ -1,4 +1,5 @@
 import { isAuthenticated } from '@/services/auth/auth'
+import { createQuizLike, deleteQuizLike } from '@/services/tables/quiz_likes'
 import { useConfirmModalStore } from '@/stores/common/modal'
 import { useActionBarStore } from '@/stores/screens/quiz/ui/actionBar'
 import { useCommentDrawerStore } from '@/stores/screens/quiz/ui/commentDrawer'
@@ -18,7 +19,7 @@ type PropsType = {
 }
 
 const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
-  const { userLikedList, userCurrentLikeList, setUserCurrentLikeList } = useActionBarStore()
+  const { userLikedList, addUserLikedList, removeUserLikedList } = useActionBarStore()
   const { setOpen: setOpenCommentDrawer } = useCommentDrawerStore()
   const { setOpen, setContent, setEvent } = useConfirmModalStore()
   const { setOpen: setOpenQuizPlayer } = useQuizPlayerStore()
@@ -30,6 +31,7 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
     // 로그인 여부 확인
     const isUserAuthenticated = await isAuthenticated()
 
+    // 비로그인 상태면 로그인 컨펌 모달 열기
     if (!isUserAuthenticated) {
       setOpen(true)
       setContent(
@@ -50,11 +52,13 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
 
     // 기존에 좋아요 눌렀는지 여부
     if (isLiked) {
-      // 좋아요 취소
-      setUserCurrentLikeList(userCurrentLikeList.filter((id) => id !== quizId))
+      // 좋아요 삭제
+      removeUserLikedList(quizId)
+      await deleteQuizLike(quizId)
     } else {
       // 좋아요 추가
-      setUserCurrentLikeList([...userCurrentLikeList, quizId])
+      addUserLikedList(quizId)
+      await createQuizLike(quizId)
     }
   }
 
@@ -64,10 +68,7 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
   }
 
   ///// 좋아요 여부
-  const isLiked = [...userLikedList, ...userCurrentLikeList].includes(quizId)
-
-  ///// 현재 좋아요 눌렀는지 여부
-  const isCurrentLiked = userCurrentLikeList.includes(quizId)
+  const isLiked = userLikedList.includes(quizId)
 
   return (
     <Container>
@@ -77,7 +78,7 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
         ) : (
           <FontAwesome name='heart-o' size={20} color='white' />
         )}
-        <ActionText>{isCurrentLiked ? likeCount + 1 : likeCount}</ActionText>
+        <ActionText>{isLiked ? likeCount + 1 : likeCount}</ActionText>
       </ActionContainer>
       <ActionContainer onPress={handleCommentPress}>
         <Ionicons name='chatbubble-outline' size={20} color={theme.colors.core.white} />
