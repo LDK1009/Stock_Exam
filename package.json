@@ -5,6 +5,8 @@
   "scripts": {
     "start": "expo start",
     "prebuild": "node scripts/verify-env.js",
+    "build:android": "eas build --platform android --profile production",
+    "build:android:dev": "eas build --platform android --profile development",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -15,8 +17,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx}\" \"app/**/*.{ts,tsx,js,jsx}\"",
     "type-check": "tsc --noEmit",
     "clean": "expo r -c",
-    "build:android": "expo build:android",
-    "build:ios": "expo build:ios"
+    "expo-build:android": "expo build:android",
+    "expo-build:ios": "expo build:ios"
   },
   "dependencies": {
     "@emotion/native": "^11.11.0",
