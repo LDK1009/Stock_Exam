@@ -14,7 +14,7 @@ async function getUserQuizLikes() {
 }
 
 ////////// 퀴즈 좋아요 생성
-async function createQuizLike(quizId: number) {
+async function createQuizLike(quizId: string) {
   try {
     // 추천수 1 증가
     await incrementQuizLikeCount(quizId)
@@ -30,7 +30,7 @@ async function createQuizLike(quizId: number) {
 }
 
 ////////// 퀴즈 좋아요 삭제
-async function deleteQuizLike(quizId: number) {
+async function deleteQuizLike(quizId: string) {
   try {
     // 추천수 1 감소
     await decrementQuizLikeCount(quizId)

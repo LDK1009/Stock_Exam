@@ -9,19 +9,18 @@ import { theme } from '@/styles/theme'
 import { QuizStatsType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
-import { router } from 'expo-router'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
-  quizId: number
+  quizId: string
   quiz_stats: QuizStatsType
 }
 
 const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
   const { userLikedList, addUserLikedList, removeUserLikedList } = useActionBarStore()
-  const { setOpen: setOpenCommentDrawer } = useCommentDrawerStore()
-  const { setOpen, setContent, setEvent } = useConfirmModalStore()
+  const { setOpen: setOpenCommentDrawer, fetchComments, setQuizId } = useCommentDrawerStore()
+  const { setConfirmLogin, setEventCallback } = useConfirmModalStore()
   const { setOpen: setOpenQuizPlayer } = useQuizPlayerStore()
 
   const { likeCount, commentCount } = quiz_stats
@@ -33,20 +32,13 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
 
     // 비로그인 상태면 로그인 컨펌 모달 열기
     if (!isUserAuthenticated) {
-      setOpen(true)
-      setContent(
-        '로그인이 필요한 기능입니다.',
-        '좋아요를 남기려면 로그인이 필요해요',
-        '확인',
-        '취소'
-      )
-      setEvent(
-        () => {
-          setOpenQuizPlayer(false) // 퀴즈 플레이어 모달 닫기
-          router.push('/auth/login')
+      setEventCallback({
+        onConfirmCallback: () => {
+          setOpenQuizPlayer(false)
         },
-        () => setOpen(false)
-      )
+        onCancelCallback: () => {},
+      })
+      setConfirmLogin('좋아요를 남기려면 로그인이 필요합니다.')
       return
     }
 
@@ -54,17 +46,18 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
     if (isLiked) {
       // 좋아요 삭제
       removeUserLikedList(quizId)
-      await deleteQuizLike(quizId)
+      await deleteQuizLike(quizId.toString())
     } else {
       // 좋아요 추가
       addUserLikedList(quizId)
-      await createQuizLike(quizId)
+      await createQuizLike(quizId.toString())
     }
   }
 
   ///// 댓글 터치 핸들러
   async function handleCommentPress() {
     setOpenCommentDrawer(true)
+    setQuizId(quizId.toString())
   }
 
   ///// 좋아요 여부

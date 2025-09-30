@@ -42,7 +42,7 @@ async function incrementQuizViewCount(quizId: string) {
 }
 
 ////////// 퀴즈 추천수 증가
-async function incrementQuizLikeCount(quizId: number) {
+async function incrementQuizLikeCount(quizId: string) {
   try {
     // 현재 추천수 가져오기
     const { data: current } = await supabase
@@ -64,7 +64,7 @@ async function incrementQuizLikeCount(quizId: number) {
 }
 
 ////////// 퀴즈 추천수 감소
-async function decrementQuizLikeCount(quizId: number) {
+async function decrementQuizLikeCount(quizId: string) {
   try {
     // 현재 추천수 가져오기
     const { data: current } = await supabase
@@ -85,5 +85,45 @@ async function decrementQuizLikeCount(quizId: number) {
   }
 }
 
-export { createQuizStats, decrementQuizLikeCount, incrementQuizLikeCount, incrementQuizViewCount }
+////////// 퀴즈 댓글수 증가
+async function incrementQuizCommentCount(quizId: string) {
+  try {
+    const { data: current } = await supabase
+      .from('quiz_stats')
+      .select('commentCount')
+      .eq('quizId', quizId)
+      .single()
+
+    const response = await supabase
+      .from('quiz_stats')
+      .update({ commentCount: (current?.commentCount || 0) + 1 })
+      .eq('quizId', quizId)
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+////////// 퀴즈 댓글수 감소
+async function decrementQuizCommentCount(quizId: string) {
+  try {
+    const { data: current } = await supabase
+      .from('quiz_stats')
+      .select('commentCount')
+      .eq('quizId', quizId)
+      .single()
+
+    const response = await supabase
+      .from('quiz_stats')
+      .update({ commentCount: (current?.commentCount || 0) - 1 })
+      .eq('quizId', quizId)
+
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export { createQuizStats, decrementQuizCommentCount, decrementQuizLikeCount, incrementQuizCommentCount, incrementQuizLikeCount, incrementQuizViewCount }
 

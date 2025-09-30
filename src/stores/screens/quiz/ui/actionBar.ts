@@ -4,11 +4,11 @@ import { create } from 'zustand'
 // 사용자 상태
 type StoreType = {
   // 유저가 좋아요 눌렀던 퀴즈 아이디 리스트
-  userLikedList: number[]
-  setUserLikedList: (userLikedList: number[]) => void
+  userLikedList: string[]
+  setUserLikedList: (userLikedList: string[]) => void
   fetchUserLikedList: () => Promise<void>
-  addUserLikedList: (quizId: number) => void
-  removeUserLikedList: (quizId: number) => void
+  addUserLikedList: (quizId: string) => void
+  removeUserLikedList: (quizId: string) => void
 }
 
 export const useActionBarStore = create<StoreType>((set) => ({

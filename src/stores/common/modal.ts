@@ -1,4 +1,5 @@
 import { theme } from '@/styles/theme'
+import { router } from 'expo-router'
 import { create } from 'zustand'
 
 // 사용자 상태
@@ -23,11 +24,20 @@ type StoreType = {
   setContent: (title: string, description: string, confirmText: string, cancelText: string) => void
 
   ////////// 이벤트 관련
-
   onConfirm: () => void
   onCancel: () => void
+  setEvent: ({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) => void
 
-  setEvent: (onConfirm: () => void, onCancel: () => void) => void
+  ////////// 이벤트 콜백 관련
+  onConfirmCallback: () => void
+  onCancelCallback: () => void
+  setEventCallback: ({
+    onConfirmCallback,
+    onCancelCallback,
+  }: {
+    onConfirmCallback: () => void
+    onCancelCallback: () => void
+  }) => void
 
   ////////// 스타일 관련
   backgroundColor: string
@@ -38,6 +48,9 @@ type StoreType = {
 
   borderRadius: number
   setBorderRadius: (borderRadius: number) => void
+
+  ////////// 컨펌 모드 관련
+  setConfirmLogin: (description?: string) => void
 }
 
 export const useConfirmModalStore = create<StoreType>((set) => ({
@@ -64,7 +77,13 @@ export const useConfirmModalStore = create<StoreType>((set) => ({
   ////////// 이벤트 관련
   onConfirm: () => set({ open: false }),
   onCancel: () => set({ open: false }),
-  setEvent: (onConfirm, onCancel) => set({ onConfirm, onCancel }),
+  setEvent: ({ onConfirm, onCancel }) => set({ onConfirm, onCancel }),
+
+  ////////// 이벤트 콜백 관련
+  onConfirmCallback: () => {},
+  onCancelCallback: () => {},
+  setEventCallback: ({ onConfirmCallback, onCancelCallback }) =>
+    set({ onConfirmCallback, onCancelCallback }),
 
   ////////// 스타일 관련
   backgroundColor: theme.colors.background.paper,
@@ -75,4 +94,24 @@ export const useConfirmModalStore = create<StoreType>((set) => ({
 
   borderRadius: 16,
   setBorderRadius: (borderRadius) => set({ borderRadius }),
+
+  ////////// 컨펌 모드 관련
+  setConfirmLogin: (description?: string) =>
+    set((state) => {
+      return {
+        open: true,
+        title: '로그인이 필요한 기능입니다.',
+        description: description || '로그인이 필요한 기능입니다.',
+        confirmText: '로그인',
+        cancelText: '취소',
+        onConfirm: () => {
+          router.push('/auth/login')
+          state.onConfirmCallback()
+        },
+        onCancel: () => {
+          set({ open: false })
+          state.onCancelCallback()
+        },
+      }
+    }),
 }))
