@@ -1,4 +1,3 @@
-import CommonText from '@/components/display/CommonText'
 import { getStockList } from '@/services/api/public-data-portal/stock'
 import { useStockStore } from '@/stores/screens/stock/stock'
 import { mixinFlex } from '@/styles/mixins'
@@ -25,7 +24,6 @@ const StockScreen = () => {
 
   return (
     <Container>
-      <CommonText>StockScreen</CommonText>
       <StockList stockList={stockList} />
     </Container>
   )

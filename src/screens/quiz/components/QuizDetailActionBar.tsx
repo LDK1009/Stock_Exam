@@ -1,10 +1,14 @@
+import { isAuthenticated } from '@/services/auth/auth'
+import { useConfirmModalStore } from '@/stores/common/modal'
 import { useActionBarStore } from '@/stores/screens/quiz/ui/actionBar'
 import { useCommentDrawerStore } from '@/stores/screens/quiz/ui/commentDrawer'
+import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizStatsType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
@@ -16,11 +20,36 @@ type PropsType = {
 const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
   const { userLikedList, userCurrentLikeList, setUserCurrentLikeList } = useActionBarStore()
   const { setOpen: setOpenCommentDrawer } = useCommentDrawerStore()
+  const { setOpen, setContent, setEvent } = useConfirmModalStore()
+  const { setOpen: setOpenQuizPlayer } = useQuizPlayerStore()
+
   const { likeCount, commentCount } = quiz_stats
 
   ///// 좋아요 터치 핸들러
-  async function handleLikePress() {
-    if (userCurrentLikeList.includes(quizId)) {
+  async function handleLikePress(isLiked: boolean) {
+    // 로그인 여부 확인
+    const isUserAuthenticated = await isAuthenticated()
+
+    if (!isUserAuthenticated) {
+      setOpen(true)
+      setContent(
+        '로그인이 필요한 기능입니다.',
+        '좋아요를 남기려면 로그인이 필요해요',
+        '확인',
+        '취소'
+      )
+      setEvent(
+        () => {
+          setOpenQuizPlayer(false) // 퀴즈 플레이어 모달 닫기
+          router.push('/auth/login')
+        },
+        () => setOpen(false)
+      )
+      return
+    }
+
+    // 기존에 좋아요 눌렀는지 여부
+    if (isLiked) {
       // 좋아요 취소
       setUserCurrentLikeList(userCurrentLikeList.filter((id) => id !== quizId))
     } else {
@@ -42,7 +71,7 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
 
   return (
     <Container>
-      <ActionContainer onPress={handleLikePress}>
+      <ActionContainer onPress={() => handleLikePress(isLiked)}>
         {isLiked ? (
           <FontAwesome name='heart' size={20} color='white' />
         ) : (

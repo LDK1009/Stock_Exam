@@ -1,3 +1,4 @@
+import CommonConfirmModal from '@/components/feedback/CommonConfirmModal'
 import CommonToast from '@/components/feedback/CommonToast'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -41,6 +42,9 @@ export default function RootLayout() {
           />
         </Stack>
       </Container>
+      {/* 질문 모달 */}
+      <CommonConfirmModal />
+      {/* 토스트 */}
       <CommonToast />
     </SafeAreaProvider>
   )
