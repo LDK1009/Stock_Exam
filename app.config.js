@@ -89,7 +89,7 @@ export default {
           image: './assets/images/splash-icon.png',   // 스플래시 화면 이미지
           imageWidth: 200,                            // 이미지 너비 (픽셀)
           resizeMode: 'contain',                      // 이미지 크기 조정 방식
-          backgroundColor: '#ffffff',                 // 스플래시 화면 배경색
+          backgroundColor: '#000000',                 // 스플래시 화면 배경색
         },
       ],
     ],
