@@ -20,4 +20,5 @@ type CreateUserType = {
   biography: string
 }
 
-export default UserType
+export { CreateUserType, UserType }
+

@@ -18,7 +18,7 @@ export default function AuthCallback() {
       setTimeout(() => {
         Toast.show({
           type: 'info',
-          text1: '회원가입을 진행해주세요.',
+          text1: '회원 정보를 입력해주세요.',
         })
       }, 0)
     } else {
