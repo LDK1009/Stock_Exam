@@ -12,29 +12,34 @@ const LoginScreen = () => {
   const [showWebView, setShowWebView] = useState(false)
   const [authUrl, setAuthUrl] = useState('')
 
+  ////////// 카카오 로그인 버튼 클릭 함수
   const signInWithKakao = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'kakao',
         options: {
-          redirectTo: 'stockexam://auth/callback',
-          skipBrowserRedirect: true,
+          skipBrowserRedirect: true, // 브라우저 리다이렉트 건너뛰고 로그인 URL만 받음(직접 브라우저를 열고 제어 가능)
         },
       })
 
+      // 에러 발생 시 에러 처리
       if (error) throw error
 
+      // URL이 있다면
       if (data?.url) {
+        // URL 상태 업데이트
         setAuthUrl(data.url)
+        // WebView 표시
         setShowWebView(true)
       }
-    } catch {
-      Alert.alert('로그인 실패')
-      router.replace('/')
+    } catch(error) {
+      // 에러 발생 시 로그인 페이지로 이동
+      router.replace('/auth/login')
+      throw error
     }
   }
 
-  // WebView에서 URL 변경 감지
+  ////////// WebView URL 변경 감지 함수
   const handleNavigationStateChange = async (navState: any) => {
     // access_token이 포함된 URL인지 확인
     if (navState.url.includes('access_token=')) {
@@ -58,16 +63,16 @@ const LoginScreen = () => {
         if (session) {
           setShowWebView(false)
           // 홈 화면으로 이동
-          router.replace('/')
+          router.replace('/auth/callback')
         }
       } catch {
         Alert.alert('로그인 실패')
-        router.replace('/')
+        router.replace('/auth/login')
       }
     }
   }
 
-  // 백핸들러
+  // 백핸들러(뒤로가기 버튼 눌렀을 때)
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       router.replace('/') // 홈으로 이동
@@ -76,12 +81,14 @@ const LoginScreen = () => {
 
     return () => backHandler.remove()
   }, [])
+
   return (
     <>
       {showWebView ? (
         <WebView source={{ uri: authUrl }} onNavigationStateChange={handleNavigationStateChange} />
       ) : (
         <Container>
+          {/* 뒤로가기 버튼 */}
           <BackButton onPress={() => router.replace('/')}>
             <Ionicons
               name='chevron-back'
@@ -89,7 +96,9 @@ const LoginScreen = () => {
               color={theme.colors.core.white}
             />
           </BackButton>
+          {/* 로고 */}
           <Logo source={require('@assets/images/icon.png')} style={{ width: 100, height: 100 }} />
+          {/* 카카오 로그인 버튼 */}
           <TouchableOpacity onPress={signInWithKakao}>
             <KakaoLogin source={require('@assets/images/kakao-login.png')} />
           </TouchableOpacity>

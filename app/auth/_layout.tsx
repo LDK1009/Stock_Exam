@@ -15,6 +15,7 @@ export default function AuthLayout() {
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name='login' />
           <Stack.Screen name='callback' />
+          <Stack.Screen name='signup' />
         </Stack>
       </Container>
     </SafeAreaProvider>
