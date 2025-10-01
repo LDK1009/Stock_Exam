@@ -16,9 +16,7 @@ const NavigationPost = ({ post, navigate }: PropsType) => {
 
   const handleNavigate = () => {
     if (navigate === 'prev') {
-      console.log('prev')
     } else {
-      console.log('next')
     }
   }
 

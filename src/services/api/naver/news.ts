@@ -51,11 +51,9 @@ async function getStockNewsList(stockName: string) {
 
   // const keywordNews = await Promise.all(keywordNewsPromise)
 
-  // console.log('keywordNews', JSON.stringify(keywordNews, null, 2))
   //////////////////////////////////////////////////////////////
 
   const searchString = `"${stockName}" ${searchKeywords.join(' | ')}`
-  console.log('searchString', searchString)
 
   // 네이버 뉴스 검색
   const response = await getNaverNews({ searchString: searchString, count: 100 })

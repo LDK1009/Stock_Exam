@@ -10,7 +10,6 @@ export default function AuthCallback() {
 
     ///// 신규 회원인 경우 회원가입 페이지로 이동
     if (userIsNewUser) {
-      console.log('신규 회원')
       await createUser()
       router.replace('/auth/signup')
 
@@ -22,7 +21,6 @@ export default function AuthCallback() {
         })
       }, 0)
     } else {
-      console.log('기존 회원')
       router.replace('/')
 
       // 토스트 띄우기

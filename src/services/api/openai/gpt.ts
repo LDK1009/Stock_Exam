@@ -13,7 +13,6 @@ const client = new OpenAI({
 
 async function chatGPT(prompt: string, message: string, jsonFormat?: string) {
   try {
-    console.log('OpenAI API 호출 시작')
     const response = await client.responses.create({
       model: 'gpt-5-nano',
       reasoning: { effort: 'low' },

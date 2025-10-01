@@ -15,13 +15,11 @@ async function getStockList() {
       )
 
       if (response.data.response.body.items.item.length > 0) {
-        // console.log('데이터 발견일자', requestDate)
         data = response.data.response.body.items.item
         break
       }
     }
 
-    // console.log('data', data)
 
     const returnData = data
       .map((item: any) => ({
@@ -94,7 +92,6 @@ async function getSummaryFinancialStatements(isinCd: string) {
     // 법인등록번호 조회
     const corporateRegistrationNumber = await getCorporateRegistrationNumber(isinCd)
 
-    console.log('corporateRegistrationNumber', corporateRegistrationNumber)
     // 작년 재무제표 조회
     const lastYear = new Date().getFullYear() - 1
 
