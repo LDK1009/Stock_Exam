@@ -1,5 +1,6 @@
 import CommonLoading from '@/components/feedback/CommonLoading'
-import { getCommentsByPostId, getPostById } from '@/services/tables/posts'
+import { incrementPostViewCount } from '@/services/tables/post_stats'
+import { getPostById } from '@/services/tables/posts'
 import { theme } from '@/styles/theme'
 import { PostType } from '@/types/community/community'
 import { PostCommentListType } from '@/types/community/postComment'
@@ -49,7 +50,7 @@ const PostDetailScreen = () => {
         '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
     },
     {
-        id: 5,
+      id: 5,
       postId: 5,
       parentId: null,
       userId: '배고픈하마',
@@ -100,24 +101,21 @@ const PostDetailScreen = () => {
 
   ///// 게시글 상세 조회
   async function fetchPostDetail() {
-    if (id && typeof id === 'string') {
-      const response = await getPostById(id)
+    if (id) {
+      const response = await getPostById(Number(id))
       setPostDeatil(response.data)
     }
   }
 
-  ///// 댓글 가져오기
-  async function fetchCommentList() {
-    if (id && typeof id === 'string') {
-      const response = await getCommentsByPostId(id)
-      setCommentList(response.data)
-    }
+  ///// 조회수 증가
+  async function incrementViewCount() {
+    await incrementPostViewCount(Number(id))
   }
 
   useFocusEffect(
     useCallback(() => {
       fetchPostDetail()
-      //   fetchCommentList()
+      incrementViewCount()
     }, [])
   )
 

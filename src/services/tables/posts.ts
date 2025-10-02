@@ -17,7 +17,7 @@ async function createPost(postData: PostType) {
   }
 }
 
-async function getPostById(id: string) {
+async function getPostById(id: number) {
   try {
     const response = await supabase
       .from('posts')
@@ -43,7 +43,7 @@ async function getPostById(id: string) {
   }
 }
 
-async function getCommentsByPostId(postId: string) {
+async function getCommentsByPostId(postId: number) {
   try {
     const response = await supabase.from('post_comments').select('*').eq('postId', postId)
 
