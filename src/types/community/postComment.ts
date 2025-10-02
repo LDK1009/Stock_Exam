@@ -1,7 +1,7 @@
 type PostCommentType = {
-  id?: string
-  postId: string
-  parentId?: string | null
+  id?: number
+  postId: number
+  parentId?: number | null
   userId: string
   content: string
   createdAt?: string
