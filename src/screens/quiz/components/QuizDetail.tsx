@@ -15,64 +15,43 @@ type PropsType = {
 }
 
 const QuizDetail = ({ quiz }: PropsType) => {
-  // 선택한 보기 번호
   const [selectedOptionNumber, setSelectedOptionNumber] = useState<number | null>(null)
-  //   정답 공개 여부
   const [isAnswerRevealed, setIsAnswerRevealed] = useState(false)
 
-  // 퀴즈 플레이어 스토어
   const { setOpen: setOpenQuizPlayer } = useQuizPlayerStore()
-
-  // 퀴즈 필터 스토어
   const { setInputValue, setSearchValue } = useQuizFilterStore()
 
-  // 난이도 매핑
   const difficultyMap = {
     1: '쉬움',
     2: '보통',
     3: '어려움',
   }
 
-  // 보기 번호 매핑
   const optionNumberMap = {
     0: '①',
     1: '②',
     2: '③',
   }
 
-  // 퀴즈 데이터 비구조화
   const { category, step, type, difficulty, score, question, options, answer, explanation, tags } =
     quiz
 
-  // 보기 상태값 반환 함수
   function getOptionStatus(optionNumber: number) {
-    // 공개되지 않았을 경우
-    if (isAnswerRevealed === false) {
+    if (!isAnswerRevealed) {
       return 'wait'
     }
-    // 공개 되었을 경우
-    else {
-      // 해당 보기가 정답일 경우 정답 상태로 분류(정답 공개)
-      if (optionNumber === answer) {
-        return 'correct'
-      }
-      // 해당 보기가 선택된 보기일 경우
-      if (selectedOptionNumber === optionNumber) {
-        // 선택한 보기가 정답이라면
-        if (optionNumber === answer) {
-          return 'correct'
-        } else {
-          return 'incorrect'
-        }
-      }
-      // 선택하지 않은 보기라면
-      else {
-        return 'revealed'
-      }
+
+    if (optionNumber === answer) {
+      return 'correct'
     }
+
+    if (selectedOptionNumber === optionNumber) {
+      return optionNumber === answer ? 'correct' : 'incorrect'
+    }
+
+    return 'revealed'
   }
 
-  // 보기 터치 핸들러
   async function OptionPressHandler(optionNumber: number) {
     if (isAnswerRevealed) {
       Toast.show({
@@ -85,38 +64,29 @@ const QuizDetail = ({ quiz }: PropsType) => {
       return
     }
 
-    // 정답 여부 판단
     const isCorrect = optionNumber === answer
-
-    // 정답 공개 여부 업데이트
     setIsAnswerRevealed(true)
-    // 선택한 보기 번호 업데이트
     setSelectedOptionNumber(optionNumber)
-
-    // 답변 데이터 저장/업데이트
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
+      if (user && quiz.id) {
         const userId = user.id
-        const quizId = quiz.id?.toString() || ''
+        const quizId = quiz.id
 
-        // 기존 답변 조회
         const { data: existingAnswer } = await getUserQuizAnswer(userId, quizId)
 
         if (existingAnswer) {
-          // 기존 답변이 있으면 업데이트 (시도 횟수 증가)
           await updateQuizUserAnswer(existingAnswer.id, {
             isCorrect,
-            selectedAnswer: optionNumber, // 1부터 시작
+            selectedAnswer: optionNumber,
             attemptCount: existingAnswer.attemptCount + 1,
           })
         } else {
-          // 기존 답변이 없으면 생성 (첫 시도)
           await createQuizUserAnswer({
             userId,
             quizId,
             isCorrect,
-            selectedAnswer: optionNumber, // 1부터 시작
+            selectedAnswer: optionNumber,
             attemptCount: 1,
           })
         }
@@ -126,14 +96,11 @@ const QuizDetail = ({ quiz }: PropsType) => {
     }
   }
 
-  // 태그 터치 핸들러
   function TagPressHandler(tag: string) {
     setOpenQuizPlayer(false)
     setInputValue(tag)
     setSearchValue(tag)
   }
-
-  ////////////////////////////////////////////////////////////// 렌더링
 
   return (
     <Container>

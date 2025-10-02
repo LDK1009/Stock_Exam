@@ -5,7 +5,6 @@ import { useCommentDrawerStore } from '@/stores/screens/quiz/ui/commentDrawer'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { generateRandomId } from '@/utils/random'
 import styled from '@emotion/native'
 import { Feather } from '@expo/vector-icons'
 import React from 'react'
@@ -49,22 +48,19 @@ const QuizCommentInput = () => {
       return
     }
 
-    // 랜덤 ID 생성
-    const randomId = generateRandomId()
+    const randomId = Math.floor(Math.random() * 1000000)
 
-    // 댓글 상태 추가
     addComments({
       id: randomId,
-      quizId: quizId.toString(), // number를 string으로 변환
+      quizId: quizId,
       userId: userId,
       content: inputComment,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     })
 
-    // 댓글 데이터베이스 추가
     await createQuizComment({
-      quizId: quizId.toString(), // number를 string으로 변환
+      quizId: quizId,
       userId: userId,
       content: inputComment,
     })

@@ -1,5 +1,5 @@
 function generateRandomId() {
-  return `${Date.now()}-${Math.random().toString(36)}`
+  return Math.floor(Math.random() * 1000000)
 }
 
 function generateRandomInt(min: number, max: number) {

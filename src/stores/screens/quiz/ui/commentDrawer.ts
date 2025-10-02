@@ -2,10 +2,9 @@ import { getQuizComments } from '@/services/tables/quiz_comments'
 import { QuizCommentType } from '@/types/quiz/quiz_comments'
 import { create } from 'zustand'
 
-// 사용자 상태
 type StoreType = {
-  quizId: string
-  setQuizId: (quizId: string) => void
+  quizId: number
+  setQuizId: (quizId: number) => void
 
   open: boolean
   setOpen: (open: boolean) => void
@@ -13,7 +12,7 @@ type StoreType = {
   comments: QuizCommentType[]
   setComments: (comments: QuizCommentType[]) => void
   addComments: (comment: QuizCommentType) => void
-  fetchComments: (quizId: string) => void
+  fetchComments: (quizId: number) => void
 
   inputComment: string
   setInputComment: (inputComment: string) => void
@@ -21,7 +20,7 @@ type StoreType = {
 }
 
 export const useCommentDrawerStore = create<StoreType>((set) => ({
-  quizId: '',
+  quizId: 0,
   setQuizId: (quizId) => set({ quizId }),
 
   open: false,

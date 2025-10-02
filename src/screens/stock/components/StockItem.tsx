@@ -16,10 +16,8 @@ type StockItemProps = {
 }
 
 const StockItem = ({ stock }: StockItemProps) => {
-  // 퀴즈 개수
-  const quizCount = 32
-  // 퀴즈 성공 개수
-  const quizSuccessCount = 16
+  const quizCount: number = 32
+  const quizSuccessCount: number = 16
 
   return (
     <Container onPress={() => router.push(`/stock/${stock.id}`)}>

@@ -15,9 +15,8 @@ const QuizCommentModal = () => {
     return <CommentItem comment={item} />
   }
 
-  ////////// 모달이 열리면 댓글 가져오기
   useEffect(() => {
-    if (open === true && quizId !== '') {
+    if (open && quizId !== 0) {
       fetchComments(quizId)
     }
   }, [open])
@@ -29,7 +28,7 @@ const QuizCommentModal = () => {
         <FlatList
           data={comments}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           style={{ flex: 1 }}
           nestedScrollEnabled
           keyboardShouldPersistTaps='handled'

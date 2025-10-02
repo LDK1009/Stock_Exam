@@ -13,7 +13,7 @@ import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
-  quizId: string
+  quizId: number
   quiz_stats: QuizStatsType
 }
 
@@ -25,12 +25,9 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
 
   const { likeCount, commentCount } = quiz_stats
 
-  ///// 좋아요 터치 핸들러
   async function handleLikePress(isLiked: boolean) {
-    // 로그인 여부 확인
     const isUserAuthenticated = await isAuthenticated()
 
-    // 비로그인 상태면 로그인 컨펌 모달 열기
     if (!isUserAuthenticated) {
       setEventCallback({
         onConfirmCallback: () => {
@@ -42,25 +39,20 @@ const QuizDetailActionBar = ({ quizId, quiz_stats }: PropsType) => {
       return
     }
 
-    // 기존에 좋아요 눌렀는지 여부
     if (isLiked) {
-      // 좋아요 삭제
       removeUserLikedList(quizId)
-      await deleteQuizLike(quizId.toString())
+      await deleteQuizLike(quizId)
     } else {
-      // 좋아요 추가
       addUserLikedList(quizId)
-      await createQuizLike(quizId.toString())
+      await createQuizLike(quizId)
     }
   }
 
-  ///// 댓글 터치 핸들러
   async function handleCommentPress() {
     setOpenCommentDrawer(true)
-    setQuizId(quizId.toString())
+    setQuizId(quizId)
   }
 
-  ///// 좋아요 여부
   const isLiked = userLikedList.includes(quizId)
 
   return (

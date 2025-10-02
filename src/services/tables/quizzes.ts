@@ -14,7 +14,7 @@ async function createQuiz(quizData: QuizType) {
     if (quizError) throw quizError
 
     // 퀴즈 스탯 생성
-    await createQuizStats(quiz.id.toString())
+    await createQuizStats(quiz.id)
 
     return { data: quiz, error: null }
   } catch (error) {

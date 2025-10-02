@@ -60,9 +60,8 @@ const QuizPlayer = () => {
         const currentIndex = viewableItems[0].index as number
         const currentQuiz = quizList[currentIndex]
 
-        // 조회수 증가
         if (currentQuiz?.id) {
-          incrementQuizViewCount(currentQuiz.id.toString())
+          incrementQuizViewCount(currentQuiz.id)
         }
 
         // 마지막에서 두 번째 퀴즈에 도달하면 추가 퀴즈 로드
@@ -85,10 +84,9 @@ const QuizPlayer = () => {
       <QuizContainer height={CONTENT_HEIGHT}>
         {/* 퀴즈 상세 */}
         <QuizDetail quiz={quizData} />
-        {/* 퀴즈 액션바 */}
         {quizData.id && (
           <QuizDetailActionBar
-            quizId={quizData.id.toString()}
+            quizId={quizData.id}
             quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
           />
         )}

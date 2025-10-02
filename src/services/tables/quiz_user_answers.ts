@@ -12,8 +12,7 @@ async function createQuizUserAnswer(answerData: QuizUserAnswerInsertType) {
   }
 }
 
-// 퀴즈 답변 업데이트
-async function updateQuizUserAnswer(id: string, updateData: QuizUserAnswerUpdateType) {
+async function updateQuizUserAnswer(id: number, updateData: QuizUserAnswerUpdateType) {
   try {
     const response = await supabase
       .from('quiz_user_answers')
@@ -28,7 +27,7 @@ async function updateQuizUserAnswer(id: string, updateData: QuizUserAnswerUpdate
 }
 
 // 유저의 퀴즈 답변 조회
-async function getUserQuizAnswer(userId: string, quizId: string) {
+async function getUserQuizAnswer(userId: string, quizId: number) {
   try {
     const response = await supabase
       .from('quiz_user_answers')

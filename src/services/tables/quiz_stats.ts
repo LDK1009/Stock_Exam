@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabaseClient'
 
-// 퀴즈 스탯 생성
-async function createQuizStats(quizId: string) {
+async function createQuizStats(quizId: number) {
   try {
     const response = await supabase
       .from('quiz_stats')
@@ -19,17 +18,14 @@ async function createQuizStats(quizId: string) {
   }
 }
 
-////////// 퀴즈 조회수 증가
-async function incrementQuizViewCount(quizId: string) {
+async function incrementQuizViewCount(quizId: number) {
   try {
-    // 현재 조회수 가져오기
     const { data: current } = await supabase
       .from('quiz_stats')
       .select('viewCount')
       .eq('quizId', quizId)
       .single()
 
-    // 조회수 1 증가
     const response = await supabase
       .from('quiz_stats')
       .update({ viewCount: (current?.viewCount || 0) + 1 })
@@ -41,17 +37,14 @@ async function incrementQuizViewCount(quizId: string) {
   }
 }
 
-////////// 퀴즈 추천수 증가
-async function incrementQuizLikeCount(quizId: string) {
+async function incrementQuizLikeCount(quizId: number) {
   try {
-    // 현재 추천수 가져오기
     const { data: current } = await supabase
       .from('quiz_stats')
       .select('likeCount')
       .eq('quizId', quizId)
       .single()
 
-    // 추천수 1 증가
     const response = await supabase
       .from('quiz_stats')
       .update({ likeCount: (current?.likeCount || 0) + 1 })
@@ -63,17 +56,14 @@ async function incrementQuizLikeCount(quizId: string) {
   }
 }
 
-////////// 퀴즈 추천수 감소
-async function decrementQuizLikeCount(quizId: string) {
+async function decrementQuizLikeCount(quizId: number) {
   try {
-    // 현재 추천수 가져오기
     const { data: current } = await supabase
       .from('quiz_stats')
       .select('likeCount')
       .eq('quizId', quizId)
       .single()
 
-    // 추천수 1 감소
     const response = await supabase
       .from('quiz_stats')
       .update({ likeCount: (current?.likeCount || 0) - 1 })
@@ -85,8 +75,7 @@ async function decrementQuizLikeCount(quizId: string) {
   }
 }
 
-////////// 퀴즈 댓글수 증가
-async function incrementQuizCommentCount(quizId: string) {
+async function incrementQuizCommentCount(quizId: number) {
   try {
     const { data: current } = await supabase
       .from('quiz_stats')
@@ -105,8 +94,7 @@ async function incrementQuizCommentCount(quizId: string) {
   }
 }
 
-////////// 퀴즈 댓글수 감소
-async function decrementQuizCommentCount(quizId: string) {
+async function decrementQuizCommentCount(quizId: number) {
   try {
     const { data: current } = await supabase
       .from('quiz_stats')

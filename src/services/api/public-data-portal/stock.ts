@@ -2,7 +2,6 @@ import { StockType } from '@/types/stock/stock'
 import { getPreviousDate8Digits } from '@/utils/time'
 import axios from 'axios'
 
-////////// 종목 목록 조회
 async function getStockList() {
   try {
     let data
@@ -22,7 +21,13 @@ async function getStockList() {
 
 
     const returnData = data
-      .map((item: any) => ({
+      .map((item: {
+        isinCd: string;
+        itmsNm: string;
+        clpr: string;
+        fltRt: string;
+        mrktTotAmt: string;
+      }) => ({
         id: item.isinCd,
         name: item.itmsNm,
         closingPrice: Number(item.clpr),
@@ -37,7 +42,6 @@ async function getStockList() {
   }
 }
 
-////////// 종목 상세 조회
 async function getStockDetailById(id: string) {
   try {
     let data

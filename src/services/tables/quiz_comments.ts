@@ -3,13 +3,11 @@ import { QuizCommentInsertType } from '@/types/quiz/quiz_comments'
 import { getUserId } from '../auth/auth'
 import { decrementQuizCommentCount, incrementQuizCommentCount } from './quiz_stats'
 
-////////// 퀴즈 댓글 가져오기
-async function getQuizComments(quizId: string) {
+async function getQuizComments(quizId: number) {
   const response = await supabase.from('quiz_comments').select('*').eq('quizId', quizId)
   return response
 }
 
-////////// 퀴즈 댓글 추가하기
 async function createQuizComment(params: QuizCommentInsertType) {
   const userId = await getUserId()
   await incrementQuizCommentCount(params.quizId)
@@ -20,8 +18,7 @@ async function createQuizComment(params: QuizCommentInsertType) {
   return response
 }
 
-////////// 퀴즈 댓글 삭제하기
-async function deleteQuizComment(quizId: string) {
+async function deleteQuizComment(quizId: number) {
   const userId = await getUserId()
   await decrementQuizCommentCount(quizId)
   const response = await supabase
