@@ -159,7 +159,6 @@ const IndicatorSection = ({ stock }: PropsType) => {
       const baseDate = data.basDt
       const formattedDate = `${baseDate.slice(0, 4)}.${baseDate.slice(4, 6)}.${baseDate.slice(6, 8)}`
 
-      console.log('data', JSON.stringify(data, null, 2))
       setUpdatedAt(formattedDate)
     } catch (error) {
       Toast.show({

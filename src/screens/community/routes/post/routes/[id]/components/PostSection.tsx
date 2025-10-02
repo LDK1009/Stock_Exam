@@ -5,7 +5,7 @@ import { formatDate } from '@/utils/time'
 import styled from '@emotion/native'
 import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
@@ -16,9 +16,28 @@ const PostSection = ({ post }: PropsType) => {
   const { title, createdAt, content, users, post_stats } = post
   const { viewCount, likeCount, commentCount } = post_stats || {}
   const { nickname } = users || {}
-  const [isContentExpanded, setIsContentExpanded] = useState(false)
 
-  console.log(post_stats)
+  // 처음 입장 시에만 측정하기 위한 ref
+  const hasMeasured = useRef(false)
+  const [isContentExpanded, setIsContentExpanded] = useState(true)
+
+  const handleTextLayout = (event: any) => {
+    // 이미 측정했다면 무시
+    if (hasMeasured.current) return
+
+    const { height } = event.nativeEvent.layout
+
+    // 높이가 300px을 넘으면 접힌 상태로, 아니면 펼친 상태로 설정
+    if (height >= 300) {
+      setIsContentExpanded(false)
+    } else {
+      setIsContentExpanded(true)
+    }
+
+    // 측정 완료 표시
+    hasMeasured.current = true
+  }
+
   return (
     <Container>
       {/* 제목 */}
@@ -35,10 +54,7 @@ const PostSection = ({ post }: PropsType) => {
       {/* 본문 */}
       <ContentArea>
         {/* 본문 */}
-        <Content expanded={isContentExpanded}>
-          {content}
-          {content}
-          {content}
+        <Content expanded={isContentExpanded} onLayout={handleTextLayout}>
           {content}
         </Content>
         {/* 더보기 버튼 */}
@@ -102,6 +118,7 @@ type ContentProps = {
 }
 
 const ContentArea = styled(View)`
+  width: 100%;
   position: relative;
 `
 
@@ -109,7 +126,6 @@ const Content = styled(Text)<ContentProps>`
   font-size: ${`${theme.fontSizes.body}px`};
   font-weight: ${theme.fontWeights.regular};
   color: ${theme.colors.core.white};
-
   height: ${({ expanded }) => (expanded ? 'auto' : '300px')};
 `
 
