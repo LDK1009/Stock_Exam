@@ -45,11 +45,16 @@ export const usePostStore = create<StoreType>((set, get) => ({
         *,
         users (
           nickname
+        ),
+        post_stats (
+          viewCount,
+          likeCount,
+          commentCount
         )
       `)
 
       // 카테고리 필터
-      if (category) {
+      if (category !== '자유게시판') {
         query = query.eq('category', category)
       }
 
@@ -77,7 +82,6 @@ export const usePostStore = create<StoreType>((set, get) => ({
         )
 
         set({ postList: uniquePosts })
-
       }
     } catch (error) {
       console.error('게시글 로드 실패:', error)

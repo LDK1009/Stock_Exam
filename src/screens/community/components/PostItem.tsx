@@ -11,7 +11,8 @@ type PropsType = {
 }
 
 const PostItem = ({ post }: PropsType) => {
-  const { id, users, viewCount, commentCount, recommendationCount, title, content } = post
+  const { id, users, title, post_stats } = post
+  const {viewCount, likeCount, commentCount} = post_stats || {};
 
   const { nickname } = users || {}
 
@@ -22,7 +23,7 @@ const PostItem = ({ post }: PropsType) => {
       <Footer>
         <FooterText>조회 {viewCount}</FooterText>
         <FooterText>댓글 {commentCount}</FooterText>
-        <FooterText>추천 {recommendationCount}</FooterText>
+        <FooterText>추천 {likeCount}</FooterText>
       </Footer>
     </Container>
   )

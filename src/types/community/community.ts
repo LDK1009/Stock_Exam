@@ -14,11 +14,17 @@ type PostType = {
   userId?: string
   createdAt?: string
   updatedAt?: string
-  viewCount?: number
-  commentCount?: number
-  recommendationCount?: number
+
+  ///// 테이블 조인
+  // users 테이블 조인
   users?: {
     nickname?: string
+  }
+  // post_stats 테이블 조인
+  post_stats?: {
+    viewCount?: number
+    likeCount?: number
+    commentCount?: number
   }
 }
 

@@ -13,10 +13,12 @@ type PropsType = {
 }
 
 const PostSection = ({ post }: PropsType) => {
-  const { title, users, createdAt, content } = post
+  const { title, createdAt, content, users, post_stats } = post
+  const { viewCount, likeCount, commentCount } = post_stats || {}
   const { nickname } = users || {}
   const [isContentExpanded, setIsContentExpanded] = useState(false)
 
+  console.log(post_stats)
   return (
     <Container>
       {/* 제목 */}
@@ -25,9 +27,7 @@ const PostSection = ({ post }: PropsType) => {
       {/* 헤더 */}
       <Header>
         {/* 작성자 */}
-        <HeaderText>
-          {nickname}
-        </HeaderText>
+        <HeaderText>{nickname}</HeaderText>
         {/* 작성일 */}
         <HeaderText>{formatDate(new Date(createdAt || ''), '.')}</HeaderText>
       </Header>
@@ -56,16 +56,16 @@ const PostSection = ({ post }: PropsType) => {
       <FooterContainer>
         {/* 조회, 댓글, 추천 수 */}
         <CountContainer>
-          <CountText>조회 {32}</CountText>
-          <CountText>댓글 {32}</CountText>
-          <CountText>추천 {32}</CountText>
+          <CountText>조회 {viewCount}</CountText>
+          <CountText>댓글 {likeCount}</CountText>
+          <CountText>추천 {commentCount}</CountText>
         </CountContainer>
         {/* 추천 버튼 */}
         <RecommendeContainer>
           <RecommendeButton>
             <MaterialIcons name='trending-up' size={16} color='white' />
           </RecommendeButton>
-          <RecommendeCountText>32</RecommendeCountText>
+          <RecommendeCountText>{commentCount}</RecommendeCountText>
         </RecommendeContainer>
       </FooterContainer>
     </Container>
