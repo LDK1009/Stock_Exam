@@ -17,7 +17,7 @@ export const useActionBarStore = create<StoreType>((set) => ({
   setUserLikedList: (userLikedList) => set({ userLikedList }),
   fetchUserLikedList: async () => {
     const { data: userLikedList } = await getUserQuizLikes()
-    set({ userLikedList: userLikedList?.map((item) => item.quizId) || [] })
+    set({ userLikedList: userLikedList?.map((item) => item.quizId.toString()) || [] })
   },
   addUserLikedList: (quizId) => {
     set((state) => ({ userLikedList: [...state.userLikedList, quizId] }))
