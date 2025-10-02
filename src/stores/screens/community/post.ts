@@ -12,12 +12,8 @@ type StoreType = {
   setLoading: (loading: boolean) => void
   setCanMore: (canMore: boolean) => void
   setPage: (page: number) => void
-  getPosts: (
-    pageNumber?: number,
-    category?: string | null
-  ) => Promise<void>
+  getPosts: (pageNumber?: number, category?: string | null) => Promise<void>
 }
-
 
 export const usePostStore = create<StoreType>((set, get) => ({
   postList: [],
@@ -45,7 +41,12 @@ export const usePostStore = create<StoreType>((set, get) => ({
 
     try {
       // 기본 쿼리 설정
-      let query = supabase.from('posts').select('*')
+      let query = supabase.from('posts').select(`
+        *,
+        users (
+          nickname
+        )
+      `)
 
       // 카테고리 필터
       if (category) {
@@ -76,6 +77,7 @@ export const usePostStore = create<StoreType>((set, get) => ({
         )
 
         set({ postList: uniquePosts })
+
       }
     } catch (error) {
       console.error('게시글 로드 실패:', error)

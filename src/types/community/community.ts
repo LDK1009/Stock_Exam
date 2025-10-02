@@ -17,6 +17,9 @@ type PostType = {
   viewCount?: number
   commentCount?: number
   recommendationCount?: number
+  users?: {
+    nickname?: string
+  }
 }
 
 type PostListType = PostType[]

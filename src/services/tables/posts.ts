@@ -13,7 +13,14 @@ async function createPost(postData: PostType) {
 
 async function getPostById(id: string) {
   try {
-    const response = await supabase.from('posts').select('*').eq('id', id).single()
+    const response = await supabase
+      .from('posts')
+      .select(`
+        *,
+        users!inner(nickname)
+      `)
+      .eq('id', id)
+      .single()
 
     return response
   } catch (error) {
@@ -23,7 +30,13 @@ async function getPostById(id: string) {
 
 async function getCommentsByPostId(postId: string) {
   try {
-    const response = await supabase.from('post_comments').select('*').eq('postId', postId)
+    const response = await supabase
+      .from('post_comments')
+      .select(`
+        *,
+        users!inner(nickname)
+      `)
+      .eq('postId', postId)
 
     return response
   } catch (error) {
