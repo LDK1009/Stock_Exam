@@ -5,24 +5,33 @@ import styled from '@emotion/native'
 import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
+import Toast from 'react-native-toast-message'
 
 type PropsType = {
   comment: PostCommentType
 }
 
 const CommentItem = ({ comment }: PropsType) => {
-  const { userId, content } = comment
+  const { content, users } = comment
+  const { nickname } = users || {}
+
+  async function handleRecommendePress() {
+    Toast.show({
+      type: 'info',
+      text1: '준비중인 기능입니다.',
+    })
+  }
 
   return (
     <Container>
-      <Author>{userId}</Author>
+      <Author>{nickname}</Author>
       <Content>{content}</Content>
       {/* 추천 버튼 */}
-      <RecommendeContainer>
+      <RecommendeContainer onPress={handleRecommendePress}>
         <RecommendeButton>
           <MaterialIcons name='trending-up' size={16} color='white' />
         </RecommendeButton>
-        <RecommendeCountText>32</RecommendeCountText>
+        <RecommendeCountText>0</RecommendeCountText>
       </RecommendeContainer>
     </Container>
   )
@@ -48,7 +57,7 @@ const Content = styled(Text)`
   color: ${theme.colors.core.white};
 `
 
-const RecommendeContainer = styled(View)`
+const RecommendeContainer = styled(TouchableOpacity)`
   width: 100%;
   ${mixinFlex('row', 'flex-end', 'center')}
   column-gap: 4px;

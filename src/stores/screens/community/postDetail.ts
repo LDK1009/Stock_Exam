@@ -20,7 +20,7 @@ type StoreType = {
   // 댓글 목록 설정
   setComments: (comments: PostCommentType[]) => void
   // 댓글 목록 추가
-  addComments: (comment: PostCommentType) => void
+  addComment: (comment: PostCommentType) => void
   // 댓글 목록 조회
   fetchComments: (postId: number) => void
 
@@ -49,7 +49,7 @@ export const usePostDetailStore = create<StoreType>((set) => ({
   // 댓글 목록 설정
   setComments: (comments) => set({ comments }),
   // 댓글 목록 추가
-  addComments: (comment) => set((state) => ({ comments: [...state.comments, comment] })),
+  addComment: (comment) => set((state) => ({ comments: [...state.comments, comment] })),
   // 댓글 목록 조회
   fetchComments: async (postId) => {
     const response = await getPostComments(postId)

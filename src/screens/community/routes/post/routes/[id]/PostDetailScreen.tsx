@@ -67,8 +67,11 @@ const PostDetailScreen = () => {
         paddingBottom: 50,
       }}
     >
+      {/* 게시물 상세 */}
       <PostSection />
+      {/* 댓글 */}
       <CommentSection />
+      {/* 내비게이션 */}
       <NavigationSection />
     </Container>
   )

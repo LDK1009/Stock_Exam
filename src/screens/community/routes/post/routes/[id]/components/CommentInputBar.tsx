@@ -1,4 +1,4 @@
-import { getUserId, isAuthenticated } from '@/services/auth/auth'
+import { getUserId, getUserNickname, isAuthenticated } from '@/services/auth/auth'
 import { createPostComment } from '@/services/tables/post/post_comments'
 import { useConfirmModalStore } from '@/stores/common/modal'
 import { usePostDetailStore } from '@/stores/screens/community/postDetail'
@@ -10,13 +10,10 @@ import React from 'react'
 import { TextInput, TouchableOpacity, View } from 'react-native'
 // import { v4 as uuidv4 } from 'uuid' // 임시 제거
 
-type PropsType = {
-  postId: number
-}
-
-const CommentInputBar = ( { postId }: PropsType ) => {
+const CommentInputBar = () => {
   ////// 커뮤니티 댓글 입력값 상태 관리
-  const { inputComment, setInputComment, clearInputComment } = usePostDetailStore()
+  const { inputComment, setInputComment, clearInputComment, postId, addComment } =
+    usePostDetailStore()
 
   const { setConfirmLogin, setEventCallback } = useConfirmModalStore()
 
@@ -29,11 +26,9 @@ const CommentInputBar = ( { postId }: PropsType ) => {
 
     // 로그인 여부 확인
     const isUserAuthenticated = await isAuthenticated()
-    // 유저 ID 가져오기
-    const userId = await getUserId()
 
     // 비로그인 상태면 로그인 컨펌 모달 열기
-    if (!isUserAuthenticated || !userId) {
+    if (!isUserAuthenticated) {
       setEventCallback({
         onConfirmCallback: () => {},
         onCancelCallback: () => {},
@@ -42,17 +37,28 @@ const CommentInputBar = ( { postId }: PropsType ) => {
       return
     }
 
-    // const randomId = Math.floor(Math.random() * 1000000)
+    //  랜덤 댓글 ID
+    const randomId = Math.floor(Math.random() * 1000000)
+    // 유저 ID 가져오기
+    const userId = await getUserId()
+    // 유저 닉네임 가져오기
+    const nickname = await getUserNickname()
 
-    // addComments({
-    //   id: randomId,
-    //   quizId: quizId,
-    //   userId: userId,
-    //   content: inputComment,
-    //   createdAt: new Date().toISOString(),
-    //   updatedAt: new Date().toISOString(),
-    // })
+    // 댓글 상태 추가
+    addComment({
+      id: randomId,
+      postId: postId,
+      userId: userId || '',
+      content: inputComment,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
 
+      users: {
+        nickname: nickname || '',
+      },
+    })
+
+    // 댓글 생성
     await createPostComment({
       postId: postId,
       userId: userId,

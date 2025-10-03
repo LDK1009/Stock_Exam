@@ -6,6 +6,10 @@ type PostCommentType = {
   content: string
   createdAt?: string
   updatedAt?: string
+
+  users?: {
+    nickname: string
+  }
 }
 
 type PostCommentListType = PostCommentType[]

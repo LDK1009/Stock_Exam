@@ -5,7 +5,7 @@ import { decrementPostCommentCount, incrementPostCommentCount } from './post_sta
 ////////// 게시물 댓글 생성
 async function createPostComment(params: PostCommentCreateType) {
   try {
-    const { postId} = params
+    const { postId } = params
 
     // 게시물 댓글 생성
     const { data, error } = await supabase.from('post_comments').insert(params).select()
@@ -21,7 +21,10 @@ async function createPostComment(params: PostCommentCreateType) {
 ////////// 게시물 댓글 조회
 async function getPostComments(postId: number) {
   try {
-    const { data, error } = await supabase.from('post_comments').select('*').eq('postId', postId)
+    const { data, error } = await supabase
+      .from('post_comments')
+      .select(`*, users(nickname)`)
+      .eq('postId', postId)
 
     return { data, error }
   } catch (error) {

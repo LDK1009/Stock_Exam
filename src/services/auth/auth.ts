@@ -101,5 +101,12 @@ async function getUserId() {
   }
 }
 
-export { createUser, getUserId, isAuthenticated, isNewUser, logout }
+////////// 사용자 닉네임 조회
+async function getUserNickname() {
+  const userId = await getUserId()
+  const { data } = await supabase.from('users').select('nickname').eq('id', userId).single()
+  return data?.nickname
+}
+
+export { createUser, getUserId, getUserNickname, isAuthenticated, isNewUser, logout }
 

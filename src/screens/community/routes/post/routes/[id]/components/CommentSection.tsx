@@ -13,13 +13,19 @@ const CommentSection = () => {
 
   return (
     <Container>
+      {/* 헤더 */}
       <Header>
         <HeaderText>댓글</HeaderText>
       </Header>
+      {/* 댓글 목록 */}
       <CommentList>
-        <ScrollView scrollEnabled={true} nestedScrollEnabled={true}>
+        <ScrollView
+          scrollEnabled={true}
+          nestedScrollEnabled={true}
+          contentContainerStyle={{ gap: 16 }}
+        >
           {comments?.length === 0 ? (
-            <CommonText>댓글이 없습니다.</CommonText>
+            <CommonText>첫 댓글을 남겨보세요.</CommonText>
           ) : (
             <>
               {comments?.map((item) => (
@@ -29,7 +35,8 @@ const CommentSection = () => {
           )}
         </ScrollView>
       </CommentList>
-      <CommentInputBar postId={postId} />
+      {/* 댓글 입력바 */}
+      <CommentInputBar />
     </Container>
   )
 }
