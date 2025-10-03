@@ -81,6 +81,6 @@ export default PostDetailScreen
 
 const Container = styled(ScrollView)`
   flex: 1;
-  padding: 16px 32px;
+  padding: 32px 32px;
   background-color: ${theme.colors.background.default};
 `

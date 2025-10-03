@@ -37,16 +37,18 @@ const PostSection = () => {
 
   return (
     <Container>
-      {/* 제목 */}
-      <Title>{title}</Title>
+      <HeaderContainer>
+        {/* 제목 */}
+        <Title>{title}</Title>
 
-      {/* 헤더 */}
-      <Header>
-        {/* 작성자 */}
-        <HeaderText>{nickname}</HeaderText>
-        {/* 작성일 */}
-        <HeaderText>{formatDate(new Date(createdAt || ''), '.')}</HeaderText>
-      </Header>
+        {/* 헤더 */}
+        <Header>
+          {/* 작성자 */}
+          <HeaderText>{nickname}</HeaderText>
+          {/* 작성일 */}
+          <HeaderText>{formatDate(new Date(createdAt || ''), '.')}</HeaderText>
+        </Header>
+      </HeaderContainer>
 
       {/* 본문 */}
       <ContentArea>
@@ -89,11 +91,18 @@ export default PostSection
 
 const Container = styled(View)`
   ${mixinFlex('column', 'flex-start', 'center')}
-  row-gap: 16px;
+  row-gap: 24px;
   width: 100%;
 `
 
+const HeaderContainer = styled(View)`
+  ${mixinFlex('column', 'flex-start', 'flex-start')}
+  width: 100%;
+  row-gap: 8px;
+`
+
 const Title = styled(Text)`
+  width: 100%;
   font-size: 20px;
   font-weight: ${theme.fontWeights.bold};
   color: ${theme.colors.core.white};
