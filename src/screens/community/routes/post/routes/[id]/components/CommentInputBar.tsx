@@ -26,9 +26,13 @@ const CommentInputBar = () => {
 
     // 로그인 여부 확인
     const isUserAuthenticated = await isAuthenticated()
+    // 유저 ID 가져오기
+    const userId = await getUserId()
+    // 유저 닉네임 가져오기
+    const nickname = await getUserNickname()
 
     // 비로그인 상태면 로그인 컨펌 모달 열기
-    if (!isUserAuthenticated) {
+    if (!isUserAuthenticated || !userId || !nickname) {
       setEventCallback({
         onConfirmCallback: () => {},
         onCancelCallback: () => {},
@@ -39,29 +43,25 @@ const CommentInputBar = () => {
 
     //  랜덤 댓글 ID
     const randomId = Math.floor(Math.random() * 1000000)
-    // 유저 ID 가져오기
-    const userId = await getUserId()
-    // 유저 닉네임 가져오기
-    const nickname = await getUserNickname()
 
     // 댓글 상태 추가
     addComment({
       id: randomId,
       postId: postId,
-      userId: userId || '',
+      userId: userId,
       content: inputComment,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
 
       users: {
-        nickname: nickname || '',
+        nickname: nickname,
       },
     })
 
     // 댓글 생성
     await createPostComment({
       postId: postId,
-      userId: userId,
+      userId: userId || '',
       content: inputComment,
     })
 
