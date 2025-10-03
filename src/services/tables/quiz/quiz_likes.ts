@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
-import { getUserId } from '../auth/auth'
+import { getUserId } from '../../auth/auth'
 import { decrementQuizLikeCount, incrementQuizLikeCount } from './quiz_stats'
 
 async function getUserQuizLikes() {

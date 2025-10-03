@@ -1,4 +1,4 @@
-import { getQuizComments } from '@/services/tables/quiz_comments'
+import { getQuizComments } from '@/services/tables/quiz/quiz_comments'
 import { QuizCommentType } from '@/types/quiz/quiz_comments'
 import { create } from 'zustand'
 

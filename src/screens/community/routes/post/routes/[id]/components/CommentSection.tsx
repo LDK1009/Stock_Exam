@@ -9,9 +9,10 @@ import CommentItem from './CommentItem'
 
 type PropsType = {
   commentList: PostCommentListType | null
+  postId: number
 }
 
-const CommentSection = ({ commentList }: PropsType) => {
+const CommentSection = ({ commentList, postId }: PropsType) => {
   return (
     <Container>
       <Header>
@@ -24,7 +25,7 @@ const CommentSection = ({ commentList }: PropsType) => {
           ))}
         </ScrollView>
       </CommentList>
-      <CommentInputBar />
+      <CommentInputBar postId={postId} />
     </Container>
   )
 }

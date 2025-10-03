@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabaseClient'
 import { QuizCommentInsertType } from '@/types/quiz/quiz_comments'
-import { getUserId } from '../auth/auth'
+import { getUserId } from '../../auth/auth'
 import { decrementQuizCommentCount, incrementQuizCommentCount } from './quiz_stats'
 
 async function getQuizComments(quizId: number) {

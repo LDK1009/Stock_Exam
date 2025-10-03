@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabaseClient'
 
+////////// 게시물 반응 통계 생성
 async function createPostStats(postId: number) {
   try {
     const response = await supabase
@@ -18,6 +19,7 @@ async function createPostStats(postId: number) {
   }
 }
 
+////////// 게시물 조회수 증가
 async function incrementPostViewCount(postId: number) {
   try {
     const { data: current } = await supabase
@@ -37,6 +39,7 @@ async function incrementPostViewCount(postId: number) {
   }
 }
 
+////////// 게시물 좋아요 수 증가
 async function incrementPostLikeCount(postId: number) {
   try {
     const { data: current } = await supabase
@@ -56,6 +59,7 @@ async function incrementPostLikeCount(postId: number) {
   }
 }
 
+////////// 게시물 좋아요 수 감소
 async function decrementPostLikeCount(postId: number) {
   try {
     const { data: current } = await supabase
@@ -75,6 +79,7 @@ async function decrementPostLikeCount(postId: number) {
   }
 }
 
+////////// 게시물 댓글 수 증가
 async function incrementPostCommentCount(postId: number) {
   try {
     const { data: current } = await supabase
@@ -94,6 +99,7 @@ async function incrementPostCommentCount(postId: number) {
   }
 }
 
+////////// 게시물 댓글 수 감소
 async function decrementPostCommentCount(postId: number) {
   try {
     const { data: current } = await supabase
@@ -114,11 +120,11 @@ async function decrementPostCommentCount(postId: number) {
 }
 
 export {
-    createPostStats,
-    decrementPostCommentCount,
-    decrementPostLikeCount,
-    incrementPostCommentCount,
-    incrementPostLikeCount,
-    incrementPostViewCount
+  createPostStats,
+  decrementPostCommentCount,
+  decrementPostLikeCount,
+  incrementPostCommentCount,
+  incrementPostLikeCount,
+  incrementPostViewCount
 }
 

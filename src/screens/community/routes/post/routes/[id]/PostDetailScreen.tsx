@@ -1,6 +1,6 @@
 import CommonLoading from '@/components/feedback/CommonLoading'
-import { incrementPostViewCount } from '@/services/tables/post_stats'
-import { getPostById } from '@/services/tables/posts'
+import { incrementPostViewCount } from '@/services/tables/post/post_stats'
+import { getPostById } from '@/services/tables/post/posts'
 import { theme } from '@/styles/theme'
 import { PostType } from '@/types/community/community'
 import { PostCommentListType } from '@/types/community/postComment'
@@ -138,7 +138,7 @@ const PostDetailScreen = () => {
       }}
     >
       <PostSection post={postDeatil} />
-      <CommentSection commentList={commentList} />
+      <CommentSection commentList={commentList} postId={Number(id)} />
       <NavigationSection />
     </Container>
   )

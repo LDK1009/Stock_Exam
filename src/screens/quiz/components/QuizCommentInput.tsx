@@ -1,5 +1,5 @@
 import { getUserId, isAuthenticated } from '@/services/auth/auth'
-import { createQuizComment } from '@/services/tables/quiz_comments'
+import { createQuizComment } from '@/services/tables/quiz/quiz_comments'
 import { useConfirmModalStore } from '@/stores/common/modal'
 import { useCommentDrawerStore } from '@/stores/screens/quiz/ui/commentDrawer'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'

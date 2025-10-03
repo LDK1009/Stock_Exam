@@ -1,4 +1,4 @@
-import { getUserQuizLikes } from '@/services/tables/quiz_likes'
+import { getUserQuizLikes } from '@/services/tables/quiz/quiz_likes'
 import { create } from 'zustand'
 
 type StoreType = {

@@ -1,4 +1,5 @@
 import { getUserId, isAuthenticated } from '@/services/auth/auth'
+import { createPostComment } from '@/services/tables/post/post_comments'
 import { useConfirmModalStore } from '@/stores/common/modal'
 import { useCommunityCommentStore } from '@/stores/screens/community/ui/comment'
 import { mixinFlex } from '@/styles/mixins'
@@ -9,7 +10,11 @@ import React from 'react'
 import { TextInput, TouchableOpacity, View } from 'react-native'
 // import { v4 as uuidv4 } from 'uuid' // 임시 제거
 
-const CommentInputBar = () => {
+type PropsType = {
+  postId: number
+}
+
+const CommentInputBar = ( { postId }: PropsType ) => {
   ////// 커뮤니티 댓글 입력값 상태 관리
   const { inputComment, setInputComment, clearInputComment } = useCommunityCommentStore()
 
@@ -37,7 +42,7 @@ const CommentInputBar = () => {
       return
     }
 
-    const randomId = Math.floor(Math.random() * 1000000)
+    // const randomId = Math.floor(Math.random() * 1000000)
 
     // addComments({
     //   id: randomId,
@@ -48,11 +53,11 @@ const CommentInputBar = () => {
     //   updatedAt: new Date().toISOString(),
     // })
 
-    // await createQuizComment({
-    //   quizId: quizId,
-    //   userId: userId,
-    //   content: inputComment,
-    // })
+    await createPostComment({
+      postId: postId,
+      userId: userId,
+      content: inputComment,
+    })
 
     // 댓글 입력값 초기화
     clearInputComment()

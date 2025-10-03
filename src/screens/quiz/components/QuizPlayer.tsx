@@ -1,5 +1,5 @@
 import CommonToast from '@/components/feedback/CommonToast'
-import { incrementQuizViewCount } from '@/services/tables/quiz_stats'
+import { incrementQuizViewCount } from '@/services/tables/quiz/quiz_stats'
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizStore } from '@/stores/screens/quiz/quiz'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'

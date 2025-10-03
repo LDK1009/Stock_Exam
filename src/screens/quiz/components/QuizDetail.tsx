@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
-import { createQuizUserAnswer, getUserQuizAnswer, updateQuizUserAnswer } from '@/services/tables/quiz_user_answers'
+import { createQuizUserAnswer, getUserQuizAnswer, updateQuizUserAnswer } from '@/services/tables/quiz/quiz_user_answers'
 import { useQuizFilterStore } from '@/stores/screens/quiz/filter'
 import { useQuizPlayerStore } from '@/stores/screens/quiz/ui/quizPlayer'
 import { mixinFlex } from '@/styles/mixins'

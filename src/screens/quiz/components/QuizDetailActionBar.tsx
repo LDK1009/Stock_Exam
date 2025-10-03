@@ -1,5 +1,5 @@
 import { isAuthenticated } from '@/services/auth/auth'
-import { createQuizLike, deleteQuizLike } from '@/services/tables/quiz_likes'
+import { createQuizLike, deleteQuizLike } from '@/services/tables/quiz/quiz_likes'
 import { useConfirmModalStore } from '@/stores/common/modal'
 import { useActionBarStore } from '@/stores/screens/quiz/ui/actionBar'
 import { useCommentDrawerStore } from '@/stores/screens/quiz/ui/commentDrawer'
