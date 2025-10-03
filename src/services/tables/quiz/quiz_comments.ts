@@ -4,7 +4,10 @@ import { getUserId } from '../../auth/auth'
 import { decrementQuizCommentCount, incrementQuizCommentCount } from './quiz_stats'
 
 async function getQuizComments(quizId: number) {
-  const response = await supabase.from('quiz_comments').select('*').eq('quizId', quizId)
+  const response = await supabase
+    .from('quiz_comments')
+    .select(`*, users(nickname)`)
+    .eq('quizId', quizId)
   return response
 }
 

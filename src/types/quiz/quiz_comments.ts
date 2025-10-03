@@ -6,6 +6,10 @@ type QuizCommentType = {
   parentId?: number | null
   createdAt: string
   updatedAt: string
+
+  users?: {
+    nickname: string
+  }
 }
 
 type QuizCommentInsertType = {
