@@ -5,6 +5,7 @@ import { create } from 'zustand'
 type StoreType = {
   userProfile: UserType
   setUserProfile: (userProfile: UserType) => void
+  setUserProfileProperty: (property: keyof UserType, value: UserType[keyof UserType]) => void
 }
 
 export const useUserProfileStore = create<StoreType>((set) => ({
@@ -23,4 +24,8 @@ export const useUserProfileStore = create<StoreType>((set) => ({
   },
 
   setUserProfile: (userProfile) => set({ userProfile }),
+  setUserProfileProperty: (property, value) =>
+    set((state) => ({
+      userProfile: { ...state.userProfile, [property]: value },
+    })),
 }))

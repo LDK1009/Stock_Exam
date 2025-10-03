@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabaseClient'
+import { UpdateUserType } from '@/types/auth/user'
 import { getUserId } from '../auth/auth'
 
 ////////// 유저 정보 가져오기
@@ -11,6 +12,23 @@ async function getUser() {
     }
 
     const { data } = await supabase.from('users').select('*').eq('id', userId).single()
+
+    return data
+  } catch (error) {
+    throw error
+  }
+}
+
+////////// 유저 정보 수정
+type UpdateUserProfileType = {
+  userId: string
+  updateData: UpdateUserType
+}
+
+async function updateUserProfile(params: UpdateUserProfileType) {
+  try {
+    const { userId, updateData } = params
+    const { data } = await supabase.from('users').update(updateData).eq('id', userId).select()
 
     return data
   } catch (error) {
@@ -45,5 +63,5 @@ async function completeUserProfile(params: CompleteUserProfileType) {
   }
 }
 
-export { completeUserProfile, getUser }
+export { completeUserProfile, getUser, updateUserProfile }
 

@@ -1,4 +1,5 @@
 import { PROFILE_CHARACTER_LIST } from '@/constants/profileImages'
+import { useProfileEditStore } from '@/stores/screens/profile/profileEdit'
 import { useUserProfileStore } from '@/stores/screens/profile/userProfile'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
@@ -6,15 +7,17 @@ import styled from '@emotion/native'
 import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
+import ProfileEditModal from './profile-edit-modal/ProfileEditModal'
 
 const ProfileSection = () => {
-  ///// 스토어
+  ///// 유저 프로필 스토어
   const { userProfile } = useUserProfileStore()
   ///// 유저 프로필 비구조화 할당
   const { nickname, profileCharacter } = userProfile
-  console.log(JSON.stringify(userProfile, null, 2))
-  console.log('--------------------------------')
 
+  ///// 프로필 수정 모달 스토어
+  const { setOpen } = useProfileEditStore()
+  
   return (
     <Container>
       {/* 이미지와 이름 */}
@@ -30,9 +33,12 @@ const ProfileSection = () => {
       </ImageAndNameContainer>
 
       {/* 수정 버튼 */}
-      <EditButton>
+      <EditButton onPress={() => setOpen(true)}>
         <MaterialIcons name='create' size={20} color={theme.colors.core.white} />
       </EditButton>
+
+      {/* 프로필 수정 모달 */}
+      <ProfileEditModal />
     </Container>
   )
 }

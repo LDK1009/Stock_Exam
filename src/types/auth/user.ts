@@ -20,5 +20,15 @@ type CreateUserType = {
   biography: string
 }
 
-export { CreateUserType, UserType }
+type UpdateUserType = {
+  nickname: string
+  profileImageSrc?: string
+  profileCharacter?: string
+  biography?: string
+  level?: number
+  experience?: number
+  notificationEnabled?: boolean
+}
+
+export { CreateUserType, UpdateUserType, UserType }
 
