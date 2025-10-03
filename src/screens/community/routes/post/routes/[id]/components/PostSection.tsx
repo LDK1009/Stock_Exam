@@ -1,6 +1,6 @@
+import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { PostType } from '@/types/community/community'
 import { formatDate } from '@/utils/time'
 import styled from '@emotion/native'
 import { Entypo, MaterialIcons } from '@expo/vector-icons'
@@ -8,12 +8,9 @@ import { LinearGradient } from 'expo-linear-gradient'
 import React, { useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
-type PropsType = {
-  post: PostType
-}
-
-const PostSection = ({ post }: PropsType) => {
-  const { title, createdAt, content, users, post_stats } = post
+const PostSection = () => {
+  const { postDetail } = usePostDetailStore()
+  const { title, createdAt, content, users, post_stats } = postDetail || {}
   const { viewCount, likeCount, commentCount } = post_stats || {}
   const { nickname } = users || {}
 

@@ -1,12 +1,12 @@
 import CommonLoading from '@/components/feedback/CommonLoading'
+import { getPostComments } from '@/services/tables/post/post_comments'
 import { incrementPostViewCount } from '@/services/tables/post/post_stats'
 import { getPostById } from '@/services/tables/post/posts'
+import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { theme } from '@/styles/theme'
-import { PostType } from '@/types/community/community'
-import { PostCommentListType } from '@/types/community/postComment'
 import styled from '@emotion/native'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { ScrollView } from 'react-native'
 import CommentSection from './components/CommentSection'
 import NavigationSection from './components/NavigationSection'
@@ -15,95 +15,21 @@ import PostSection from './components/PostSection'
 const PostDetailScreen = () => {
   const { id } = useLocalSearchParams()
 
-  const [postDeatil, setPostDeatil] = useState<PostType | null>(null)
-  const [commentList, setCommentList] = useState<PostCommentListType | null>([
-    {
-      id: 1,
-      postId: 1,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 2,
-      postId: 2,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 3,
-      postId: 3,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 4,
-      postId: 4,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 5,
-      postId: 5,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 6,
-      postId: 6,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 7,
-      postId: 7,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 8,
-      postId: 8,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 9,
-      postId: 9,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-    {
-      id: 10,
-      postId: 10,
-      parentId: null,
-      userId: '배고픈하마',
-      content:
-        '저는 은행에서 증권사로 옮길 생각이 없습니다. 퇴직연금이 손실을 입을까 염려되기 때문입니다. 앞으로 67년 정도 더 받을 수 있는데, 만약 손실이 발생하면 기간이 34년으로 줄어들 수 있어 안정성이 무엇보다 중요하다고 생각합니다.',
-    },
-  ])
+  const { setPostId, postDetail, setPostDetail, setComments } = usePostDetailStore()
 
   ///// 게시글 상세 조회
   async function fetchPostDetail() {
     if (id) {
       const response = await getPostById(Number(id))
-      setPostDeatil(response.data)
+      setPostDetail(response.data)
+    }
+  }
+
+  ///// 댓글 목록 조회
+  async function fetchComments() {
+    if (id) {
+      const response = await getPostComments(Number(id))
+      setComments(response.data || [])
     }
   }
 
@@ -114,15 +40,19 @@ const PostDetailScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
+      // 게시물 아이디 설정
+      setPostId(Number(id))
       // 게시물 상세 데이터 조회
       fetchPostDetail()
+      // 댓글 목록 조회
+      fetchComments()
       // 게시물 조회수 증가
       incrementViewCount()
     }, [])
   )
 
   ///// 게시물 상세 데이터 조회 완료 전 로딩 표시
-  if (!postDeatil) {
+  if (!postDetail) {
     return (
       <Container>
         <CommonLoading />
@@ -137,8 +67,8 @@ const PostDetailScreen = () => {
         paddingBottom: 50,
       }}
     >
-      <PostSection post={postDeatil} />
-      <CommentSection commentList={commentList} postId={Number(id)} />
+      <PostSection />
+      <CommentSection />
       <NavigationSection />
     </Container>
   )

@@ -1,18 +1,16 @@
+import CommonText from '@/components/display/CommonText'
+import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { PostCommentListType } from '@/types/community/postComment'
 import styled from '@emotion/native'
 import React from 'react'
 import { ScrollView, Text, View } from 'react-native'
 import CommentInputBar from './CommentInputBar'
 import CommentItem from './CommentItem'
 
-type PropsType = {
-  commentList: PostCommentListType | null
-  postId: number
-}
+const CommentSection = () => {
+  const { postId, comments } = usePostDetailStore()
 
-const CommentSection = ({ commentList, postId }: PropsType) => {
   return (
     <Container>
       <Header>
@@ -20,9 +18,15 @@ const CommentSection = ({ commentList, postId }: PropsType) => {
       </Header>
       <CommentList>
         <ScrollView scrollEnabled={true} nestedScrollEnabled={true}>
-          {commentList?.map((item) => (
-            <CommentItem key={item.id} comment={item} />
-          ))}
+          {comments?.length === 0 ? (
+            <CommonText>댓글이 없습니다.</CommonText>
+          ) : (
+            <>
+              {comments?.map((item) => (
+                <CommentItem key={item.id} comment={item} />
+              ))}
+            </>
+          )}
         </ScrollView>
       </CommentList>
       <CommentInputBar postId={postId} />

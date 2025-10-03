@@ -1,7 +1,7 @@
 import { getUserId, isAuthenticated } from '@/services/auth/auth'
 import { createPostComment } from '@/services/tables/post/post_comments'
 import { useConfirmModalStore } from '@/stores/common/modal'
-import { useCommunityCommentStore } from '@/stores/screens/community/ui/comment'
+import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -16,7 +16,7 @@ type PropsType = {
 
 const CommentInputBar = ( { postId }: PropsType ) => {
   ////// 커뮤니티 댓글 입력값 상태 관리
-  const { inputComment, setInputComment, clearInputComment } = useCommunityCommentStore()
+  const { inputComment, setInputComment, clearInputComment } = usePostDetailStore()
 
   const { setConfirmLogin, setEventCallback } = useConfirmModalStore()
 
