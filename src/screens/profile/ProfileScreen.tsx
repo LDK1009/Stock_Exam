@@ -1,18 +1,22 @@
 import { isAuthenticated } from '@/services/auth/auth'
-import { mixinContainer, mixinContentContainer, mixinFlex } from '@/styles/mixins'
+import { getUser } from '@/services/tables/users'
+import { useUserProfileStore } from '@/stores/screens/profile/userProfile'
+import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import { useFocusEffect } from '@react-navigation/native'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { SafeAreaView } from 'react-native'
-import AnalyticsSection from './components/AnalyticsSection'
-import LearningOverviewSection from './components/learning-overview/LearningOverviewSection'
 import LogoutButton from './components/LogoutButton'
 import ProfileSection from './components/ProfileSection'
+import LearningOverviewSection from './components/learning-overview/LearningOverviewSection'
 
 const ProfileScreen = () => {
+  ///// 라우터
   const router = useRouter()
+  ///// 스토어
+  const { setUserProfile } = useUserProfileStore()
 
   ////////// 로그인 체크
   async function loginCheck() {
@@ -24,18 +28,32 @@ const ProfileScreen = () => {
     }
   }
 
+  ////////// 유저 프로필 정보 가져오기
+
+  async function fetchUserProfile() {
+    const userProfile = await getUser()
+    if (userProfile) {
+      setUserProfile(userProfile)
+    }
+  }
+
   ////////// 화면 포커스될 때마다 로그인 체크
   useFocusEffect(
     React.useCallback(() => {
       loginCheck()
+      fetchUserProfile()
     }, [])
   )
 
   return (
     <Container>
+      {/* 프로필 */}
       <ProfileSection />
-      <LearningOverviewSection/>
-      <AnalyticsSection/>
+      {/* 학습 통계 */}
+      <LearningOverviewSection />
+      {/* 분석 */}
+      {/* <AnalyticsSection/> */}
+      {/* 로그아웃 버튼 */}
       <LogoutButton />
     </Container>
   )
@@ -44,12 +62,10 @@ const ProfileScreen = () => {
 export default ProfileScreen
 
 const Container = styled(SafeAreaView)`
-  ${mixinContainer}
-  ${mixinContentContainer(4, 3)}
+  flex: 1;
+  padding: 32px;
+  row-gap: 32px;
   ${mixinFlex('column', 'flex-start', 'center')}
-
-  padding-top:16px;
-  padding-bottom: 0px;
 
   background-color: ${theme.colors.background.default};
 `

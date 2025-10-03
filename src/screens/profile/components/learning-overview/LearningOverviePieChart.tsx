@@ -41,7 +41,7 @@ const LearningOverviePieChart = () => {
       />
       <LegendContainer>
         {data.map((item, index) => (
-          <LegendItem>
+          <LegendItem key={`${item.name}-${index}`}>
             <LegendCircle rank={index} />
             <LegendText>{item.name}</LegendText>
           </LegendItem>

@@ -1,3 +1,5 @@
+import { PROFILE_CHARACTER_LIST } from '@/constants/profileImages'
+import { useUserProfileStore } from '@/stores/screens/profile/userProfile'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
@@ -6,15 +8,28 @@ import React from 'react'
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 
 const ProfileSection = () => {
+  ///// 스토어
+  const { userProfile } = useUserProfileStore()
+  ///// 유저 프로필 비구조화 할당
+  const { nickname, profileCharacter } = userProfile
+  console.log(JSON.stringify(userProfile, null, 2))
+  console.log('--------------------------------')
+
   return (
     <Container>
+      {/* 이미지와 이름 */}
       <ImageAndNameContainer>
+        {/* 프로필 이미지 */}
         <ProfileImageContainer>
-          <ProfileImage source={require('@assets/images/profile-character/tiger.png')} />
+          <ProfileImage
+            source={PROFILE_CHARACTER_LIST.find((item) => item.key === profileCharacter)?.source}
+          />
         </ProfileImageContainer>
-        <ProfileName>배고픈 호랑이</ProfileName>
+        {/* 프로필 이름 */}
+        <ProfileName>{nickname}</ProfileName>
       </ImageAndNameContainer>
 
+      {/* 수정 버튼 */}
       <EditButton>
         <MaterialIcons name='create' size={20} color={theme.colors.core.white} />
       </EditButton>
@@ -37,7 +52,6 @@ const ImageAndNameContainer = styled(View)`
 const ProfileImageContainer = styled(View)`
   width: 50px;
   height: 50px;
-  padding: 8px;
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 50%;
   overflow: hidden;
