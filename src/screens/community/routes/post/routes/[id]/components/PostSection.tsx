@@ -1,4 +1,7 @@
+import { getUserId } from '@/services/auth/auth'
+import { createUserPostLike, deleteUserPostLike } from '@/services/tables/post/post_likes'
 import { usePostDetailStore } from '@/stores/screens/community/postDetail'
+import { usePostDetailFooterStore } from '@/stores/screens/community/postDetailFooter'
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { formatDate } from '@/utils/time'
@@ -9,15 +12,21 @@ import React, { useRef, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 const PostSection = () => {
+  ///// 스토어
   const { postDetail } = usePostDetailStore()
-  const { title, createdAt, content, users, post_stats } = postDetail || {}
+  const { userLikedList, addUserLikedList, removeUserLikedList } = usePostDetailFooterStore()
+  ///// 게시물 상세 데이터
+  const { id, title, createdAt, content, users, post_stats } = postDetail || {}
+  ///// 게시물 통계 데이터
   const { viewCount, likeCount, commentCount } = post_stats || {}
+  ///// 게시물 작성자 데이터
   const { nickname } = users || {}
 
   // 처음 입장 시에만 측정하기 위한 ref
   const hasMeasured = useRef(false)
   const [isContentExpanded, setIsContentExpanded] = useState(true)
 
+  ///// 본문 높이 측정
   const handleTextLayout = (event: any) => {
     // 이미 측정했다면 무시
     if (hasMeasured.current) return
@@ -35,7 +44,22 @@ const PostSection = () => {
     hasMeasured.current = true
   }
 
-  
+  ///// 좋아요 버튼 클릭
+  async function handleLikeButtonPress() {
+    const userId = await getUserId()
+    if (!userId) return
+
+    if (isLiked) {
+      removeUserLikedList(Number(id))
+      await deleteUserPostLike({ postId: Number(id), userId: userId })
+    } else {
+      addUserLikedList(Number(id))
+      await createUserPostLike({ postId: Number(id), userId: userId })
+    }
+  }
+
+  const isLiked = userLikedList.includes(Number(id))
+
   return (
     <Container>
       <HeaderContainer>
@@ -73,15 +97,21 @@ const PostSection = () => {
         {/* 조회, 댓글, 추천 수 */}
         <CountContainer>
           <CountText>조회 {viewCount}</CountText>
-          <CountText>댓글 {likeCount}</CountText>
-          <CountText>추천 {commentCount}</CountText>
+          <CountText>댓글 {commentCount}</CountText>
+          <CountText>추천 {likeCount}</CountText>
         </CountContainer>
         {/* 추천 버튼 */}
-        <RecommendeContainer>
-          <RecommendeButton>
-            <MaterialIcons name='trending-up' size={16} color='white' />
+        <RecommendeContainer onPress={handleLikeButtonPress}>
+          <RecommendeButton onPress={handleLikeButtonPress} isLiked={isLiked}>
+            <MaterialIcons
+              name='trending-up'
+              size={16}
+              color={isLiked ? theme.colors.core.white : 'rgba(255,255,255,0.5)'}
+            />
           </RecommendeButton>
-          <RecommendeCountText>{commentCount}</RecommendeCountText>
+          <RecommendeCountText isLiked={isLiked}>
+            {isLiked ? (likeCount || 0) + 1 : likeCount || 0}
+          </RecommendeCountText>
         </RecommendeContainer>
       </FooterContainer>
     </Container>
@@ -164,23 +194,33 @@ const FooterContainer = styled(View)`
   ${mixinFlex('row', 'space-between', 'center')}
 `
 
-const RecommendeContainer = styled(View)`
+const RecommendeContainer = styled(TouchableOpacity)`
   ${mixinFlex('row', 'center', 'center')}
   column-gap: 4px;
 `
 
-const RecommendeButton = styled(TouchableOpacity)`
+type RecommendeButtonProps = {
+  isLiked: boolean
+}
+
+const RecommendeButton = styled(TouchableOpacity)<RecommendeButtonProps>`
   ${mixinFlex('row', 'center', 'center')}
   width: 24px;
   height: 24px;
   border-radius: 999px;
-  border: 1px solid ${theme.colors.core.white};
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ isLiked }) => (isLiked ? theme.colors.core.white : 'rgba(255,255,255,0.5)')};
 `
 
-const RecommendeCountText = styled(Text)`
+type RecommendeCountTextProps = {
+  isLiked: boolean
+}
+
+const RecommendeCountText = styled(Text)<RecommendeCountTextProps>`
   font-size: ${`${theme.fontSizes.subtitle}px`};
   font-weight: ${theme.fontWeights.regular};
-  color: rgba(255, 255, 255, 0.5);
+  color: ${({ isLiked }) => (isLiked ? theme.colors.core.white : 'rgba(255,255,255,0.5)')};
 `
 
 const CountContainer = styled(View)`

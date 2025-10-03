@@ -7,6 +7,10 @@ type PostCommentType = {
   content: string
   createdAt: string
   updatedAt?: string
+
+  users?: {
+    nickname: string
+  }
 }
 
 ////////// 게시물 댓글 생성 타입

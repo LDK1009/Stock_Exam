@@ -1,8 +1,11 @@
 import CommonLoading from '@/components/feedback/CommonLoading'
+import { getUserId } from '@/services/auth/auth'
 import { getPostComments } from '@/services/tables/post/post_comments'
+import { getUserPostLikes } from '@/services/tables/post/post_likes'
 import { incrementPostViewCount } from '@/services/tables/post/post_stats'
 import { getPostById } from '@/services/tables/post/posts'
 import { usePostDetailStore } from '@/stores/screens/community/postDetail'
+import { usePostDetailFooterStore } from '@/stores/screens/community/postDetailFooter'
 import { theme } from '@/styles/theme'
 import styled from '@emotion/native'
 import { useFocusEffect, useLocalSearchParams } from 'expo-router'
@@ -16,6 +19,7 @@ const PostDetailScreen = () => {
   const { id } = useLocalSearchParams()
 
   const { setPostId, postDetail, setPostDetail, setComments } = usePostDetailStore()
+  const { setUserLikedList } = usePostDetailFooterStore()
 
   ///// 게시글 상세 조회
   async function fetchPostDetail() {
@@ -33,6 +37,16 @@ const PostDetailScreen = () => {
     }
   }
 
+  ///// 좋아요 목록 조회
+  async function fetchUserLikedList() {
+    const userId = await getUserId()
+    if (!userId) return
+
+    const { data: userLikedList } = await getUserPostLikes({ postId: Number(id), userId })
+
+    setUserLikedList(userLikedList?.map((item) => item.postId) || [])
+  }
+
   ///// 조회수 증가
   async function incrementViewCount() {
     await incrementPostViewCount(Number(id))
@@ -46,6 +60,8 @@ const PostDetailScreen = () => {
       fetchPostDetail()
       // 댓글 목록 조회
       fetchComments()
+      // 유저의 게시물 좋아요 목록 조회
+      fetchUserLikedList()
       // 게시물 조회수 증가
       incrementViewCount()
     }, [])

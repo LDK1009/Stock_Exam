@@ -1,6 +1,6 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { PostCommentType } from '@/types/community/postComment'
+import { PostCommentType } from '@/types/community/post_comments'
 import styled from '@emotion/native'
 import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
@@ -22,16 +22,22 @@ const CommentItem = ({ comment }: PropsType) => {
     })
   }
 
+  const isLiked = false
+
   return (
     <Container>
       <Author>{nickname}</Author>
       <Content>{content}</Content>
       {/* 추천 버튼 */}
       <RecommendeContainer onPress={handleRecommendePress}>
-        <RecommendeButton>
-          <MaterialIcons name='trending-up' size={16} color='white' />
+        <RecommendeButton isLiked={isLiked} onPress={handleRecommendePress}>
+          <MaterialIcons
+            name='trending-up'
+            size={16}
+            color={isLiked ? theme.colors.core.white : 'rgba(255,255,255,0.5)'}
+          />
         </RecommendeButton>
-        <RecommendeCountText>0</RecommendeCountText>
+        <RecommendeCountText isLiked={isLiked}>0</RecommendeCountText>
       </RecommendeContainer>
     </Container>
   )
@@ -63,16 +69,26 @@ const RecommendeContainer = styled(TouchableOpacity)`
   column-gap: 4px;
 `
 
-const RecommendeButton = styled(TouchableOpacity)`
+type RecommendeButtonProps = {
+  isLiked: boolean
+}
+
+const RecommendeButton = styled(TouchableOpacity)<RecommendeButtonProps>`
   ${mixinFlex('row', 'center', 'center')}
   width: 24px;
   height: 24px;
   border-radius: 999px;
-  border: 1px solid ${theme.colors.core.white};
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${({ isLiked }) => (isLiked ? theme.colors.core.white : 'rgba(255,255,255,0.5)')};
 `
 
-const RecommendeCountText = styled(Text)`
+type RecommendeCountTextProps = {
+  isLiked: boolean
+}
+
+const RecommendeCountText = styled(Text)<RecommendeCountTextProps>`
   font-size: ${`${theme.fontSizes.subtitle}px`};
   font-weight: ${theme.fontWeights.regular};
-  color: rgba(255, 255, 255, 0.5);
+  color: ${({ isLiked }) => (isLiked ? theme.colors.core.white : 'rgba(255,255,255,0.5)')};
 `
