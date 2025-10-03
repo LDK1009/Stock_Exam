@@ -4,6 +4,7 @@ import { PostCommentListType } from '@/types/community/postComment'
 import styled from '@emotion/native'
 import React from 'react'
 import { ScrollView, Text, View } from 'react-native'
+import CommentInputBar from './CommentInputBar'
 import CommentItem from './CommentItem'
 
 type PropsType = {
@@ -23,6 +24,7 @@ const CommentSection = ({ commentList }: PropsType) => {
           ))}
         </ScrollView>
       </CommentList>
+      <CommentInputBar />
     </Container>
   )
 }

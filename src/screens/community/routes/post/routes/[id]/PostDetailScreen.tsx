@@ -114,11 +114,14 @@ const PostDetailScreen = () => {
 
   useFocusEffect(
     useCallback(() => {
+      // 게시물 상세 데이터 조회
       fetchPostDetail()
+      // 게시물 조회수 증가
       incrementViewCount()
     }, [])
   )
 
+  ///// 게시물 상세 데이터 조회 완료 전 로딩 표시
   if (!postDeatil) {
     return (
       <Container>
