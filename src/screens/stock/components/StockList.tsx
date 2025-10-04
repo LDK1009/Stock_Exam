@@ -2,12 +2,18 @@ import CommonLoading from '@/components/feedback/CommonLoading'
 import { StockListType } from '@/types/stock/stock'
 import React from 'react'
 import { FlatList } from 'react-native'
+import ErrorNotice from './ErrorNotice'
 import StockItem from './StockItem'
 
 type StockListProps = {
   stockList: StockListType
 }
+
 const StockList = ({ stockList }: StockListProps) => {
+  if (stockList.length === 0) {
+    return <ErrorNotice />
+  }
+
   return (
     <FlatList
       data={stockList}
