@@ -1,24 +1,20 @@
+import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { mixinFlex } from '@/styles/mixins'
-import { PostType } from '@/types/community/community'
 import styled from '@emotion/native'
 import React from 'react'
 import { View } from 'react-native'
 import NavigationPost from './NavigationPost'
 
 const NavigationSection = () => {
-  const examplePost: PostType = {
-    title: 'ETF와 개별주식, 어디에 투자하는 게 나을까? 고민이네요 정말',
-    category: '자유게시판',
-    content: 'Example Content',
-    viewCount: 100,
-    commentCount: 10,
-    recommendationCount: 5,
-  }
+  ///// 게시물 상세 스토어
+  const { previousAndNextPostList } = usePostDetailStore()
+  ///// 이전/다음 게시물 구조분해할당
+  const [prevPost, nextPost] = previousAndNextPostList || []
 
   return (
     <Container>
-      <NavigationPost post={examplePost} navigate='prev' />
-      <NavigationPost post={examplePost} navigate='next' />
+      <NavigationPost post={prevPost} navigate='prev' />
+      <NavigationPost post={nextPost} navigate='next' />
     </Container>
   )
 }

@@ -1,3 +1,4 @@
+////////// 커뮤니티 카테고리 타입
 type CommunityCategoryType =
   | '자유게시판'
   | '종목토론'
@@ -6,6 +7,7 @@ type CommunityCategoryType =
   | '마인드컨트롤'
   | '투자자문'
 
+////////// 게시물 타입
 type PostType = {
   id?: number
   category: CommunityCategoryType | null
@@ -28,7 +30,22 @@ type PostType = {
   }
 }
 
+////////// 게시물 목록 타입
 type PostListType = PostType[]
 
-export type { CommunityCategoryType, PostListType, PostType }
+////////// 이전/다음 게시물 목록 타입
+type PreviousAndNextPostType = {
+  id: number
+  title: string
+  post_stats: {
+    viewCount: number
+    likeCount: number
+    commentCount: number
+  }
+}
+
+type PreviousAndNextPostListType = (PreviousAndNextPostType | null)[]
+
+
+export type { CommunityCategoryType, PostListType, PostType, PreviousAndNextPostListType, PreviousAndNextPostType }
 

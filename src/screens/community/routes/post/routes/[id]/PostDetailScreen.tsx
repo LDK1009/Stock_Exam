@@ -3,14 +3,16 @@ import { getUserId } from '@/services/auth/auth'
 import { getPostComments } from '@/services/tables/post/post_comments'
 import { getUserPostLikes } from '@/services/tables/post/post_likes'
 import { incrementPostViewCount } from '@/services/tables/post/post_stats'
-import { getPostById } from '@/services/tables/post/posts'
+import { getPostById, getPreviousAndNextPost } from '@/services/tables/post/posts'
+import { useCommunityFilterStore } from '@/stores/screens/community/filter'
 import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { usePostDetailFooterStore } from '@/stores/screens/community/postDetailFooter'
 import { theme } from '@/styles/theme'
+import { PreviousAndNextPostListType } from '@/types/community/community'
 import styled from '@emotion/native'
-import { useFocusEffect, useLocalSearchParams } from 'expo-router'
-import React, { useCallback } from 'react'
-import { ScrollView } from 'react-native'
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router'
+import React, { useCallback, useEffect } from 'react'
+import { BackHandler, ScrollView } from 'react-native'
 import CommentSection from './components/CommentSection'
 import NavigationSection from './components/NavigationSection'
 import PostSection from './components/PostSection'
@@ -18,7 +20,19 @@ import PostSection from './components/PostSection'
 const PostDetailScreen = () => {
   const { id } = useLocalSearchParams()
 
-  const { setPostId, postDetail, setPostDetail, setComments } = usePostDetailStore()
+  /////
+  const { category } = useCommunityFilterStore()
+  ///// 게시물 상세 스토어
+  const {
+    setPostId,
+    postDetail,
+    setPostDetail,
+    setComments,
+    setLoading,
+    loading,
+    setPreviousAndNextPostList,
+  } = usePostDetailStore()
+  ///// 푸터 스토어
   const { setUserLikedList } = usePostDetailFooterStore()
 
   ///// 게시글 상세 조회
@@ -52,8 +66,34 @@ const PostDetailScreen = () => {
     await incrementPostViewCount(Number(id))
   }
 
+  ///// 이전/다음 게시물 조회
+  async function fetchPreviousAndNextPost() {
+    // 이전/다음 게시물 가져오기
+    const response = await getPreviousAndNextPost({
+      currentPostId: Number(id),
+      category: category,
+    })
+
+    // 상태 업데이트
+    setPreviousAndNextPostList(response as PreviousAndNextPostListType)
+  }
+
+  // 백핸들러(뒤로가기 버튼 눌렀을 때)
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      router.replace(`/community`) // 홈으로 이동
+      return true // 기본 동작 방지
+    })
+
+    return () => backHandler.remove()
+  }, [])
+
+  ///// 포커스 이벤트
   useFocusEffect(
     useCallback(() => {
+      // 로딩 ON
+      setLoading(true)
+
       // 게시물 아이디 설정
       setPostId(Number(id))
       // 게시물 상세 데이터 조회
@@ -64,11 +104,27 @@ const PostDetailScreen = () => {
       fetchUserLikedList()
       // 게시물 조회수 증가
       incrementViewCount()
+      // 이전/다음 게시물 조회
+      fetchPreviousAndNextPost()
+
+      // 로딩 OFF
+      setTimeout(() => {
+        setLoading(false)
+      }, 300)
     }, [])
   )
 
   ///// 게시물 상세 데이터 조회 완료 전 로딩 표시
   if (!postDetail) {
+    return (
+      <Container>
+        <CommonLoading />
+      </Container>
+    )
+  }
+
+  ///// 로딩 중 로딩 표시
+  if (loading) {
     return (
       <Container>
         <CommonLoading />

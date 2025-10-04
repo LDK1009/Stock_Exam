@@ -1,25 +1,34 @@
 import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
-import { PostType } from '@/types/community/community'
+import { PreviousAndNextPostType } from '@/types/community/community'
 import styled from '@emotion/native'
 import { FontAwesome } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import React from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type PropsType = {
-  post: PostType
+  post: PreviousAndNextPostType | null
   navigate: 'prev' | 'next'
 }
 
 const NavigationPost = ({ post, navigate }: PropsType) => {
-  const { title } = post
-
-  const handleNavigate = () => {
-    if (navigate === 'prev') {
-    } else {
-    }
+  ///// 게시물이 없으면 리턴
+  if (!post) {
+    return null
   }
 
+  ///// 게시물 데이터 구조분해할당
+  const { id, title, post_stats } = post
+  ///// 게시물 조회수, 댓글수, 추천수 구조분해할당
+  const { viewCount, commentCount, likeCount } = post_stats
+
+  ///// 이전/다음 게시물 이동 핸들러
+  const handleNavigate = () => {
+    router.push(`/community/post/${id}`)
+  }
+
+  ///// 렌더링
   return (
     <Container onPress={handleNavigate}>
       {/* 이전 아이콘 */}
@@ -34,9 +43,9 @@ const NavigationPost = ({ post, navigate }: PropsType) => {
         </Title>
         {/* 조회, 댓글, 추천 수 */}
         <CountContainer>
-          <CountText>조회 {32}</CountText>
-          <CountText>댓글 {32}</CountText>
-          <CountText>추천 {32}</CountText>
+          <CountText>조회 {viewCount}</CountText>
+          <CountText>댓글 {commentCount}</CountText>
+          <CountText>추천 {likeCount}</CountText>
         </CountContainer>
       </PostContainer>
 
