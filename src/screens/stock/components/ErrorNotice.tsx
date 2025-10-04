@@ -5,7 +5,7 @@ import React from 'react'
 import { Image, Text, View } from 'react-native'
 
 const ErrorNotice = () => {
-  console.log('ErrorNotice')
+
   return (
     <Container>
       <LogoContainer>
