@@ -1,5 +1,6 @@
-import { getUserId } from '@/services/auth/auth'
+import { getUserId, isAuthenticated } from '@/services/auth/auth'
 import { createUserPostLike, deleteUserPostLike } from '@/services/tables/post/post_likes'
+import { useConfirmModalStore } from '@/stores/common/modal'
 import { usePostDetailStore } from '@/stores/screens/community/postDetail'
 import { usePostDetailFooterStore } from '@/stores/screens/community/postDetailFooter'
 import { mixinFlex } from '@/styles/mixins'
@@ -8,47 +9,50 @@ import { formatDate } from '@/utils/time'
 import styled from '@emotion/native'
 import { Entypo, MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
-import React, { useRef, useState } from 'react'
+import { useFocusEffect } from 'expo-router'
+import React, { useCallback, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 const PostSection = () => {
-  ///// 스토어
+  ///// 게시물 상세 스토어
   const { postDetail } = usePostDetailStore()
+  ///// 푸터 스토어
   const { userLikedList, addUserLikedList, removeUserLikedList } = usePostDetailFooterStore()
-  ///// 게시물 상세 데이터
-  const { id, title, createdAt, content, users, post_stats } = postDetail || {}
-  ///// 게시물 통계 데이터
-  const { viewCount, likeCount, commentCount } = post_stats || {}
-  ///// 게시물 작성자 데이터
-  const { nickname } = users || {}
-
-  // 처음 입장 시에만 측정하기 위한 ref
-  const hasMeasured = useRef(false)
+  ///// 컨펌 모달 스토어
+  const { setConfirmLogin, setEventCallback } = useConfirmModalStore()
+  ///// 더보기 버튼 확장 여부
   const [isContentExpanded, setIsContentExpanded] = useState(true)
 
-  ///// 본문 높이 측정
-  const handleTextLayout = (event: any) => {
-    // 이미 측정했다면 무시
-    if (hasMeasured.current) return
-
-    const { height } = event.nativeEvent.layout
-
-    // 높이가 300px을 넘으면 접힌 상태로, 아니면 펼친 상태로 설정
-    if (height >= 300) {
-      setIsContentExpanded(false)
-    } else {
-      setIsContentExpanded(true)
-    }
-
-    // 측정 완료 표시
-    hasMeasured.current = true
-  }
+  ///// 게시물 상세 데이터 구조분해할당
+  const { id, title, createdAt, content, users, post_stats } = postDetail || {}
+  ///// 조회수, 좋아요 수, 댓글 수 구조분해할당
+  const { viewCount, likeCount, commentCount } = post_stats || {}
+  ///// 닉네임 구조분해할당
+  const { nickname } = users || {}
+  ///// 게시물 좋아요 여부
+  const isLiked = userLikedList.includes(Number(id))
 
   ///// 좋아요 버튼 클릭
   async function handleLikeButtonPress() {
+    // 로그인 여부 확인
+    const isUserAuthenticated = await isAuthenticated()
+
+    // 비로그인 상태면 로그인 컨펌 모달 열기
+    if (!isUserAuthenticated) {
+      setEventCallback({
+        onConfirmCallback: () => {},
+        onCancelCallback: () => {},
+      })
+      setConfirmLogin('좋아요를 남기려면 로그인이 필요합니다.')
+      return
+    }
+
+    // 유저 ID 가져오기
     const userId = await getUserId()
+    // 유저 ID가 없으면 종료
     if (!userId) return
 
+    // 좋아요 여부에 따라 좋아요 추가 또는 제거
     if (isLiked) {
       removeUserLikedList(Number(id))
       await deleteUserPostLike({ postId: Number(id), userId: userId })
@@ -58,7 +62,15 @@ const PostSection = () => {
     }
   }
 
-  const isLiked = userLikedList.includes(Number(id))
+  useFocusEffect(
+    useCallback(() => {
+      if (content?.length && content?.length > 300) {
+        setIsContentExpanded(false)
+      } else {
+        setIsContentExpanded(true)
+      }
+    }, [content])
+  )
 
   return (
     <Container>
@@ -78,9 +90,7 @@ const PostSection = () => {
       {/* 본문 */}
       <ContentArea>
         {/* 본문 */}
-        <Content expanded={isContentExpanded} onLayout={handleTextLayout}>
-          {content}
-        </Content>
+        <Content expanded={isContentExpanded}>{content}</Content>
         {/* 더보기 버튼 */}
         {!isContentExpanded && (
           <ReadMoreButton onPress={() => setIsContentExpanded(true)}>
