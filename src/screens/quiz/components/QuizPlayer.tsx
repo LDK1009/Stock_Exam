@@ -62,11 +62,16 @@ const QuizPlayer = () => {
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       if (viewableItems.length > 0) {
-        console.log('뷰트래킹된 문제 인덱스 : ', viewableItems[0].index)
         // 현재 보이는 퀴즈 인덱스 추출
         const currentIndex = viewableItems[0].index as number
         // 현재 보이는 퀴즈 데이터 추출
         const currentQuizId = quizList[currentIndex].id
+
+
+        console.log("--------------------------------")
+        console.log('현재 보이는 퀴즈 인덱스 : ', currentIndex)
+        console.log('현재 보이는 퀴즈 아이디 : ', currentQuizId)
+        console.log("--------------------------------")
 
         // 현재 보이는 퀴즈 아이디가 있으면 조회수 증가
         if (currentQuizId) {
@@ -114,7 +119,6 @@ const QuizPlayer = () => {
 
   ////////////////////////////// 임시코드
   const onScrollToIndexFailed = useCallback((info: any) => {
-    console.log('스크롤 이동 실패 : ', info)
     // setTimeout(() => {
     //   flatListRef.current?.scrollToIndex({
     //     index: info.index,
