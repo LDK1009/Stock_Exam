@@ -39,6 +39,7 @@ const QuizPlayer = () => {
   const insets = useSafeAreaInsets()
   // 최종 컨텐츠 영역 높이 계산(컨텐츠 영역 높이 = 화면 높이 - (상단 스테이터스바 + 하단 바텀 네비게이션 바))
   const CONTENT_HEIGHT = SCREEN_HEIGHT - STATUSBAR_HEIGHT - insets.bottom
+
   ///// FlatList 참조 추가
   const flatListRef = useRef<FlatList>(null)
 
@@ -88,35 +89,28 @@ const QuizPlayer = () => {
   }
 
   ///// 렌더링 핸들러
-  const renderItem = useCallback(
-    ({ item: quizData, index }: RenderItemProps) => {
-
-      console.log('렌더링된 퀴즈 인덱스 : ', index)
-      return (
-        <QuizContainer height={CONTENT_HEIGHT}>
-          {/* 퀴즈 상세 */}
-          <QuizDetail quiz={quizData} />
-          {quizData.id && (
-            <QuizDetailActionBar
-              quizId={quizData.id}
-              quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
-            />
-          )}
-        </QuizContainer>
-      )
-    },
-    [quizList]
-  )
+  const renderItem = ({ item: quizData, index }: RenderItemProps) => {
+    return (
+      <QuizContainer height={CONTENT_HEIGHT}>
+        {/* 퀴즈 상세 */}
+        <QuizDetail quiz={quizData} />
+        {/* 액션바 */}
+        {quizData.id && (
+          <QuizDetailActionBar
+            quizId={quizData.id}
+            quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
+          />
+        )}
+      </QuizContainer>
+    )
+  }
 
   ///// 아이템 레이아웃 추출 핸들러
-  const getItemLayout = useCallback(
-    (_: any, index: number) => ({
-      length: CONTENT_HEIGHT,
-      offset: CONTENT_HEIGHT * index,
-      index,
-    }),
-    [quizList]
-  )
+  const getItemLayout = (_: any, index: number) => ({
+    length: CONTENT_HEIGHT,
+    offset: CONTENT_HEIGHT * index,
+    index,
+  })
 
   ////////////////////////////// 임시코드
   const onScrollToIndexFailed = useCallback((info: any) => {
