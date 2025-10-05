@@ -90,6 +90,8 @@ const QuizPlayer = () => {
   ///// 렌더링 핸들러
   const renderItem = useCallback(
     ({ item: quizData, index }: RenderItemProps) => {
+
+      console.log('렌더링된 퀴즈 인덱스 : ', index)
       return (
         <QuizContainer height={CONTENT_HEIGHT}>
           {/* 퀴즈 상세 */}
@@ -103,7 +105,7 @@ const QuizPlayer = () => {
         </QuizContainer>
       )
     },
-    [CONTENT_HEIGHT]
+    [quizList]
   )
 
   ///// 아이템 레이아웃 추출 핸들러
@@ -113,7 +115,7 @@ const QuizPlayer = () => {
       offset: CONTENT_HEIGHT * index,
       index,
     }),
-    []
+    [quizList]
   )
 
   ////////////////////////////// 임시코드
