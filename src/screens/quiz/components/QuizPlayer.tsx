@@ -7,7 +7,7 @@ import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   ActivityIndicator,
   Dimensions,
@@ -49,43 +49,34 @@ const QuizPlayer = () => {
   }).current
 
   ////////// 무한 스크롤
-  const loadMore = useCallback(() => {
+  const loadMore = () => {
     // 로딩 중이거나 더 불러올 데이터가 없으면 중단
     if (!loading && canMore) {
       const nextPage = page + 1
       setPage(nextPage)
       getQuiz(nextPage, searchValue, category, difficulty, type, sort)
     }
-  }, [loading, canMore, page, searchValue, category, difficulty, type, sort])
+  }
 
   ///// 뷰트래킹 핸들러
-  const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0) {
-        // 현재 보이는 퀴즈 인덱스 추출
-        const currentIndex = viewableItems[0].index as number
-        // 현재 보이는 퀴즈 데이터 추출
-        const currentQuizId = quizList[currentIndex].id
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    if (viewableItems.length > 0) {
+      // 현재 보이는 퀴즈 인덱스 추출
+      const currentIndex = viewableItems[0].index as number
+      // 현재 보이는 퀴즈 데이터 추출
+      const currentQuizId = quizList[currentIndex]?.id
 
-
-        console.log("--------------------------------")
-        console.log('현재 보이는 퀴즈 인덱스 : ', currentIndex)
-        console.log('현재 보이는 퀴즈 아이디 : ', currentQuizId)
-        console.log("--------------------------------")
-
-        // 현재 보이는 퀴즈 아이디가 있으면 조회수 증가
-        if (currentQuizId) {
-          incrementQuizViewCount(currentQuizId)
-        }
-
-        // 마지막 문제에 가까워지면 추가 퀴즈 로드
-        if (currentIndex === quizList.length - 2) {
-          loadMore()
-        }
+      // 현재 보이는 퀴즈 아이디가 있으면 조회수 증가
+      if (currentQuizId) {
+        incrementQuizViewCount(currentQuizId)
       }
-    },
-    [quizList, loadMore]
-  )
+
+      // 마지막 문제에 가까워지면 추가 퀴즈 로드
+      if (currentIndex === quizList.length - 2) {
+        loadMore()
+      }
+    }
+  }
 
   ///// 렌더링 핸들러
   type RenderItemProps = {
@@ -94,7 +85,7 @@ const QuizPlayer = () => {
   }
 
   ///// 렌더링 핸들러
-  const renderItem = useCallback(({ item: quizData, index }: RenderItemProps) => {
+  const renderItem = ({ item: quizData, index }: RenderItemProps) => {
     // quizData가 완전히 로드되었는지 확인
     if (!quizData || !quizData.id) {
       return (
@@ -117,7 +108,7 @@ const QuizPlayer = () => {
         />
       </QuizContainer>
     )
-  }, [CONTENT_HEIGHT])
+  }
 
   ///// 아이템 레이아웃 추출 핸들러
   const getItemLayout = (_: any, index: number) => ({
@@ -127,7 +118,7 @@ const QuizPlayer = () => {
   })
 
   ///// 스크롤 실패 처리 핸들러
-  const onScrollToIndexFailed = useCallback((info: any) => {
+  const onScrollToIndexFailed = (info: any) => {
     // 스크롤 실패 시 대체 로직 구현
     setTimeout(() => {
       flatListRef.current?.scrollToOffset({
@@ -135,7 +126,7 @@ const QuizPlayer = () => {
         animated: false,
       })
     }, 100)
-  }, [CONTENT_HEIGHT])
+  }
 
   ///// 모달이 열릴 때 선택된 인덱스로 스크롤 보장
   useEffect(() => {
@@ -184,7 +175,6 @@ const QuizPlayer = () => {
           windowSize={5} // 화면에 보이는 아이템 수 제한
           initialNumToRender={3} // 초기 렌더링 아이템 수
           onScrollToIndexFailed={onScrollToIndexFailed}
-
           ///// 기타
           // 스크롤바 숨김 여부
           showsVerticalScrollIndicator={false} // 스크롤바 숨기기
