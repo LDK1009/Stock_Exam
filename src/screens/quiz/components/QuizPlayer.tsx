@@ -24,21 +24,25 @@ import QuizDetailActionBar from './QuizDetailActionBar'
 import ScrollAnimation from './ScrollAnimation'
 
 const QuizPlayer = () => {
+  ///// 퀴즈 플레이어 스토어
   const { open, setOpen, selectedQuizIndex } = useQuizPlayerStore()
+  ///// 퀴즈 스토어
   const { quizList, getQuiz, loading, canMore, page, setPage } = useQuizStore()
+  ///// 퀴즈 필터 스토어
   const { searchValue, category, difficulty, type, sort } = useQuizFilterStore()
 
-  // 화면 높이 계산
+  // 화면 총 높이 추출
   const { height: SCREEN_HEIGHT } = Dimensions.get('window')
-  // 스테이터스바 높이 계산
+  // 스테이터스바 높이 추출
   const STATUSBAR_HEIGHT = StatusBar.currentHeight || 0
-  // 바텀 네비게이션 바 높이 계산
+  // 바텀 네비게이션 바 높이 추출
   const insets = useSafeAreaInsets()
-
-  // 컨텐츠 높이 계산(상단 스테이터스바, 하단 바텀 네비게이션 바 제외)
+  // 최종 컨텐츠 영역 높이 계산(컨텐츠 영역 높이 = 화면 높이 - (상단 스테이터스바 + 하단 바텀 네비게이션 바))
   const CONTENT_HEIGHT = SCREEN_HEIGHT - STATUSBAR_HEIGHT - insets.bottom
+  ///// FlatList 참조 추가
+  const flatListRef = useRef<FlatList>(null)
 
-  // viewability 설정을 useRef로 메모이제이션
+  ///// 뷰트래킹 옵션(70% 이상 보이면 뷰트래킹 판단)
   const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 70,
   }).current
@@ -53,18 +57,22 @@ const QuizPlayer = () => {
     }
   }, [loading, canMore, page, searchValue, category, difficulty, type, sort])
 
-  // 보이는 아이템 변경 핸들러를 useCallback으로 메모이제이션
+  ///// 뷰트래킹 핸들러
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       if (viewableItems.length > 0) {
+        console.log('뷰트래킹된 문제 인덱스 : ', viewableItems[0].index)
+        // 현재 보이는 퀴즈 인덱스 추출
         const currentIndex = viewableItems[0].index as number
-        const currentQuiz = quizList[currentIndex]
+        // 현재 보이는 퀴즈 데이터 추출
+        const currentQuizId = quizList[currentIndex].id
 
-        if (currentQuiz?.id) {
-          incrementQuizViewCount(currentQuiz.id)
+        // 현재 보이는 퀴즈 아이디가 있으면 조회수 증가
+        if (currentQuizId) {
+          incrementQuizViewCount(currentQuizId)
         }
 
-        // 마지막에서 두 번째 퀴즈에 도달하면 추가 퀴즈 로드
+        // 마지막 문제에 가까워지면 추가 퀴즈 로드
         if (currentIndex === quizList.length - 2) {
           loadMore()
         }
@@ -73,67 +81,79 @@ const QuizPlayer = () => {
     [quizList, loadMore]
   )
 
+  ///// 렌더링 핸들러
   type RenderItemProps = {
     item: QuizType
     index: number
   }
 
-  // renderItem도 useCallback으로 메모이제이션
+  ///// 렌더링 핸들러
   const renderItem = useCallback(
-    ({ item: quizData, index }: RenderItemProps) => (
-      <QuizContainer height={CONTENT_HEIGHT}>
-        {/* 퀴즈 상세 */}
-        <QuizDetail quiz={quizData} />
-        {quizData.id && (
-          <QuizDetailActionBar
-            quizId={quizData.id}
-            quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
-          />
-        )}
-      </QuizContainer>
-    ),
+    ({ item: quizData, index }: RenderItemProps) => {
+      return (
+        <QuizContainer height={CONTENT_HEIGHT}>
+          {/* 퀴즈 상세 */}
+          <QuizDetail quiz={quizData} />
+          {quizData.id && (
+            <QuizDetailActionBar
+              quizId={quizData.id}
+              quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
+            />
+          )}
+        </QuizContainer>
+      )
+    },
     [CONTENT_HEIGHT]
   )
 
-  // getItemLayout도 useCallback으로 메모이제이션
+  ///// 아이템 레이아웃 추출 핸들러
   const getItemLayout = useCallback(
     (_: any, index: number) => ({
       length: CONTENT_HEIGHT,
       offset: CONTENT_HEIGHT * index,
       index,
     }),
-    [CONTENT_HEIGHT]
+    []
   )
+
+  ///// 선택된 문제 인덱스 변경 시 스크롤 이동 핸들러
 
   return (
     <Modal visible={open} transparent animationType='fade' onRequestClose={() => setOpen(false)}>
       <ModalContainer>
         <FlatList
+          ref={flatListRef}
           ///// 렌더링 관련
           // 렌더링할 배열
           data={quizList}
           // 렌더링할 아이템 컴포넌트
           renderItem={renderItem}
+          
           ///// 페이징 관련
-          // 페이징 사용 여부
-          pagingEnabled={true}
-          // 페이징 감속 설정
-          decelerationRate={'normal'}
-          // 시작할 아이템 인덱스
-          initialScrollIndex={selectedQuizIndex}
-          // 아이템 크기/위치 정보
+          // 한번에 스냅할 간격
+          snapToInterval={CONTENT_HEIGHT}
+          // 스냅 정렬 방식
+          snapToAlignment='start'
+          // 감속 속도
+          decelerationRate={'fast'}
+          // 아이템 레이아웃 명시적 설정
           getItemLayout={getItemLayout}
+          // 초기 스크롤 인덱스
+          initialScrollIndex={selectedQuizIndex}
+
           ///// 뷰 트래킹 관련
           // 뷰 트래킹 판단 기준 설정
           viewabilityConfig={viewabilityConfig}
           // 보이는 아이템 변경 핸들러
           onViewableItemsChanged={onViewableItemsChanged}
-          ///// 성능 최적화 관련
-          removeClippedSubviews={true} // 화면 밖 아이템 메모리에서 제거
-          maxToRenderPerBatch={3} // 한번에 렌더링할 아이템 수 제한
+          // ///// 성능 최적화 관련
+          // removeClippedSubviews={true} // 화면 밖 아이템 메모리에서 제거
+          // maxToRenderPerBatch={3} // 한번에 렌더링할 아이템 수 제한
+
           ///// 기타
           // 스크롤바 숨김 여부
           showsVerticalScrollIndicator={false} // 스크롤바 숨기기
+          // 하단 로딩 인디케이터
           ListFooterComponent={
             loading ? (
               <LoadingContainer>
