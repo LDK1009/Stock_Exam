@@ -116,7 +116,17 @@ const QuizPlayer = () => {
     []
   )
 
-  ///// 선택된 문제 인덱스 변경 시 스크롤 이동 핸들러
+  ////////////////////////////// 임시코드
+  const onScrollToIndexFailed = useCallback((info: any) => {
+    console.log('스크롤 이동 실패 : ', info)
+    // setTimeout(() => {
+    //   flatListRef.current?.scrollToIndex({
+    //     index: info.index,
+    //     animated: false,
+    //   })
+    // }, 100)
+  }, [])
+  ////////////////////////////// 임시코드
 
   return (
     <Modal visible={open} transparent animationType='fade' onRequestClose={() => setOpen(false)}>
@@ -128,7 +138,6 @@ const QuizPlayer = () => {
           data={quizList}
           // 렌더링할 아이템 컴포넌트
           renderItem={renderItem}
-          
           ///// 페이징 관련
           // 한번에 스냅할 간격
           snapToInterval={CONTENT_HEIGHT}
@@ -140,13 +149,16 @@ const QuizPlayer = () => {
           getItemLayout={getItemLayout}
           // 초기 스크롤 인덱스
           initialScrollIndex={selectedQuizIndex}
-
           ///// 뷰 트래킹 관련
           // 뷰 트래킹 판단 기준 설정
           viewabilityConfig={viewabilityConfig}
           // 보이는 아이템 변경 핸들러
           onViewableItemsChanged={onViewableItemsChanged}
           // ///// 성능 최적화 관련
+          ////////////////////임시 코드
+          removeClippedSubviews={false} // 모든 아이템 렌더링 보장
+          onScrollToIndexFailed={onScrollToIndexFailed}
+          ////////////////////임시 코드
           // removeClippedSubviews={true} // 화면 밖 아이템 메모리에서 제거
           // maxToRenderPerBatch={3} // 한번에 렌더링할 아이템 수 제한
 
