@@ -15,8 +15,6 @@ type PropsType = {
 }
 
 const QuizDetail = ({ quiz }: PropsType) => {
-
-  console.log("렌더링된 문제 아이디 : ", quiz.id)
   const [selectedOptionNumber, setSelectedOptionNumber] = useState<number | null>(null)
   const [isAnswerRevealed, setIsAnswerRevealed] = useState(false)
 

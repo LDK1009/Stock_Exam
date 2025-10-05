@@ -25,8 +25,12 @@ const Quiz = ({ quiz, index }: PropsType) => {
 
   // 퀴즈 클릭 핸들러
   function QuizPressHandler() {
-    setOpenQuizPlayer(true)
+    // 상태 업데이트 순서 보장: 먼저 인덱스 설정, 그 다음 모달 열기
     setSelectedQuizIndex(index)
+    // 다음 이벤트 루프에서 모달 열기 (상태 업데이트 순서 보장)
+    setTimeout(() => {
+      setOpenQuizPlayer(true)
+    }, 0)
   }
 
 

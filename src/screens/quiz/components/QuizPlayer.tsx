@@ -7,7 +7,7 @@ import { mixinFlex } from '@/styles/mixins'
 import { theme } from '@/styles/theme'
 import { QuizType } from '@/types/quiz/quiz'
 import styled from '@emotion/native'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import {
   ActivityIndicator,
   Dimensions,
@@ -94,21 +94,30 @@ const QuizPlayer = () => {
   }
 
   ///// 렌더링 핸들러
-  const renderItem = ({ item: quizData, index }: RenderItemProps) => {
+  const renderItem = useCallback(({ item: quizData, index }: RenderItemProps) => {
+    // quizData가 완전히 로드되었는지 확인
+    if (!quizData || !quizData.id) {
+      return (
+        <QuizContainer height={CONTENT_HEIGHT}>
+          <LoadingContainer>
+            <ActivityIndicator size='large' color={theme.colors.core.white} animating={true} />
+          </LoadingContainer>
+        </QuizContainer>
+      )
+    }
+
     return (
       <QuizContainer height={CONTENT_HEIGHT}>
         {/* 퀴즈 상세 */}
         <QuizDetail quiz={quizData} />
         {/* 액션바 */}
-        {quizData.id && (
-          <QuizDetailActionBar
-            quizId={quizData.id}
-            quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
-          />
-        )}
+        <QuizDetailActionBar
+          quizId={quizData.id}
+          quiz_stats={quizData.quiz_stats || { viewCount: 0, likeCount: 0, commentCount: 0 }}
+        />
       </QuizContainer>
     )
-  }
+  }, [CONTENT_HEIGHT])
 
   ///// 아이템 레이아웃 추출 핸들러
   const getItemLayout = (_: any, index: number) => ({
@@ -117,16 +126,31 @@ const QuizPlayer = () => {
     index,
   })
 
-  ////////////////////////////// 임시코드
+  ///// 스크롤 실패 처리 핸들러
   const onScrollToIndexFailed = useCallback((info: any) => {
-    // setTimeout(() => {
-    //   flatListRef.current?.scrollToIndex({
-    //     index: info.index,
-    //     animated: false,
-    //   })
-    // }, 100)
-  }, [])
-  ////////////////////////////// 임시코드
+    // 스크롤 실패 시 대체 로직 구현
+    setTimeout(() => {
+      flatListRef.current?.scrollToOffset({
+        offset: CONTENT_HEIGHT * info.index,
+        animated: false,
+      })
+    }, 100)
+  }, [CONTENT_HEIGHT])
+
+  ///// 모달이 열릴 때 선택된 인덱스로 스크롤 보장
+  useEffect(() => {
+    if (open && quizList.length > 0 && selectedQuizIndex >= 0) {
+      // 약간의 지연을 두고 스크롤 실행 (렌더링 완료 후)
+      const timer = setTimeout(() => {
+        flatListRef.current?.scrollToIndex({
+          index: selectedQuizIndex,
+          animated: false,
+        })
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }
+  }, [open, selectedQuizIndex, quizList.length])
 
   return (
     <Modal visible={open} transparent animationType='fade' onRequestClose={() => setOpen(false)}>
@@ -154,13 +178,12 @@ const QuizPlayer = () => {
           viewabilityConfig={viewabilityConfig}
           // 보이는 아이템 변경 핸들러
           onViewableItemsChanged={onViewableItemsChanged}
-          // ///// 성능 최적화 관련
-          ////////////////////임시 코드
-          removeClippedSubviews={false} // 모든 아이템 렌더링 보장
+          ///// 성능 최적화 관련
+          removeClippedSubviews={true} // 화면 밖 아이템 메모리에서 제거
+          maxToRenderPerBatch={2} // 한번에 렌더링할 아이템 수 제한
+          windowSize={5} // 화면에 보이는 아이템 수 제한
+          initialNumToRender={3} // 초기 렌더링 아이템 수
           onScrollToIndexFailed={onScrollToIndexFailed}
-          ////////////////////임시 코드
-          // removeClippedSubviews={true} // 화면 밖 아이템 메모리에서 제거
-          // maxToRenderPerBatch={3} // 한번에 렌더링할 아이템 수 제한
 
           ///// 기타
           // 스크롤바 숨김 여부
