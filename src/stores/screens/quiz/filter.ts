@@ -41,7 +41,7 @@ export const useQuizFilterStore = create<StoreType>((set) => ({
   type: '',
 
   // 정렬 필터 초기값
-  sort: '인기순',
+  sort: '최신순',
 
   // 필터 설정 함수
   setSearchValue: (value) => set({ searchValue: value || '' }),
@@ -59,6 +59,6 @@ export const useQuizFilterStore = create<StoreType>((set) => ({
       category: '',
       difficulty: null,
       type: '',
-      sort: '인기순',
+      sort: '최신순',
     }),
 }))
